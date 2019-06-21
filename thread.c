@@ -93,6 +93,19 @@ static int32_t dconst_1(stack *s, code *c) {
 	stack_push(s, 0x00000000);//d2i_push_last(1)
 	return 1;
 }
+static int32_t bipush(stack *s, code *c) {
+	int32_t value = (uint32_t)code_fetch(c, 1);
+	stack_push(s, value);
+	return 2;
+}
+static int32_t sipush(stack *s, code *c) {
+	int8_t svalue[2];
+	svalue[0] = code_fetch(c, 1);
+	svalue[1] = code_fetch(c, 2);
+	int32_t value = (int32_t)*((int16_t*)svalue);
+	stack_push(s, value);
+	return 3;
+}
 
 
 
@@ -124,8 +137,8 @@ thread thread_new(uint32_t stack_count, uint8_t *code) {
 	t.ops[0x0d] = fconst_2;
 	t.ops[0x0e] = dconst_0;
 	t.ops[0x0f] = dconst_1;
-	t.ops[0x10] = 
-	t.ops[0x11] = 
+	t.ops[0x10] = bipush;
+	t.ops[0x11] = sipush; 
 	t.ops[0x12] = 
 	t.ops[0x13] = 
 	t.ops[0x14] = 
