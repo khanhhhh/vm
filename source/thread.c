@@ -12,6 +12,17 @@ static int32_t pop_char(stack *s, code *c, data *d) {
 	putchar(ch);
 	return 1;
 }
+static int32_t pop_int(stack *s, code *c, data *d) {
+	object in = stack_pop(s);
+	printf("%d", in);
+	return 1;
+}
+static int32_t pop_float(stack *s, code *c, data *d) {
+	object in = stack_pop(s);
+	float fin = *((float*)&in);
+	printf("%f", fin);
+	return 1;
+}
 // LOAD DATA
 static int32_t load_code(stack *s, code *c, data *d) {
 	object in = (object)code_fetch_param(c);
@@ -509,8 +520,8 @@ thread thread_new(uint8_t *code, object *data) {
 	t.ops[0xf9] = halt;
 	t.ops[0xfa] = halt;
 	t.ops[0xfb] = halt;
-	t.ops[0xfc] = halt;
-	t.ops[0xfd] = halt;
+	t.ops[0xfc] = pop_int;
+	t.ops[0xfd] = pop_float;
 	t.ops[0xfe] = pop_char;
 	t.ops[0xff] = halt;
 	return t;

@@ -1,8 +1,8 @@
 DEBUG = 0
 
 CC = gcc
-CCFLAGS = -std=c11 -fPIC -Wall -Wfatal-errors
-INFLAGS = -I.
+CCFLAGS = -std=c11 -fPIC -Wall -Wfatal-errors -fno-strict-aliasing
+INFLAGS = -I./include
 LDFLAGS = 
 
 ifeq (1, $(DEBUG))
@@ -13,12 +13,12 @@ CCFLAGS += -DNDEBUG -O3
 GDB = 
 endif
 
-
+.PHONY: test
 
 
 
 test: 
-	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run *.c
+	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run source/*.c main.c
 	$(GDB) ./run
 clean:
 	rm -f run
