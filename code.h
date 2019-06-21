@@ -10,7 +10,8 @@ code	code_new(uint8_t *mem);
 // DESTRUCTOR
 void	code_del();
 // FETCH CODE
-uint8_t	code_fetch(code *c, uint32_t offset);
+uint8_t	 code_fetch(code *c);
+uint32_t code_fetch_param(code *c);
 // JUMP
 void	code_jump(code *c, uint32_t offset);
 #endif
