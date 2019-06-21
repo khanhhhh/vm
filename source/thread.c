@@ -538,20 +538,15 @@ void thread_del(thread *t) {
 	data_del(&t->d);
 }
 void thread_loop(thread *t) {
-	for (uint32_t count =1; ; count++) {
+	for (;;) {
 		// FETCH CODE
 		uint8_t opcode = code_fetch(&t->c);
-		//stack_print(&t->s);
-		//printf("instruction: %d\n", t->c.pos);
-		//printf("opcode: 0x%x\n", opcode);
 		if (t->ops[opcode] == halt) {
-			printf("total instructions run: %d\n", count);
 			break;
 		}
 		// EXECUTE
 		int32_t next = t->ops[opcode](&t->s, &t->c, &t->d);
 		// JUMP
 		code_jump_offset(&t->c, next);
-		//stack_print(&t->s);
 	}
 }

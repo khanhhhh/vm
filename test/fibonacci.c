@@ -42,6 +42,6 @@ int main() {
 	 * call_fp `fib` // -> override temp0
 	 * print_int
 	 * */
-	int32_t temp0 = fib(20);
+	int32_t temp0 = fib(40);
 	printf("%d\n", temp0);
 }

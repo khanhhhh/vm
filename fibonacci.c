@@ -4,7 +4,6 @@
 #include<stdint.h>
 #include<stdlib.h>
 int main() {
-
 	uint8_t code[] = {
 		// int main()
 		0x00, 0x00, 0x00, 0x00, 0x00,	// nop				#0
