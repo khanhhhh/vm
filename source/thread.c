@@ -6,18 +6,18 @@ static int32_t halt(stack *s, code *c, data *d) {
 static int32_t nop(stack *s, code *c, data *d) {
 	return 1;
 }
-static int32_t pop_char(stack *s, code *c, data *d) {
+static int32_t print_char(stack *s, code *c, data *d) {
 	object in = stack_pop(s);
 	char ch = (char)in;
 	putchar(ch);
 	return 1;
 }
-static int32_t pop_int(stack *s, code *c, data *d) {
+static int32_t print_int(stack *s, code *c, data *d) {
 	object in = stack_pop(s);
 	printf("%d", in);
 	return 1;
 }
-static int32_t pop_float(stack *s, code *c, data *d) {
+static int32_t print_float(stack *s, code *c, data *d) {
 	object in = stack_pop(s);
 	float fin = *((float*)&in);
 	printf("%f", fin);
@@ -37,7 +37,7 @@ static int32_t load_data(stack *s, code *c, data *d) {
 }
 static int32_t load_stack(stack *s, code *c, data *d) {
 	uint32_t offset = (uint32_t)code_fetch_param(c);
-	object in = stack_frame_load(s, offset);
+	object in = stack_load(s, offset);
 	stack_push(s, in);
 	return 1 + 4;
 }
@@ -51,7 +51,7 @@ static int32_t store_data(stack *s, code *c, data *d) {
 static int32_t store_stack(stack *s, code *c, data *d) {
 	uint32_t offset = (uint32_t)code_fetch_param(c);
 	object in = stack_pop(s);
-	stack_frame_store(s, offset, in);
+	stack_store(s, offset, in);
 	return 1 + 4;
 }
 // STACK MANIPULATION
@@ -244,19 +244,25 @@ static int32_t ifne_jump(stack *s, code *c, data *d) {
 	}
 	return 1 + 4;
 }
-// FUNCTION CALL = INVOKE -> PREPARE STACK -> JUMP
-static int32_t invoke(stack *s, code *c, data *d) {
-	stack_frame_call(s);
+// FUNCTION CALL = PUSH_FP -> PREPARE STACK -> CALL_FP
+static int32_t push_fp(stack *s, code *c, data *d) {
+	stack_push_fp(s);
 	return 1;
+}
+static int32_t call_fp(stack *s, code *c, data *d) {
+	stack_call(s);
+	uint32_t offset = (uint32_t)code_fetch_param(c);
+	code_jump(c, offset);
+	return 1 + 4;
 }
 // RETURN
 static int32_t return0(stack *s, code *c, data *d) {
-	stack_frame_return(s);
+	stack_return(s);
 	return 1;
 }
 static int32_t return1(stack *s, code *c, data *d) {
 	object value = stack_pop(s);
-	stack_frame_return(s);
+	stack_return(s);
 	stack_push(s, value);
 	return 1;
 }
@@ -297,10 +303,10 @@ thread thread_new(uint8_t *code, object *data) {
 	t.ops[0x1a] = ifle_jump;
 	t.ops[0x1b] = ifge_jump;
 	t.ops[0x1c] = ifne_jump;
-	t.ops[0x1d] = invoke;
-	t.ops[0x1e] = return0;
-	t.ops[0x1f] = return1;
-	t.ops[0x20] = halt;
+	t.ops[0x1d] = push_fp;
+	t.ops[0x1e] = call_fp;
+	t.ops[0x1f] = return0;
+	t.ops[0x20] = return1;
 	t.ops[0x21] = halt;
 	t.ops[0x22] = halt;
 	t.ops[0x23] = halt;
@@ -520,9 +526,9 @@ thread thread_new(uint8_t *code, object *data) {
 	t.ops[0xf9] = halt;
 	t.ops[0xfa] = halt;
 	t.ops[0xfb] = halt;
-	t.ops[0xfc] = pop_int;
-	t.ops[0xfd] = pop_float;
-	t.ops[0xfe] = pop_char;
+	t.ops[0xfc] = print_int;
+	t.ops[0xfd] = print_float;
+	t.ops[0xfe] = print_char;
 	t.ops[0xff] = halt;
 	return t;
 }

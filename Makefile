@@ -13,12 +13,15 @@ CCFLAGS += -DNDEBUG -O3
 GDB = 
 endif
 
-.PHONY: test
+.PHONY: test fibonacci
 
 
+fibonacci: 
+	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run source/*.c fibonacci.c
+	$(GDB) ./run
 
-test: 
-	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run source/*.c main.c
+hello_world: 
+	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run source/*.c helloworld.c
 	$(GDB) ./run
 clean:
 	rm -f run

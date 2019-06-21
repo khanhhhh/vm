@@ -3,12 +3,9 @@
 #include<string.h>
 #include<stdint.h>
 #include<stdlib.h>
-thread	thread_new(uint8_t *code, object *data);
 int main() {
 	char str[14] = "hello world!\n";
 	uint32_t len = 14;
-
-
 	uint32_t *data = malloc(len * sizeof(uint32_t));
 	for (uint32_t i=0; i<len; i++) {
 		data[i] = (uint32_t) str[14-i-1];
@@ -46,9 +43,7 @@ int main() {
 		0xfe,
 		0xff
 	};
-
-	thread t = thread_new(code, data);
-	
+	thread t = thread_new(code, data);	
 	thread_loop(&t);
 
 	return 0;

@@ -4,6 +4,7 @@
 typedef struct stack_t {
 	uint32_t sp; // sp-1 : top of the stack
 	uint32_t fp; // fp : bottom of the frame, usually points to return value
+	uint32_t sh;
 	object *mem; //
 } stack;
 // CONSTRUCTOR
@@ -15,13 +16,16 @@ object	stack_peek(stack *s);
 object	stack_pop(stack *s);
 void	stack_push(stack *s, object item);
 //function call procedure:
+//-1. push return value
+//0. stack_push_fp
+//2. push parameters
 //1. stack_frame_call
-//2. push_parameters
 //3. jump / execute code
 //4. stack_frame_return
 // fp = stack_pop() + stack_pop()
-void	stack_frame_call(stack *s); // push fp value on top of the stack. set fp to next value. later prepare the function call parameter by stack_push
-void	stack_frame_return(stack *s); //
-object	stack_frame_load(stack *s, uint32_t offset);
-void	stack_frame_store(stack *s, uint32_t offset, object item);
+void	stack_push_fp(stack *s);
+void	stack_call(stack *s);
+void	stack_return(stack *s);
+object	stack_load(stack *s, uint32_t offset);
+void	stack_store(stack *s, uint32_t offset, object item);
 #endif
