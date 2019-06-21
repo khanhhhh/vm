@@ -1,6 +1,5 @@
 *.swp
 *.o
 *.so
-test
 run
 a.out
