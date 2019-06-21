@@ -265,7 +265,7 @@ thread thread_new(uint8_t *code, object *data) {
 	t.s = stack_new(1024);
 	t.c = code_new(code);
 	t.d = data_new(data);
-	for (uint8_t i=0; i<256; ++i) {
+	for (uint32_t i=0; i<256; ++i) {
 		t.ops[i] = halt;
 	}
 	t.ops[0x00] = nop;
