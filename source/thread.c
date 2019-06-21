@@ -10,17 +10,20 @@ static int32_t print_char(stack *s, code *c, data *d) {
 	object in = stack_pop(s);
 	char ch = (char)in;
 	putchar(ch);
+	stack_push(s, in);
 	return 1;
 }
 static int32_t print_int(stack *s, code *c, data *d) {
 	object in = stack_pop(s);
 	printf("%d", in);
+	stack_push(s, in);
 	return 1;
 }
 static int32_t print_float(stack *s, code *c, data *d) {
 	object in = stack_pop(s);
 	float fin = *((float*)&in);
 	printf("%f", fin);
+	stack_push(s, in);
 	return 1;
 }
 // LOAD DATA
@@ -191,56 +194,55 @@ static int32_t f2i(stack *s, code *c, data *d) {
 }
 // JUMP
 static int32_t jump(stack *s, code *c, data *d) {
-	uint32_t offset = (uint32_t)code_fetch_param(c);
-	code_jump(c, offset);
-	return 1 + 4;
+	uint32_t dst = (uint32_t)code_fetch_param(c);
+	return code_get_offset(c, dst);
 }
 // CONDITIONAL JUMP
 static int32_t ifeq_jump(stack *s, code *c, data *d) {
 	int32_t in = (int32_t)stack_pop(s);
 	if (in == 0) {
-		uint32_t offset = (uint32_t)code_fetch_param(c);
-		code_jump(c, offset);
+		uint32_t dst = (uint32_t)code_fetch_param(c);
+		return code_get_offset(c, dst);
 	}
 	return 1 + 4;
 }
 static int32_t iflt_jump(stack *s, code *c, data *d) {
 	int32_t in = (int32_t)stack_pop(s);
 	if (in < 0) {
-		uint32_t offset = (uint32_t)code_fetch_param(c);
-		code_jump(c, offset);
+		uint32_t dst = (uint32_t)code_fetch_param(c);
+		return code_get_offset(c, dst);
 	}
 	return 1 + 4;
 }
 static int32_t ifgt_jump(stack *s, code *c, data *d) {
 	int32_t in = (int32_t)stack_pop(s);
 	if (in > 0) {
-		uint32_t offset = (uint32_t)code_fetch_param(c);
-		code_jump(c, offset);
+		uint32_t dst = (uint32_t)code_fetch_param(c);
+		return code_get_offset(c, dst);
 	}
 	return 1 + 4;
 }
 static int32_t ifle_jump(stack *s, code *c, data *d) {
 	int32_t in = (int32_t)stack_pop(s);
 	if (in <= 0) {
-		uint32_t offset = (uint32_t)code_fetch_param(c);
-		code_jump(c, offset);
+		uint32_t dst = (uint32_t)code_fetch_param(c);
+		return code_get_offset(c, dst);
 	}
 	return 1 + 4;
 }
 static int32_t ifge_jump(stack *s, code *c, data *d) {
 	int32_t in = (int32_t)stack_pop(s);
 	if (in >= 0) {
-		uint32_t offset = (uint32_t)code_fetch_param(c);
-		code_jump(c, offset);
+		uint32_t dst = (uint32_t)code_fetch_param(c);
+		return code_get_offset(c, dst);
 	}
 	return 1 + 4;
 }
 static int32_t ifne_jump(stack *s, code *c, data *d) {
 	int32_t in = (int32_t)stack_pop(s);
 	if (in != 0) {
-		uint32_t offset = (uint32_t)code_fetch_param(c);
-		code_jump(c, offset);
+		uint32_t dst = (uint32_t)code_fetch_param(c);
+		return code_get_offset(c, dst);
 	}
 	return 1 + 4;
 }
@@ -250,21 +252,19 @@ static int32_t push_fp(stack *s, code *c, data *d) {
 	return 1;
 }
 static int32_t call_fp(stack *s, code *c, data *d) {
-	stack_call(s);
-	uint32_t offset = (uint32_t)code_fetch_param(c);
-	code_jump(c, offset);
-	return 1 + 4;
+	stack_call(s, c->pos);
+	return jump(s, c, d);
 }
 // RETURN
 static int32_t return0(stack *s, code *c, data *d) {
-	stack_return(s);
-	return 1;
+	uint32_t dst = stack_return(s);
+	return code_get_offset(c, dst) + 5;
 }
 static int32_t return1(stack *s, code *c, data *d) {
 	object value = stack_pop(s);
-	stack_return(s);
+	uint32_t dst = stack_return(s);
 	stack_push(s, value);
-	return 1;
+	return code_get_offset(c, dst) + 5;
 }
 thread thread_new(uint8_t *code, object *data) {
 	thread t;
@@ -541,10 +541,14 @@ void thread_loop(thread *t) {
 	while (1) {
 		// FETCH CODE
 		uint8_t opcode = code_fetch(&t->c);
+		//stack_print(&t->s);
+		//printf("instruction: %d\n", t->c.pos);
+		//printf("opcode: 0x%x\n", opcode);
 		if (t->ops[opcode] == halt) break;
 		// EXECUTE
 		int32_t next = t->ops[opcode](&t->s, &t->c, &t->d);
 		// JUMP
-		code_jump(&t->c, next);
+		code_jump_offset(&t->c, next);
+		//stack_print(&t->s);
 	}
 }

@@ -13,5 +13,7 @@ void	code_del();
 uint8_t	 code_fetch(code *c);
 uint32_t code_fetch_param(code *c);
 // JUMP
-void	code_jump(code *c, uint32_t offset);
+void	code_jump(code *c, uint32_t dst);
+void	code_jump_offset(code *c, uint32_t offset);
+uint32_t code_get_offset(code *c, uint32_t dst);
 #endif

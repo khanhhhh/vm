@@ -14,6 +14,12 @@ uint32_t code_fetch_param(code *c) {
 	uint32_t *out = (uint32_t*)(c->mem + c->pos + 1);
 	return *out;
 }
-void	code_jump(code *c, uint32_t offset) {
+void	code_jump(code *c, uint32_t dst) {
+	c->pos = dst;
+}
+void	code_jump_offset(code *c, uint32_t offset) {
 	c->pos += offset;
+}
+uint32_t code_get_offset(code *c, uint32_t dst) {
+	return dst - c->pos;
 }
