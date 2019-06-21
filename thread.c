@@ -6,6 +6,13 @@ static int32_t halt(stack *s, code *c, data *d) {
 static int32_t nop(stack *s, code *c, data *d) {
 	return 1;
 }
+static int32_t pop_char(stack *s, code *c, data *d) {
+	object in = stack_pop(s);
+	char ch = (char)in;
+	putchar(ch);
+	return 1;
+}
+// LOAD DATA
 static int32_t load_code(stack *s, code *c, data *d) {
 	object in = (object)code_fetch_param(c);
 	stack_push(s, in);
@@ -23,8 +30,9 @@ static int32_t load_stack(stack *s, code *c, data *d) {
 	stack_push(s, in);
 	return 1 + 4;
 }
+// STORE DATA
 static int32_t store_data(stack *s, code *c, data *d) {
-	uint32_t offset = (uint32_t)code_fetch_param;
+	uint32_t offset = (uint32_t)code_fetch_param(c);
 	object in = stack_pop(s);
 	data_store(d, offset, in);
 	return 1 + 4;
@@ -35,6 +43,7 @@ static int32_t store_stack(stack *s, code *c, data *d) {
 	stack_frame_store(s, offset, in);
 	return 1 + 4;
 }
+// STACK MANIPULATION
 static int32_t pop(stack *s, code *c, data *d) {
 	stack_pop(s);
 	return 1;
@@ -52,7 +61,7 @@ static int32_t swap(stack *s, code *c, data *d) {
 	stack_push(s, in2);
 	return 1;
 }
-
+// ARITHMETIC
 static int32_t iadd(stack *s, code *c, data *d) {
 	int32_t in1 = (int32_t)stack_pop(s);
 	int32_t in2 = (int32_t)stack_pop(s);
@@ -152,6 +161,7 @@ static int32_t fneg(stack *s, code *c, data *d) {
 	stack_push(s, out);
 	return 1;
 }
+// TYPE CONVERSION
 static int32_t i2f(stack *s, code *c, data *d) {
 	int32_t in = (int32_t)stack_pop(s);
 	float fout = (float)in;
@@ -168,52 +178,117 @@ static int32_t f2i(stack *s, code *c, data *d) {
 	stack_push(s, out);
 	return 1;
 }
-
-
-
-
-
-
+// JUMP
+static int32_t jump(stack *s, code *c, data *d) {
+	uint32_t offset = (uint32_t)code_fetch_param(c);
+	code_jump(c, offset);
+	return 1 + 4;
+}
+// CONDITIONAL JUMP
+static int32_t ifeq_jump(stack *s, code *c, data *d) {
+	int32_t in = (int32_t)stack_pop(s);
+	if (in == 0) {
+		uint32_t offset = (uint32_t)code_fetch_param(c);
+		code_jump(c, offset);
+	}
+	return 1 + 4;
+}
+static int32_t iflt_jump(stack *s, code *c, data *d) {
+	int32_t in = (int32_t)stack_pop(s);
+	if (in < 0) {
+		uint32_t offset = (uint32_t)code_fetch_param(c);
+		code_jump(c, offset);
+	}
+	return 1 + 4;
+}
+static int32_t ifgt_jump(stack *s, code *c, data *d) {
+	int32_t in = (int32_t)stack_pop(s);
+	if (in > 0) {
+		uint32_t offset = (uint32_t)code_fetch_param(c);
+		code_jump(c, offset);
+	}
+	return 1 + 4;
+}
+static int32_t ifle_jump(stack *s, code *c, data *d) {
+	int32_t in = (int32_t)stack_pop(s);
+	if (in <= 0) {
+		uint32_t offset = (uint32_t)code_fetch_param(c);
+		code_jump(c, offset);
+	}
+	return 1 + 4;
+}
+static int32_t ifge_jump(stack *s, code *c, data *d) {
+	int32_t in = (int32_t)stack_pop(s);
+	if (in >= 0) {
+		uint32_t offset = (uint32_t)code_fetch_param(c);
+		code_jump(c, offset);
+	}
+	return 1 + 4;
+}
+static int32_t ifne_jump(stack *s, code *c, data *d) {
+	int32_t in = (int32_t)stack_pop(s);
+	if (in != 0) {
+		uint32_t offset = (uint32_t)code_fetch_param(c);
+		code_jump(c, offset);
+	}
+	return 1 + 4;
+}
+// FUNCTION CALL = INVOKE -> PREPARE STACK -> JUMP
+static int32_t invoke(stack *s, code *c, data *d) {
+	stack_frame_call(s);
+	return 1;
+}
+// RETURN
+static int32_t return0(stack *s, code *c, data *d) {
+	stack_frame_return(s);
+	return 1;
+}
+static int32_t return1(stack *s, code *c, data *d) {
+	object value = stack_pop(s);
+	stack_frame_return(s);
+	stack_push(s, value);
+	return 1;
+}
 thread thread_new(uint8_t *code, object *data) {
 	thread t;
-	t.s = stack_new(1024, 256);
+	t.s = stack_new(1024);
 	t.c = code_new(code);
 	t.d = data_new(data);
 	for (uint8_t i=0; i<256; ++i) {
 		t.ops[i] = halt;
 	}
 	t.ops[0x00] = nop;
-	t.ops[0x01] = halt;
-	t.ops[0x02] = halt;
-	t.ops[0x03] = halt;
-	t.ops[0x04] = halt;
-	t.ops[0x05] = halt;
-	t.ops[0x06] = halt;
-	t.ops[0x07] = halt;
-	t.ops[0x08] = halt;
-	t.ops[0x09] = halt;
-	t.ops[0x0a] = halt;
-	t.ops[0x0b] = halt;
-	t.ops[0x0c] = halt;
-	t.ops[0x0d] = halt;
-	t.ops[0x0e] = halt;
-	t.ops[0x0f] = halt;
-	t.ops[0x10] = halt;
-	t.ops[0x11] = halt;
-	t.ops[0x12] = halt;
-	t.ops[0x13] = halt;
-	t.ops[0x14] = halt;
-	t.ops[0x15] = halt;
-	t.ops[0x16] = halt;
-	t.ops[0x17] = halt;
-	t.ops[0x18] = halt;
-	t.ops[0x19] = halt;
-	t.ops[0x1a] = halt;
-	t.ops[0x1b] = halt;
-	t.ops[0x1c] = halt;
-	t.ops[0x1d] = halt;
-	t.ops[0x1e] = halt;
-	t.ops[0x1f] = halt;
+	t.ops[0x01] = load_code;
+	t.ops[0x02] = load_data;
+	t.ops[0x03] = load_stack;
+	t.ops[0x04] = store_data;
+	t.ops[0x05] = store_stack;
+	t.ops[0x06] = pop;
+	t.ops[0x07] = dup;
+	t.ops[0x08] = swap;
+	t.ops[0x09] = iadd;
+	t.ops[0x0a] = fadd;
+	t.ops[0x0b] = isub;
+	t.ops[0x0c] = fsub;
+	t.ops[0x0d] = imul;
+	t.ops[0x0e] = fmul;
+	t.ops[0x0f] = idiv;
+	t.ops[0x10] = fdiv;
+	t.ops[0x11] = irem;
+	t.ops[0x12] = ineg;
+	t.ops[0x13] = fneg;
+	t.ops[0x14] = i2f;
+	t.ops[0x15] = f2i;
+	t.ops[0x16] = jump;
+	t.ops[0x17] = ifeq_jump;
+	t.ops[0x18] = iflt_jump;
+	t.ops[0x19] = ifgt_jump;
+	t.ops[0x1a] = ifle_jump;
+	t.ops[0x1b] = ifge_jump;
+	t.ops[0x1c] = ifne_jump;
+	t.ops[0x1d] = invoke;
+	t.ops[0x1e] = return0;
+	t.ops[0x1f] = return1;
 	t.ops[0x20] = halt;
 	t.ops[0x21] = halt;
 	t.ops[0x22] = halt;
@@ -436,7 +511,7 @@ thread thread_new(uint8_t *code, object *data) {
 	t.ops[0xfb] = halt;
 	t.ops[0xfc] = halt;
 	t.ops[0xfd] = halt;
-	t.ops[0xfe] = halt;
+	t.ops[0xfe] = pop_char;
 	t.ops[0xff] = halt;
 	return t;
 }
