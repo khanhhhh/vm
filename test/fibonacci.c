@@ -35,7 +35,7 @@ int32_t fib(int32_t x) {
 		return temp0 + temp1;
 	}
 }
-int main() {
+int main(int i, char **argv) {
 	/* load code 0 //temp0
 	 * push_fp
 	 * load code 20
