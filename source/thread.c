@@ -537,7 +537,10 @@ void thread_del(thread *t) {
 	code_del(&t->c);
 	data_del(&t->d);
 }
+#include<time.h>
 void thread_loop(thread *t) {
+	long t1 = clock();
+	long count = 0;
 	for (;;) {
 		// FETCH CODE
 		uint8_t opcode = code_fetch(&t->c);
@@ -548,5 +551,8 @@ void thread_loop(thread *t) {
 		int32_t next = t->ops[opcode](&t->s, &t->c, &t->d);
 		// JUMP
 		code_jump_offset(&t->c, next);
+		count++;
 	}
+	long t2 = clock();
+	printf("\n--------------------------------------------------------\nMIPS: %f\n", 1e-6 * (double)count * CLOCKS_PER_SEC / (t2-t1));
 }
