@@ -20,11 +20,13 @@ b1:	push_fp
 	load_code	2
 	isub
 	call_fp		fib
+
 	iadd
 	return1
 
 main:	push_fp
 	load_data	0
 	call_fp 	fib
+	print_int
 	store_data 	0
 	return0

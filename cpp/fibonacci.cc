@@ -14,30 +14,46 @@ std::vector<uint8_t> read_file(const std::string& filename) {
 	return out;
 }
 int main() {
-	std::vector<uint8_t> source = read_file("fibonacci.byte");
+	//std::vector<uint8_t> source = read_file("fibonacci.byte");
 
+	uint8_t source[] = {
+		// int main()
+		0x00,						// #0  halt
+		0x50, 0x00, 0x00, 0x00, 0x00,			// #1  jump `main`
 
+		0x15, 0x00, 0x00, 0x00, 0x00,			// #6  load_stack 0	[fib]
+		0x11, 0x02, 0x00, 0x00, 0x00,			// #11 load_code 2
+		0x32, 						// #16 isub
+		0x53, 0x00, 0x00, 0x00, 0x00,			// #17 ifgt_jump `b1`
 
+		0x11, 0x01, 0x00, 0x00, 0x00,			// #22 load_code 1	[b0]
+		0x63,						// #27 return1
 
+		0x60,						// #28 push_fp 		[b1]
+		0x15, 0x00, 0x00, 0x00, 0x00,			// #29 load_stack 0
+		0x11, 0x01, 0x00, 0x00, 0x00,                   // #34 load_code 1
+		0x32,                                           // #39 isub
+		0x61, 0x00, 0x00, 0x00, 0x00,			// #40 call_fp `fib`
 
+		0x60,						// #45 push_fp
+		0x15, 0x00, 0x00, 0x00, 0x00,			// #46 load_stack 0
+		0x11, 0x02, 0x00, 0x00, 0x00,                   // #51 load_code 2
+		0x32,                                           // #56 isub
+		0x61, 0x00, 0x00, 0x00, 0x00,			// #57 call_fp `fib`
 
+		0x30,						// #58 iadd
+		0x63,						// #59 return1
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	program p(source.size());
-	std::memcpy(p.mem, source.data(), source.size());
+		0x60,						// #60 push_fp		[main]
+		0x13, 0x00, 0x00, 0x00, 0x00,			// #61 load_data 0
+		0x61, 0x00, 0x00, 0x00, 0x00,                   // #66 call_fp `fib`
+		0xf0,						// #70 print_int
+		0x17, 0x00, 0x00, 0x00, 0x00,			// #71 store_data 0
+		0x62						// #76 return0
+	};
+	int len = 86;
+	program p(len);
+	std::memcpy(p.mem, source, len);
 	heap h(1);
 	h.store(0, 20);
 
