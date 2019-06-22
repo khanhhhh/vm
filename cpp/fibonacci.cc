@@ -1,6 +1,7 @@
 #include"thread.hh"
 #include<cstring>
 #include<cstdint>
+#include<ctime>
 int main() {
 	uint8_t source[] = {
 		// int main()
@@ -41,7 +42,17 @@ int main() {
 	program p(86); std::memcpy(p.mem, source, 86 * sizeof(uint8_t));
 	heap h(0);
 	thread t(p, h);
-	while (t.iterate());
+
+        long t1 = std::clock();
+        long count = 0;
+	while (t.iterate())
+		count++;
+        long t2 = std::clock();
+        printf("\nMIPS: %f\n", 1e-6 * (double)count * CLOCKS_PER_SEC / (t2-t1));
+
+
+
+
 
 	return 0;
 }
