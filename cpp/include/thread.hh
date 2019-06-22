@@ -17,14 +17,15 @@ using heap	= data<utype>;
 
 
 class thread: public i_thread<opcode, utype> {
+public:
+	typedef stype (thread::* instruction)();
+	static instruction ops[256];
 private:
 	utype ip; // instruction pointer: current instruction index
 	utype sp; // stack pointer: stack[sp-1] is top of the stack
 	utype fp; // frame pointer: fucntion call convention 
 	utype shv; // stack height variation: used for function call
 	utype *stack;
-	typedef stype (thread::* instruction)();
-	instruction ops[256];
 	// JUMP
 inline	void	jump(stype offset) {
 		ip += offset;
@@ -86,6 +87,7 @@ public:
 		shv(0),
 		stack((utype*)std::malloc(stack_count * sizeof(utype)))
        	{
+		if (ops[0] == nullptr) {
 		// SET HALT
 		for (int32_t i=0; i<256; i++) {
 			ops[i] = nullptr;
@@ -146,6 +148,7 @@ public:
 		ops[0xf0] = &thread::print_int;
 		ops[0xf1] = &thread::print_float;
 		ops[0xf2] = &thread::print_char;
+		}
 	}
 	~thread() {
 		std::free(stack);
@@ -510,4 +513,5 @@ private:
 		return ip_offset(dst) + 5;
 	}
 };
+thread::instruction thread::ops[256] = {nullptr};
 #endif

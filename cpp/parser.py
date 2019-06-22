@@ -249,4 +249,4 @@ if __name__ == "__main__":
     i = parse("fibonacci.bytecode")
     n = gen_node(i)
     c = gen_code(n)
-    writefile(c, "fibonacci.byte")
+    writefile(c, "fibonacci")

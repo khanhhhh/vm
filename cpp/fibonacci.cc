@@ -14,8 +14,7 @@ std::vector<uint8_t> read_file(const std::string& filename) {
 	return out;
 }
 int main() {
-	//std::vector<uint8_t> source = read_file("fibonacci.byte");
-
+	/*
 	uint8_t source[] = {
 		// int main()
 		0x01,						// #0  nop
@@ -50,14 +49,19 @@ int main() {
 		0x17, 0x00, 0x00, 0x00, 0x00,			// #74 store_data 0
 		0x00						// #78 halt
 	};
-	int len = 86;
+	int len = 79;
 	program p(len);
 	std::memcpy(p.mem, source, len);
+	*/
+	std::vector<uint8_t> source = read_file("fibonacci");
+	program p(source.size());
+	std::memcpy(p.mem, source.data(), source.size());
+
+
 	heap h(1);
 	h.store(0, 20);
 
 	thread t(p, h);
-
         long t1 = std::clock();
         long count = 0;
 	while (t.iterate())
