@@ -111,10 +111,8 @@ def parse(filename):
             param = code[1]
         else:
             opname = code[0]
-        # finalize
-        name = name.strip()
-        opname = opname.strip()
-        param = param.strip()
+        # split param
+        param = param.strip().split(" ")
 
         if (opname == ""): continue
         inslist.append(
@@ -136,6 +134,27 @@ class node:
     def __repr__(self):
         return self.__str__()
 
+def get_param_value(param):
+    if param == "": # no param
+        return None
+    elif (param[0] == "\"" and param[len(param)-1] == "\""): # string
+        param = param[1:len(param)-1]
+    else:
+        try:
+            param = int(param)
+        except ValueError:
+            try:
+                param = float(param)
+            except ValueError:
+                # name, create NOP
+                nop = node(
+                    "",
+                    name2code["nop"],
+                    param
+                )
+                param = nop
+    return param
+
 def gennode(inslist):
     nopdict = {}
     nodelist = []
@@ -145,26 +164,14 @@ def gennode(inslist):
         param = i.param
 
         # classify param # string/integer/float
-        if param == "": # no param
-            pass
-        elif (param[0] == "\"" and param[len(param)-1] == "\""): # string
-            param = param[1:len(param)-1]
-        else:
-            try:
-                param = int(param)
-            except ValueError:
-                try:
-                    param = float(param)
-                except ValueError:
-                    # name, create NOP
-                    nop = node(
-                        "",
-                        name2code["nop"],
-                        param
-                    )
-                    nopdict[param] = nop
-                    param = nop
-                    
+        paramlist = []
+        for p in param:
+            pvalue = get_param_value(p)
+            if (isinstance(pvalue, node)):
+                nopdict[pvalue.param] = pvalue
+            if (pvalue != None):
+                paramlist.append(pvalue)
+        param = paramlist
         # gen node
         code = node(
             name,
