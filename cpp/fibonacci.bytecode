@@ -1,4 +1,4 @@
-	halt
+	nop
 	jump		main
 
 fib:	load_stack	0
@@ -29,4 +29,4 @@ main:	push_fp
 	call_fp 	fib
 	print_int
 	store_data 	0
-	return0
+	halt

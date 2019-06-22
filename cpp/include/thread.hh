@@ -80,14 +80,12 @@ inline	utype	stack_return() {
 public:
 	thread(const i_code<opcode, utype>& c, i_data<utype>& d, utype stack_count = 1024):
 		i_thread<opcode, utype>(c, d),
-		ip(1),	// code starts at ip = 1 (code[0] = halt)
-		sp(2),	// program starts at sp = 2. (stack[0]: return addr = 0, halt, stack[1] = 0)
+		ip(0),
+		sp(0),	
 		fp(0),
 		shv(0),
 		stack((utype*)std::malloc(stack_count * sizeof(utype)))
        	{
-		stack_store(0, 0);
-		stack_store(1, 0);
 		// SET HALT
 		for (int32_t i=0; i<256; i++) {
 			ops[i] = nullptr;
