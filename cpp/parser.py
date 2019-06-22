@@ -77,13 +77,6 @@ class instruction:
     def __repr__(self):
         return self.__str__()
 
-class node:
-    def __init__(self, opcode, param):
-        self.opcode = opcode
-        self.param = param
-        self.pos = 0
-
-
 def parse(filename):
     # read file
     lines = []
@@ -106,6 +99,9 @@ def parse(filename):
             code = ins[1]
         else:
             code = ins[0]
+        name = name.strip()
+        code = code.strip()
+
         # get opname and param
         code = code.split(" ")
         opname = ""
@@ -119,29 +115,29 @@ def parse(filename):
         name = name.strip()
         opname = opname.strip()
         param = param.strip()
-        if (opname == ""): continue
 
+        if (opname == ""): continue
         inslist.append(
             instruction(name, opname, param, linenum)
         )
     return inslist
 
 class node:
-    def __init__(self, opcode, param):
+    def __init__(self, name, opcode, param):
+        self.name = name
         self.opcode = opcode
         self.param = param
     def __str__(self):
-        return "{{opcode: {} -> {}, param: {}}}".format(
-                    self.opcode,
+        return "{{name: {}, opcode: {}, param: {}}}".format(
+                    self.name,
                     code2name[self.opcode],
                     self.param
                 )
     def __repr__(self):
         return self.__str__()
 
-
-def codegen(inslist):
-    namedict = {}
+def gennode(inslist):
+    nopdict = {}
     nodelist = []
     for i in inslist:
         name = i.name
@@ -153,28 +149,46 @@ def codegen(inslist):
             pass
         elif (param[0] == "\"" and param[len(param)-1] == "\""): # string
             param = param[1:len(param)-1]
-        elif (param[0] == "#"): # number
-            if (param[len(param)-1] == "f"): # float
-                param = float(param[1:len(param)-1])
-            else:
-                param = int(param[1:len(param)-1])
-        else: # name, create NOP
-            nop = node(
-                name2code["nop"],
-                None
-            )
-            namedict[param] = nop
-            param = nop
+        else:
+            try:
+                param = int(param)
+            except ValueError:
+                try:
+                    param = float(param)
+                except ValueError:
+                    # name, create NOP
+                    nop = node(
+                        "",
+                        name2code["nop"],
+                        param
+                    )
+                    nopdict[param] = nop
+                    param = nop
                     
         # gen node
         code = node(
+            name,
             name2code[opname],
             param
         )
         nodelist.append(code)
-    return nodelist
+    orderednodelist = []
+    for n in nodelist:
+        if (n.name != ""):
+            try:
+                nop = nopdict[n.name]
+                orderednodelist.append(nop)
+            except KeyError:
+                print("KeyError: {}".format(n.name))
+        orderednodelist.append(n)
+    return orderednodelist
+
+
+
 
 if __name__ == "__main__":
-    ins = parse("fibonacci.bytecode")
-    n = codegen(ins)
-    print(n)
+    i = parse("fibonacci.bytecode")
+    n = gennode(i)
+    for x in n:
+        print(x)
+    pdb.set_trace()
