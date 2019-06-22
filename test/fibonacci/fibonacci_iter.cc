@@ -45,6 +45,7 @@ int main() {
 	while (t.iterate())
 		count++;
         long t2 = std::clock();
+	std::printf("ops: %ld, ticks: %ld\n", count, t2-t1);
 	std::printf("\nMIPS: %f\n", 1e-6 * (double)count * CLOCKS_PER_SEC / (t2-t1));
 
 
