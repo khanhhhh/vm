@@ -1,7 +1,7 @@
 	halt
 	jump		main
 
-fib:	load_stack	0.0
+fib:	load_stack	0
 	load_code	2
 	isub
 	ifgt_jump	b1
@@ -24,7 +24,7 @@ b1:	push_fp
 	return1
 
 main:	push_fp
-	load_data 	0
+	load_data	0
 	call_fp 	fib
 	store_data 	0
 	return0

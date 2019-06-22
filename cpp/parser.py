@@ -123,6 +123,7 @@ class node:
         self.name = name
         self.opcode = opcode
         self.param = param
+        self.addr = 0
     def __str__(self):
         return "{{name: {}, opcode: {}, param: {}}}".format(
                     self.name,
@@ -153,7 +154,7 @@ def get_param_value(param):
                 param = nop
     return param
 
-def gennode(inslist):
+def gen_node(inslist):
     nopdict = {}
     nodelist = []
     for i in inslist:
@@ -191,9 +192,61 @@ def gennode(inslist):
 
 
 
+
+
+
+
+import struct
+def gen_code(nodelist):
+    # calculate address
+    pointer = 0
+    for n in nodelist:
+        n.addr = pointer
+        pointer += 1 # opcode
+        for p in n.param:
+            if isinstance(p, int):
+                pointer += 4 # 32bit integer
+                continue
+            if isinstance(p, float):
+                pointer += 4 # 32bit float
+                continue
+            if isinstance(p, str):
+                pointer += 4 * len(p) #string
+            if isinstance(p, node):
+                pointer += 4 # nop
+    # generate code
+    array = bytearray()
+    for n in nodelist:
+        array.extend(
+            bytearray(struct.pack("B", n.opcode))
+        )
+        if (code2name[n.opcode] == "nop"): continue
+        for p in n.param:
+            if isinstance(p, int):
+                array.extend(
+                    bytearray(struct.pack("i", p))
+                )
+                continue
+            if isinstance(p, float):
+                array.extend(
+                    bytearray(struct.pack("f", p))
+                )
+                continue
+            if isinstance(p, str):
+                print("string: {}".format(p))
+            if isinstance(p, node):
+                array.extend(
+                    bytearray(struct.pack("i", p.addr))
+                )
+    return array 
+
+def writefile(array, filename):
+    with open(filename, "wb") as f:
+        f.write(array)
+
+
 if __name__ == "__main__":
     i = parse("fibonacci.bytecode")
-    n = gennode(i)
-    for x in n:
-        print(x)
-    pdb.set_trace()
+    n = gen_node(i)
+    c = gen_code(n)
+    writefile(c, "fibonacci.byte")
