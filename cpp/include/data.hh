@@ -2,21 +2,23 @@
 #define _DATA_HH_
 #include"i_data.hh"
 #include<vector>
-template<class dtype>
-class data: public i_data<dtype> {
+template<class utype>
+class data: public i_data<utype> {
 private:
-	std::vector<dtype> mem;
+	utype *mem;
 public:
-	data(): i_data<dtype>(), mem() {}
-	~data() {}
-	dtype	load(dtype offset) const {
-		return mem[offset];
+	data(utype count):
+		i_data<utype>(),
+		mem((utype*)std::malloc(count * sizeof(utype)))
+	{}
+	~data() {
+		std::free(mem);
 	}
-	void	store(dtype offset, dtype v) {
-		mem[offset] = v;
+	utype	load(utype addr) const {
+		return mem[addr];
 	}
-	void	push_data(dtype v) {
-		mem.push_back(v);
+	void	store(utype addr, utype v) {
+		mem[addr] = v;
 	}
 };
 #endif
