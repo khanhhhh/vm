@@ -150,10 +150,6 @@ public:
 		ops[0x62] = &thread::return0;
 		ops[0x63] = &thread::return1;
 		ops[0x64] = &thread::return1_array;
-		// 0xf.. : PRINT
-		ops[0xf0] = &thread::print_int;
-		ops[0xf1] = &thread::print_float;
-		ops[0xf2] = &thread::print_char;
 		}
 	}
 	~thread() {
@@ -180,20 +176,6 @@ private:
 		return 0;
 	}
 	stype nop() {
-		return 1;
-	}
-	stype print_char() {
-		utype out = stack_peek();
-		char cout = (char)out;
-		std::putchar(cout);
-		return 1;
-	}
-	stype print_int() {
-		std::printf("%d", _u2s(stack_peek()));
-		return 1;
-	}
-	stype print_float() {
-		std::printf("%f", _u2f(stack_peek()));
 		return 1;
 	}
 	// LOAD DATA
