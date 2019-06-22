@@ -1,31 +1,31 @@
 	halt
 	jump main
 
-fib:	load_stack 0
-	load_code 2
+fib:	load_stack	0
+	load_code	2
 	isub
-	ifgt_jump b1
+	ifgt_jump	b1
 
-b0:	load_code 1
+b0:	load_code	1
 	return1
 
 b1:	push_fp
-	load_stack 0
-	load_code 1
-	sub
-	call_fp fib
+	load_stack	0
+	load_code	1
+	isub
+	call_fp		fib
 
 	push_fp
-	load_stack 0
-	load_code 2
+	load_stack	0
+	load_code	2
 	isub
-	call_fp fib
+	call_fp		fib
 	iadd
 	return1
 
 main:
 	push_fp
-	load_data 0
-	call_fp fib
-	store_data 0
+	load_data 	0
+	call_fp 	fib
+	store_data 	0
 	return0
