@@ -26,43 +26,53 @@ private:
 	typedef stype (thread::* instruction)();
 	instruction ops[256];
 	// JUMP
-	void	jump(stype offset) {
+inline	void	jump(stype offset) {
 		ip += offset;
 	}
-	stype	ip_offset(utype dst) {
+inline	stype	ip_offset(utype dst) {
 		return dst - ip;
 	}
 	// STACK MANIPULATION
-	utype	stack_peek() {
+inline	utype*	stack_ptr() {
+		return &stack[sp];
+	}
+inline	utype	stack_peek() {
 		return stack[sp - 1];
 	}
-	utype	stack_pop() {
+inline	utype	stack_pop() {
 		sp--;
 		shv--;
 		return stack[sp];
 	}
-	void	stack_push(utype item) {
+inline	void	stack_push(utype item) {
 		stack[sp] = item;
 		sp++;
 		shv++;
 	}
-	utype	stack_load(utype offset) {
+inline	void	stack_advance(stype len) {
+		sp += len;
+		shv += len;
+	}
+inline	utype	stack_load(utype offset) {
 		return stack[fp + offset];
 	}
-	void	stack_store(utype offset, utype item) {
+inline	void	stack_memmove(utype dst, utype src, utype len) {
+		std::memmove(stack + dst, stack + src, len * sizeof(utype));	
+	}
+inline	void	stack_store(utype offset, utype item) {
 		stack[fp + offset] = item;
 	}
-	// STACK CALLING FUNCTION
+inline	// STACK CALLING FUNCTION
 	void	stack_push_fp() {
 		sp++;			// placeholder for return address
 		stack_push(fp);		// store frame pointer
 		shv = 0;		// set shv to zero to calculate hm arguments
 	}
-	void	stack_call() {
+inline	void	stack_call() {
 		fp = sp - shv;		// set frame pointer to the first argument
 		stack[fp - 2] = ip;	// set return address to ip
 	}
-	utype	stack_return() {
+inline	utype	stack_return() {
 		sp = fp - 2;		// restore stack pointer
 		fp = stack[sp + 1];	// restore frame pointer
 		return stack[sp];	// return address;
@@ -70,52 +80,54 @@ private:
 public:
 	thread(const i_code<opcode, utype>& c, i_data<utype>& d, utype stack_count = 1024):
 		i_thread<opcode, utype>(c, d),
-		ip(0),
-		sp(0),
+		ip(1),	// code starts at ip = 1 (code[0] = halt)
+		sp(2),	// program starts at sp = 2. (stack[0]: return addr = 0, halt, stack[1] = 0)
 		fp(0),
 		shv(0),
 		stack((utype*)std::malloc(stack_count * sizeof(utype)))
        	{
-		ops[0x00] = &thread::nop;
-		ops[0x01] = &thread::load_code;
-		ops[0x02] = &thread::load_data;
-		ops[0x03] = &thread::load_stack;
-		ops[0x04] = &thread::store_data;
-		ops[0x05] = &thread::store_stack;
-		ops[0x06] = &thread::pop;
-		ops[0x07] = &thread::dup;
-		ops[0x08] = &thread::swap;
-		ops[0x09] = &thread::iadd;
-		ops[0x0a] = &thread::fadd;
-		ops[0x0b] = &thread::isub;
-		ops[0x0c] = &thread::fsub;
-		ops[0x0d] = &thread::imul;
-		ops[0x0e] = &thread::fmul;
-		ops[0x0f] = &thread::idiv;
-		ops[0x10] = &thread::fdiv;
-		ops[0x11] = &thread::irem;
-		ops[0x12] = &thread::ineg;
-		ops[0x13] = &thread::fneg;
-		ops[0x14] = &thread::i2f;
-		ops[0x15] = &thread::f2i;
-		ops[0x16] = &thread::jump;
-		ops[0x17] = &thread::ifeq_jump;
-		ops[0x18] = &thread::iflt_jump;
-		ops[0x19] = &thread::ifgt_jump;
-		ops[0x1a] = &thread::ifle_jump;
-		ops[0x1b] = &thread::ifge_jump;
-		ops[0x1c] = &thread::ifne_jump;
-		ops[0x1d] = &thread::push_fp;
-		ops[0x1e] = &thread::call_fp;
-		ops[0x1f] = &thread::return0;
-		ops[0x20] = &thread::return1;
-		ops[0x21] = &thread::halt;
-		ops[0x22] = &thread::halt;
-		ops[0x23] = &thread::halt;
-		ops[0x24] = &thread::halt;
-		ops[0x25] = &thread::halt;
-		ops[0x26] = &thread::halt;
-		ops[0x27] = &thread::halt;
+		stack_store(0, 0);
+		stack_store(1, 0);
+		ops[0x00] = &thread::halt;
+		ops[0x01] = &thread::nop;
+		ops[0x02] = &thread::load_code;
+		ops[0x03] = &thread::load_code_array;
+		ops[0x04] = &thread::load_data;
+		ops[0x05] = &thread::load_data_array;
+		ops[0x06] = &thread::load_stack;
+		ops[0x07] = &thread::load_stack_array;
+		ops[0x08] = &thread::store_data;
+		ops[0x09] = &thread::store_data_array;
+		ops[0x0a] = &thread::store_stack;
+		ops[0x0b] = &thread::store_stack_array;
+		ops[0x0c] = &thread::pop;
+		ops[0x0d] = &thread::dup;
+		ops[0x0e] = &thread::swap;
+		ops[0x0f] = &thread::iadd;
+		ops[0x10] = &thread::fadd;
+		ops[0x11] = &thread::isub;
+		ops[0x12] = &thread::fsub;
+		ops[0x13] = &thread::imul;
+		ops[0x14] = &thread::fmul;
+		ops[0x15] = &thread::idiv;
+		ops[0x16] = &thread::fdiv;
+		ops[0x17] = &thread::irem;
+		ops[0x18] = &thread::ineg;
+		ops[0x19] = &thread::fneg;
+		ops[0x1a] = &thread::i2f;
+		ops[0x1b] = &thread::f2i;
+		ops[0x1c] = &thread::jump;
+		ops[0x1d] = &thread::ifeq_jump;
+		ops[0x1e] = &thread::iflt_jump;
+		ops[0x1f] = &thread::ifgt_jump;
+		ops[0x20] = &thread::ifle_jump;
+		ops[0x21] = &thread::ifge_jump;
+		ops[0x22] = &thread::ifne_jump;
+		ops[0x23] = &thread::push_fp;
+		ops[0x24] = &thread::call_fp;
+		ops[0x25] = &thread::return0;
+		ops[0x26] = &thread::return1;
+		ops[0x27] = &thread::return1_array;
 		ops[0x28] = &thread::halt;
 		ops[0x29] = &thread::halt;
 		ops[0x2a] = &thread::halt;
@@ -351,6 +363,7 @@ private:
 	// INSTRUCTIONS
 	// instruction return relative address to jump
 	stype halt() {
+		// halt should not be called!
 		return 0;
 	}
 	stype nop() {
@@ -371,46 +384,89 @@ private:
 		return 1;
 	}
 	// LOAD DATA
+	// LOADCODE + PARAM
 	stype load_code() {
 		utype param = c.fetch_param(ip + 1);
 		stack_push(param);
 		return 1 + 4;
 	}
+	// LOADCODEARRAY + LEN + {ARRAY}
+	stype load_code_array() {
+		utype len = c.fetch_param(ip + 1);
+		c.fetch_array(ip + 1 + 4, len, stack_ptr());
+		stack_advance((stype)len);
+		return 1 + 4 + 4*len;
+	}
+	// LOADDATA + BASE
 	stype load_data() {
-		utype addr = c.fetch_param(ip + 1);
-		utype out = d.load(addr);
-		stack_push(out);
+		utype base = c.fetch_param(ip + 1);
+		stack_push(d.load(base));
 		return 1 + 4;
 	}
+	// LOADDATAARRAY + LEN + BASE
+	stype load_data_array() {
+		utype len = c.fetch_param(ip + 1);
+		utype base = c.fetch_param(ip + 1 + 4);
+		d.load_array(base, len, stack_ptr());
+		stack_advance((stype)len);
+		return 1 + 4 + 4;
+	}
+	// LOADSTACK + BASE
 	stype load_stack() {
 		utype addr = c.fetch_param(ip + 1);
 		utype out = stack_load(addr);
 		stack_push(out);
 		return 1 + 4;
 	}
+	// LOADSTACKARRAY + LEN + BASE
+	stype load_stack_array() {
+		utype len = c.fetch_param(ip + 1);
+		utype base = c.fetch_param(ip + 1 + 4);
+		stack_memmove(sp, base, len);
+		stack_advance((stype)len);
+		return 1 + 4 + 4;
+	}
 	// STORE DATA
+	// STOREDATA + BASE
 	stype store_data() {
-		utype addr = c.fetch_param(ip + 1);
-		utype out = stack_pop();
-		d.store(addr, out);
+		utype base = c.fetch_param(ip + 1);
+		d.store(base, stack_pop());
 		return 1 + 4;
 	}
+	// STOREDATAARRAY + LEN + BASE
+	stype store_data_array() {
+		utype len = c.fetch_param(ip + 1);
+		utype base = c.fetch_param(ip + 1 + 4);
+		d.store_array(base, len, stack_ptr() - len);
+		stack_advance(- (stype)len);
+		return 1 + 4 + 4;
+	}
+	// STORESTACK + BASE 
 	stype store_stack() {
-		utype addr = c.fetch_param(ip + 1);
-		utype out = stack_pop();
-		stack_store(addr,  out);
+		utype base = c.fetch_param(ip + 1);
+		stack_store(base, stack_pop());
 		return 1 + 4;
+	}
+	// STORESTACKARRAY + LEN + BASE
+	stype store_stack_array() {
+		utype len = c.fetch_param(ip + 1);
+		utype base = c.fetch_param(ip + 1 + 4);
+		stack_memmove(base, sp - len, len);
+		stack_advance(- (stype)len);
+		return 1 + 4 + 4;
 	}
 	// STACK MANIPULATION
+	// POP
 	stype pop() {
 		stack_pop();
 		return 1;
 	}
+	// DUP
 	stype dup() {
-		utype out = stack_peek();
-		stack_push(out);
+		stack_push(stack_peek());
 		return 1;
 	}
+	// SWAP
 	stype swap() {
 		utype out1 = stack_pop();
 		utype out2 = stack_pop();
@@ -420,101 +476,116 @@ private:
 	}
 	// ARITHMETIC
 	// helpers
-		inline stype _u2s(utype in) {
+		static inline stype _u2s(utype in) {
 			return (stype)in;
 		}
-		inline utype _s2u(stype in) {
+		static inline utype _s2u(stype in) {
 			return (utype)in;
 		}
-		inline ftype _u2f(utype in) {
+		static inline ftype _u2f(utype in) {
 			ftype *out = (ftype*)&in;
 			return *out;
 		}
-		inline utype _f2u(ftype in) {
+		static inline utype _f2u(ftype in) {
 			utype *out = (utype*)&in;
 			return *out;
 		}
+	// IADD
 	stype iadd() {
 		stype b = _u2s(stack_pop());
 		stype a = _u2s(stack_pop());
 		stack_push(_s2u(a + b));
 		return 1;
 	}
+	// FADD
 	stype fadd() {
 		ftype b = _u2f(stack_pop());
 		ftype a = _u2f(stack_pop());
 		stack_push(_f2u(a + b));
 		return 1;
 	}
+	// ISUB
 	stype isub() {
 		stype b = _u2s(stack_pop());
 		stype a = _u2s(stack_pop());
 		stack_push(_s2u(a - b));
 		return 1;
 	}
+	// FSUB
 	stype fsub() {
 		ftype b = _u2f(stack_pop());
 		ftype a = _u2f(stack_pop());
 		stack_push(_f2u(a - b));
 		return 1;
 	}
+	// IMUL
 	stype imul() {
 		stype b = _u2s(stack_pop());
 		stype a = _u2s(stack_pop());
 		stack_push(_s2u(a * b));
 		return 1;
 	}
+	// FMUL
 	stype fmul() {
 		ftype b = _u2f(stack_pop());
 		ftype a = _u2f(stack_pop());
 		stack_push(_f2u(a * b));
 		return 1;
 	}
+	// IDIV
 	stype idiv() {
 		stype b = _u2s(stack_pop());
 		stype a = _u2s(stack_pop());
 		stack_push(_s2u(a / b));
 		return 1;
 	}
+	// FDIV
 	stype fdiv() {
 		ftype b = _u2f(stack_pop());
 		ftype a = _u2f(stack_pop());
 		stack_push(_f2u(a / b));
 		return 1;
 	}
+	// IREM
 	stype irem() {
 		stype b = _u2s(stack_pop());
 		stype a = _u2s(stack_pop());
 		stack_push(_s2u(a % b));
 		return 1;
 	}
+	// INEG
 	stype ineg() {
 		stype a = _u2s(stack_pop());
 		stack_push(_s2u(- a));
 		return 1;
 	}
+	// FNEG
 	stype fneg() {
 		ftype a = _u2f(stack_pop());
 		stack_push(_f2u(- a));
 		return 1;
 	}
 // TYPE CONVERSION
+	// I2F
 	stype i2f() {
 		stype a = _u2s(stack_pop());
 		stack_push(_f2u((ftype)a));
 		return 1;
 	}
+	// F2I
 	stype f2i() {
 		ftype a = _u2f(stack_pop());
 		stack_push(_s2u((stype)a));
 		return 1;
 	}
 // JUMP
+	// JUMP DST
 	stype jump() {
 		stype dst = _u2s(c.fetch_param(ip + 1));
 		return ip_offset(dst);
 	}
 // CONDITIONAL JUMP
+	// IFEQ_JUMP DST
 	stype ifeq_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond == 0) {
@@ -523,6 +594,7 @@ private:
 		}
 		return 1 + 4;
 	}
+	// IFLT_JUMP DST
 	stype iflt_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond < 0) {
@@ -531,6 +603,7 @@ private:
 		}
 		return 1 + 4;
 	}
+	// IFGT_JUMP DST
 	stype ifgt_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond > 0) {
@@ -539,6 +612,7 @@ private:
 		}
 		return 1 + 4;
 	}
+	// IFLE_JUMP DST
 	stype ifle_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond <= 0) {
@@ -547,6 +621,7 @@ private:
 		}
 		return 1 + 4;
 	}
+	// IFGE_JUMP DST
 	stype ifge_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond >= 0) {
@@ -555,6 +630,7 @@ private:
 		}
 		return 1 + 4;
 	}
+	// IFNE_JUMP DST
 	stype ifne_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond != 0) {
@@ -564,23 +640,37 @@ private:
 		return 1 + 4;
 	}
 // FUNCTION CALL = PUSH_FP -> PREPARE STACK -> CALL_FP
+	// PUSH_FP
 	stype push_fp() {
 		stack_push_fp();
 		return 1;
 	}
+	// CALL_FP
 	stype call_fp() {
 		stack_call();
 		stype dst = _u2s(c.fetch_param(ip + 1));
 		return ip_offset(dst);
 	}
+	// RETURN0
 	stype return0() {
 		utype dst = stack_return();
 		return ip_offset(dst) + 5;
 	}
+	// RETURN1
 	stype return1() {
 		utype out = stack_pop();
 		utype dst = stack_return();
 		stack_push(out);
+		return ip_offset(dst) + 5;
+	}
+	// RETURN1ARRAY LEN
+	stype return1_array() {
+		utype len = c.fetch_param(ip + 1);
+		utype *arr = (utype*)std::malloc(len * sizeof(utype));
+		std::memcpy(arr, stack_ptr() - len, len * sizeof(utype));
+		stack_advance(- (stype)len);
+		utype dst = stack_return();
+		std::memcpy(stack_ptr(), arr, len * sizeof(utype));
 		return ip_offset(dst) + 5;
 	}
 };

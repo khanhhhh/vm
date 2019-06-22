@@ -23,5 +23,8 @@ public:
 		std::memcpy(&out, mem + addr, sizeof(utype));
 		return out;
 	}
+	void	fetch_array(utype base, utype len, utype *out) const {
+		std::memcpy(out, mem + base, len * sizeof(utype));
+	}
 };
 #endif

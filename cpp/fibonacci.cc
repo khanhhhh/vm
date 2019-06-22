@@ -1,4 +1,5 @@
 #include"thread.hh"
+#include<iostream>
 #include<cstring>
 #include<cstdint>
 #include<ctime>
@@ -38,21 +39,10 @@ int main() {
 			0x20,				// return1		#85
 	};
 	int len = 86;
-
-	program p(86); std::memcpy(p.mem, source, 86 * sizeof(uint8_t));
-	heap h(0);
-	thread t(p, h);
-
-        long t1 = std::clock();
-        long count = 0;
-	while (t.iterate())
-		count++;
-        long t2 = std::clock();
-        printf("\nMIPS: %f\n", 1e-6 * (double)count * CLOCKS_PER_SEC / (t2-t1));
-
-
-
-
+	
+	int32_t num;
+	std::memcpy(&num, source + 7, 7);
+	std::cout<<num<<std::endl;
 
 	return 0;
 }

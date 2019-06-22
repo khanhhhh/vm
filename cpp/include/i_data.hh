@@ -7,5 +7,8 @@ public:
 	virtual ~i_data() {}
 	virtual utype	load(utype addr) const = 0;
 	virtual void	store(utype addr, utype v) = 0;
+
+	virtual void	load_array(utype addr, utype len, utype *v) const = 0;
+	virtual void	store_array(utype addr, utype len, utype *v) = 0;
 };
 #endif

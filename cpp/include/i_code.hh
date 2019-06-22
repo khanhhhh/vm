@@ -7,5 +7,6 @@ public:
 	virtual ~i_code() {}
 	virtual opcode	fetch(utype addr) const = 0;
 	virtual utype	fetch_param(utype addr) const = 0;
+	virtual void	fetch_array(utype base, utype len, utype *out) const = 0;
 };
 #endif
