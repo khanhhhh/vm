@@ -4,7 +4,7 @@
 #include<cstring>
 #include<cstdlib>
 template<class opcode, class utype>
-class code: i_code<opcode, utype> {
+class code: public i_code<opcode, utype> {
 public:
 	opcode *mem;
 public:

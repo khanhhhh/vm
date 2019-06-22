@@ -13,7 +13,11 @@ CCFLAGS += -DNDEBUG -O3
 GDB = 
 endif
 
-.PHONY: test
+.PHONY: clean test fibonacci
+
+fibonacci:
+	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run fibonacci.cc
+	$(GDB) ./run
 test: 
 	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run test.cc
 	$(GDB) ./run

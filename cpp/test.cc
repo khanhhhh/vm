@@ -1,4 +1,4 @@
-//#include"thread.hh"
+#include"thread.hh"
 int main() {
 
 

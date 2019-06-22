@@ -7,10 +7,15 @@
 #include<cstdlib>
 #include<cstdio>
 //template<class opcode, class utype>
-typedef uint8_t opcode;
-typedef uint32_t utype;
-typedef int32_t stype;
-typedef float ftype;
+
+using opcode	= uint8_t;
+using utype	= uint32_t;
+using stype	= int32_t;
+using ftype	= float;
+using program	= code<opcode, utype>;
+using heap	= data<utype>;
+
+
 class thread: public i_thread<opcode, utype> {
 private:
 	utype ip; // instruction pointer: current instruction index
@@ -340,6 +345,7 @@ public:
 			return false;
 		// EXECUTE
 		jump((this->*op_func)());
+		return true;
 	}
 private:
 	// INSTRUCTIONS
@@ -357,44 +363,40 @@ private:
 		return 1;
 	}
 	stype print_int() {
-		utype out = stack_peek();
-		stype sout = (stype)out;
-		std::printf("%d", sout);
+		std::printf("%d", _u2s(stack_peek()));
 		return 1;
 	}
 	stype print_float() {
-		utype out = stack_peek();
-		float fout = *((float*)&out);
-		std::printf("%f", fout);
+		std::printf("%f", _u2f(stack_peek()));
 		return 1;
 	}
 	// LOAD DATA
 	stype load_code() {
-		utype param = c.fetch_param();
+		utype param = c.fetch_param(ip + 1);
 		stack_push(param);
 		return 1 + 4;
 	}
 	stype load_data() {
-		utype addr = c.fetch_param();
-		utype out = d.load(addr)
+		utype addr = c.fetch_param(ip + 1);
+		utype out = d.load(addr);
 		stack_push(out);
 		return 1 + 4;
 	}
 	stype load_stack() {
-		utype addr = c.fetch_param();
+		utype addr = c.fetch_param(ip + 1);
 		utype out = stack_load(addr);
 		stack_push(out);
 		return 1 + 4;
 	}
 	// STORE DATA
 	stype store_data() {
-		utype addr = c.fetch_param();
+		utype addr = c.fetch_param(ip + 1);
 		utype out = stack_pop();
 		d.store(addr, out);
 		return 1 + 4;
 	}
 	stype store_stack() {
-		utype addr = c.fetch_param();
+		utype addr = c.fetch_param(ip + 1);
 		utype out = stack_pop();
 		stack_store(addr,  out);
 		return 1 + 4;
@@ -509,14 +511,14 @@ private:
 	}
 // JUMP
 	stype jump() {
-		stype dst = _u2s(c.fetch_param());
+		stype dst = _u2s(c.fetch_param(ip + 1));
 		return ip_offset(dst);
 	}
 // CONDITIONAL JUMP
 	stype ifeq_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond == 0) {
-			stype dst = _u2s(c.fetch_param());
+			stype dst = _u2s(c.fetch_param(ip + 1));
 			return ip_offset(dst);
 		}
 		return 1 + 4;
@@ -524,7 +526,7 @@ private:
 	stype iflt_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond < 0) {
-			stype dst = _u2s(c.fetch_param());
+			stype dst = _u2s(c.fetch_param(ip + 1));
 			return ip_offset(dst);
 		}
 		return 1 + 4;
@@ -532,7 +534,7 @@ private:
 	stype ifgt_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond > 0) {
-			stype dst = _u2s(c.fetch_param());
+			stype dst = _u2s(c.fetch_param(ip + 1));
 			return ip_offset(dst);
 		}
 		return 1 + 4;
@@ -540,7 +542,7 @@ private:
 	stype ifle_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond <= 0) {
-			stype dst = _u2s(c.fetch_param());
+			stype dst = _u2s(c.fetch_param(ip + 1));
 			return ip_offset(dst);
 		}
 		return 1 + 4;
@@ -548,7 +550,7 @@ private:
 	stype ifge_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond >= 0) {
-			stype dst = _u2s(c.fetch_param());
+			stype dst = _u2s(c.fetch_param(ip + 1));
 			return ip_offset(dst);
 		}
 		return 1 + 4;
@@ -556,7 +558,7 @@ private:
 	stype ifne_jump() {
 		stype cond = _u2s(stack_pop());
 		if (cond != 0) {
-			stype dst = _u2s(c.fetch_param());
+			stype dst = _u2s(c.fetch_param(ip + 1));
 			return ip_offset(dst);
 		}
 		return 1 + 4;
@@ -568,7 +570,7 @@ private:
 	}
 	stype call_fp() {
 		stack_call();
-		stype dst = _u2s(c.fetch_param());
+		stype dst = _u2s(c.fetch_param(ip + 1));
 		return ip_offset(dst);
 	}
 	stype return0() {
@@ -578,7 +580,7 @@ private:
 	stype return1() {
 		utype out = stack_pop();
 		utype dst = stack_return();
-		stack_push(s, out);
+		stack_push(out);
 		return ip_offset(dst) + 5;
 	}
 };
