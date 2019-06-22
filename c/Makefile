@@ -1,4 +1,4 @@
-DEBUG = 2
+DEBUG = 0
 
 CC = gcc
 CCFLAGS = -std=c11 -fPIC -Wall -Wfatal-errors -fno-strict-aliasing
