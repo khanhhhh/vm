@@ -4,7 +4,7 @@
 #include<vector>
 template<class utype>
 class data: public i_data<utype> {
-private:
+public:
 	utype *mem;
 public:
 	data(utype count):

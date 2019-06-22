@@ -1,4 +1,4 @@
-DEBUG = 1
+DEBUG = 0
 
 CC = g++
 CCFLAGS = -std=c++17 -fPIC -Wall -Wfatal-errors 
