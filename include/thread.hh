@@ -63,6 +63,12 @@ inline	void	stack_memmove(utype dst, utype src, utype len) {
 inline	void	stack_store(utype offset, utype item) {
 		stack[fp + offset] = item;
 	}
+	void	stack_print() {
+		std::printf("[");
+		for (utype i = fp; i < sp; i++)
+			std::printf("%u, ", stack[i]);
+		std::printf("]\n");
+	}
 inline	// STACK CALLING FUNCTION
 	void	stack_push_fp() {
 		sp++;			// placeholder for return address
@@ -154,8 +160,10 @@ public:
 		std::free(stack);
 	}
 	bool iterate() {
+			//stack_print();
 		// FETCH
 		opcode op_name = c.fetch(ip);
+			//std::printf("ip: %u, opcode: 0x%x\n", ip, op_name);
 		// DECODE
 		auto op_func = this->ops[op_name];
 		if (op_func == &thread::halt)
@@ -292,6 +300,7 @@ private:
 	stype dup_array() {
 		utype len = c.fetch_param(ip + 1);
 		stack_memmove(sp, sp - len, len);
+		stack_advance(+ (stype)len);
 		return 1 + 4;
 	}
 	// SWAP

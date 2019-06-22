@@ -2,6 +2,15 @@
 #include<iostream>
 #include<cstdint>
 #include<ctime>
+/* def fib(x: int) -> int {
+ *	if (x <= 2) {
+ *		return 1;
+ *	} else {
+ *		return fib(x-1) + fib(x-2);
+ *	}
+ * }
+ * */
+
 
 int main() {
 	uint8_t source[] = {
