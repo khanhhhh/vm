@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-from __future__ import print_function, absolute_import, division
-
+#!/usr/bin/env python3
 code2name = {
         0x00 : "halt",
 	0x01 : "nop",
