@@ -89,7 +89,7 @@ public:
 		stack_store(0, 0);
 		stack_store(1, 0);
 		// SET HALT
-		for (opcode i=0; i<256; i++) {
+		for (int32_t i=0; i<256; i++) {
 			ops[i] = nullptr;
 		}
 		// 0x0.. : SPECIAL
