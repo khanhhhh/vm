@@ -13,6 +13,10 @@ using utype	= uint32_t;
 using stype	= int32_t;
 using ftype	= float;
 
+template<uint32_t count>
+using program = code<opcode, utype, count>;
+template<uint32_t count>
+using heap = data<utype, count>;
 
 class thread: public i_thread<opcode, utype> {
 public:

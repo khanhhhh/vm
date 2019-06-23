@@ -48,10 +48,10 @@ int main() {
 		0x00						// #78 halt
 	};
 	int len = 79;
-	code<uint8_t, uint32_t, 79> p;
+	program<79> p;
 	std::memcpy(p.mem, source, len);
 
-	data<uint32_t, 1> h;
+	heap<1> h;
 	h.mem[0] = 28;
 	thread t(p, h);
         long t1 = std::clock();

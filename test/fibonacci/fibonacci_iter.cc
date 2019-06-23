@@ -33,10 +33,10 @@ int main() {
 
 	};
 	int len = 43;
-	code<uint8_t, uint32_t, 43> p;
+	program<43> p;
 	std::memcpy(p.mem, source, len);
 
-	data<uint32_t, 1> h;
+	heap<1> h;
 	h.mem[0] = 28;
 
 	thread t(p, h);
