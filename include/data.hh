@@ -2,17 +2,15 @@
 #define _DATA_HH_
 #include"i_data.hh"
 #include<vector>
-template<class utype>
+template<class utype, utype count>
 class data: public i_data<utype> {
 public:
-	utype *mem;
+	utype mem[count];
 public:
-	data(utype count):
-		i_data<utype>(),
-		mem((utype*)std::malloc(count * sizeof(utype)))
+	data():
+		i_data<utype>()
 	{}
 	~data() {
-		std::free(mem);
 	}
 	utype	load(utype addr) const {
 		return mem[addr];

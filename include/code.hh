@@ -3,17 +3,15 @@
 #include"i_code.hh"
 #include<cstring>
 #include<cstdlib>
-template<class opcode, class utype>
+template<class opcode, class utype, utype count>
 class code: public i_code<opcode, utype> {
 public:
-	opcode *mem;
+	opcode mem[count];
 public:
-	code(utype count):
-		i_code<opcode, utype>(),
-		mem((opcode*)std::malloc(count * sizeof(opcode)))
+	code():
+		i_code<opcode, utype>()
 	{}
 	~code() {
-		std::free(mem);
 	}
 	opcode	fetch(utype addr) const {
 		return mem[addr];

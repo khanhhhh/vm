@@ -12,8 +12,6 @@ using opcode	= uint8_t;
 using utype	= uint32_t;
 using stype	= int32_t;
 using ftype	= float;
-using program	= code<opcode, utype>;
-using heap	= data<utype>;
 
 
 class thread: public i_thread<opcode, utype> {
