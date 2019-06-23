@@ -12,6 +12,7 @@ using opcode	= uint8_t;
 using utype	= uint32_t;
 using stype	= int32_t;
 using ftype	= float;
+const int count	= 1024;
 
 template<uint32_t count>
 using program = code<opcode, utype, count>;
@@ -27,7 +28,7 @@ private:
 	utype sp; // stack pointer: stack[sp-1] is top of the stack
 	utype fp; // frame pointer: fucntion call convention 
 	utype shv; // stack height variation: used for function call
-	utype *stack;
+	utype stack[count];
 	// JUMP
 inline	void	jump(stype offset) {
 		ip += offset;
@@ -93,7 +94,7 @@ public:
 		sp(0),	
 		fp(0),
 		shv(0),
-		stack((utype*)std::malloc(stack_count * sizeof(utype)))
+		stack()
        	{
 		if (ops[0] == nullptr) {
 		// SET HALT
@@ -154,9 +155,7 @@ public:
 		ops[0x64] = &thread::return1_array;
 		}
 	}
-	~thread() {
-		std::free(stack);
-	}
+	~thread() {}
 	bool iterate() {
 			//stack_print();
 		// FETCH
