@@ -1,5 +1,4 @@
 # VIRTUAL MACHINE
-
 Personal project, greatly inspired by Java Bytecode, 
 
 # TODO
