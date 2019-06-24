@@ -54,11 +54,11 @@ int main() {
 	heap<1> h;
 	h.mem[0] = 30;
 	thread t(p, h);
-        long t1 = std::clock();
-        long count = 0;
+    long t1 = std::clock();
+    long count = 0;
 	while (t.iterate())
 		count++;
-        long t2 = std::clock();
+    long t2 = std::clock();
 	std::printf("ops: %ld, ticks: %ld\n", count, t2-t1);
 	std::printf("MIPS: %f\n", 1e-6 * (double)count * CLOCKS_PER_SEC / (t2-t1));
 

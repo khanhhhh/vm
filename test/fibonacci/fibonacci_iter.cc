@@ -2,6 +2,7 @@
 #include<iostream>
 #include<cstdint>
 #include<ctime>
+#include"timer.h"
 
 /* def fib(x: int) -> int {
  * 	stack.push(1);
@@ -40,11 +41,11 @@ int main() {
 	h.mem[0] = 28;
 
 	thread t(p, h);
-        long t1 = std::clock();
-        long count = 0;
+    long t1 = std::clock();
+    long count = 0;
 	while (t.iterate())
 		count++;
-        long t2 = std::clock();
+    long t2 = std::clock();
 	std::printf("ops: %ld, ticks: %ld\n", count, t2-t1);
 	std::printf("\nMIPS: %f\n", 1e-6 * (double)count * CLOCKS_PER_SEC / (t2-t1));
 
