@@ -6,23 +6,22 @@
 #include<cstdint>
 #include<cstdlib>
 #include<cstdio>
-//template<class opcode, class utype>
+#include<array>
 
-using opcode	= uint8_t;
+// constants
+using opcode = uint8_t;
 using utype	= uint32_t;
 using stype	= int32_t;
 using ftype	= float;
 const int count	= 1024;
-
-template<uint32_t count>
-using program = code<opcode, utype, count>;
-template<uint32_t count>
-using heap = data<utype, count>;
+// class name
+template<uint32_t count> using program = code<opcode, utype, count>;
+template<uint32_t count> using heap = data<utype, count>;
 
 class thread: public i_thread<opcode, utype> {
 public:
 	typedef stype (thread::* instruction)();
-	static instruction ops[256];
+	static std::array<instruction, 256> ops;
 private:
 	utype ip; // instruction pointer: current instruction index
 	utype sp; // stack pointer: stack[sp-1] is top of the stack
@@ -96,64 +95,6 @@ public:
 		shv(0),
 		stack()
        	{
-		if (ops[0] == nullptr) {
-		// SET HALT
-		for (int32_t i=0; i<256; i++) {
-			ops[i] = nullptr;
-		}
-		// 0x0.. : SPECIAL
-		ops[0x00] = &thread::halt;
-		ops[0x01] = &thread::nop;
-		// 0x1.. : LOAD STORE
-		ops[0x11] = &thread::load_code;
-		ops[0x12] = &thread::load_code_array;
-		ops[0x13] = &thread::load_data;
-		ops[0x14] = &thread::load_data_array;
-		ops[0x15] = &thread::load_stack;
-		ops[0x16] = &thread::load_stack_array;
-		ops[0x17] = &thread::store_data;
-		ops[0x18] = &thread::store_data_array;
-		ops[0x19] = &thread::store_stack;
-		ops[0x1a] = &thread::store_stack_array;
-		// 0x02.. : STACK MANIPULATION
-		ops[0x20] = &thread::push;
-		ops[0x21] = &thread::push_array;
-		ops[0x22] = &thread::pop;
-		ops[0x23] = &thread::pop_array;
-		ops[0x24] = &thread::dup;
-		ops[0x25] = &thread::dup_array;
-		ops[0x26] = &thread::swap;
-		ops[0x27] = &thread::swap_array;
-		// 0x3.. : ARITHMETIC
-		ops[0x30] = &thread::iadd;
-		ops[0x31] = &thread::fadd;
-		ops[0x32] = &thread::isub;
-		ops[0x33] = &thread::fsub;
-		ops[0x34] = &thread::imul;
-		ops[0x35] = &thread::fmul;
-		ops[0x36] = &thread::idiv;
-		ops[0x37] = &thread::fdiv;
-		ops[0x38] = &thread::irem;
-		ops[0x39] = &thread::ineg;
-		ops[0x3a] = &thread::fneg;
-		// 0x4.. : TYPE CONVERSION
-		ops[0x40] = &thread::i2f;
-		ops[0x41] = &thread::f2i;
-		// 0x5.. : JUMP
-		ops[0x50] = &thread::jump;     
-		ops[0x51] = &thread::ifeq_jump;
-		ops[0x52] = &thread::iflt_jump;
-		ops[0x53] = &thread::ifgt_jump;
-		ops[0x54] = &thread::ifle_jump;
-		ops[0x55] = &thread::ifge_jump;
-		ops[0x56] = &thread::ifne_jump;
-		// 0x6.. : FUNCTION CALL
-		ops[0x60] = &thread::push_fp;
-		ops[0x61] = &thread::call_fp;
-		ops[0x62] = &thread::return0;
-		ops[0x63] = &thread::return1;
-		ops[0x64] = &thread::return1_array;
-		}
 	}
 	~thread() {}
 	bool iterate() {
@@ -169,7 +110,7 @@ public:
 		jump((this->*op_func)());
 		return true;
 	}
-private:
+public:
 	// INSTRUCTIONS
 	// instruction return relative address to jump
 	stype halt() {
@@ -505,5 +446,62 @@ private:
 		return ip_offset(dst) + 5;
 	}
 };
-thread::instruction thread::ops[256] = {nullptr};
+constexpr const std::array<thread::instruction, 256> ops_init() {
+	std::array<thread::instruction, 256> ops = {nullptr};
+
+		// 0x0.. : SPECIAL
+		ops[0x00] = &thread::halt;
+		ops[0x01] = &thread::nop;
+		// 0x1.. : LOAD STORE
+		ops[0x11] = &thread::load_code;
+		ops[0x12] = &thread::load_code_array;
+		ops[0x13] = &thread::load_data;
+		ops[0x14] = &thread::load_data_array;
+		ops[0x15] = &thread::load_stack;
+		ops[0x16] = &thread::load_stack_array;
+		ops[0x17] = &thread::store_data;
+		ops[0x18] = &thread::store_data_array;
+		ops[0x19] = &thread::store_stack;
+		ops[0x1a] = &thread::store_stack_array;
+		// 0x02.. : STACK MANIPULATION
+		ops[0x20] = &thread::push;
+		ops[0x21] = &thread::push_array;
+		ops[0x22] = &thread::pop;
+		ops[0x23] = &thread::pop_array;
+		ops[0x24] = &thread::dup;
+		ops[0x25] = &thread::dup_array;
+		ops[0x26] = &thread::swap;
+		ops[0x27] = &thread::swap_array;
+		// 0x3.. : ARITHMETIC
+		ops[0x30] = &thread::iadd;
+		ops[0x31] = &thread::fadd;
+		ops[0x32] = &thread::isub;
+		ops[0x33] = &thread::fsub;
+		ops[0x34] = &thread::imul;
+		ops[0x35] = &thread::fmul;
+		ops[0x36] = &thread::idiv;
+		ops[0x37] = &thread::fdiv;
+		ops[0x38] = &thread::irem;
+		ops[0x39] = &thread::ineg;
+		ops[0x3a] = &thread::fneg;
+		// 0x4.. : TYPE CONVERSION
+		ops[0x40] = &thread::i2f;
+		ops[0x41] = &thread::f2i;
+		// 0x5.. : JUMP
+		ops[0x50] = &thread::jump;     
+		ops[0x51] = &thread::ifeq_jump;
+		ops[0x52] = &thread::iflt_jump;
+		ops[0x53] = &thread::ifgt_jump;
+		ops[0x54] = &thread::ifle_jump;
+		ops[0x55] = &thread::ifge_jump;
+		ops[0x56] = &thread::ifne_jump;
+		// 0x6.. : FUNCTION CALL
+		ops[0x60] = &thread::push_fp;
+		ops[0x61] = &thread::call_fp;
+		ops[0x62] = &thread::return0;
+		ops[0x63] = &thread::return1;
+		ops[0x64] = &thread::return1_array;
+	return ops;
+}
+std::array<thread::instruction, 256> thread::ops = ops_init();
 #endif

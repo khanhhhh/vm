@@ -3,3 +3,4 @@
 *.so
 run
 a.out
+.vscode/*
