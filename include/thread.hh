@@ -19,53 +19,63 @@ template<uint32_t count> using program = code<opcode, utype, count>;
 template<uint32_t count> using heap = data<utype, count>;
 
 class thread: public i_thread<opcode, utype> {
-public:
+public: //INSTRUCTIONS
 	typedef stype (thread::* instruction)();
 	static std::array<instruction, 256> ops;
-private:
+private: // MEMBERS
 	utype ip; // instruction pointer: current instruction index
 	utype sp; // stack pointer: stack[sp-1] is top of the stack
 	utype fp; // frame pointer: fucntion call convention 
 	utype shv; // stack height variation: used for function call
 	std::array<utype, count> stack;
-private:
-	// JUMP
+private: //PRIVATE METHODS
+	// jump into specific location
 	inline	void	jump(stype offset) {
 		ip += offset;
 	}
+	// get how many slots to jump into some specific location
 	inline	stype	ip_offset(utype dst) {
 		return dst - ip;
 	}
 	// STACK MANIPULATION
+	// get pointer of top+1
 	inline	utype*	stack_ptr() {
 		return &stack[sp];
 	}
+	// peek
 	inline	utype	stack_peek() {
 		return stack[sp - 1];
 	}
+	// pop
 	inline	utype	stack_pop() {
 		sp--;
 		shv--;
 		return stack[sp];
 	}
+	// push
 	inline	void	stack_push(utype item) {
 		stack[sp] = item;
 		sp++;
 		shv++;
 	}
+	// advance
 	inline	void	stack_advance(stype len) {
 		sp += len;
 		shv += len;
 	}
+	// get item at some specific location
 	inline	utype	stack_load(utype offset) {
 		return stack[fp + offset];
 	}
-	inline	void	stack_memmove(utype dst, utype src, utype len) {
-		std::memmove(stack.data() + dst, stack.data() + src, len * sizeof(utype));	
-	}
+	// store item into some specific location
 	inline	void	stack_store(utype offset, utype item) {
 		stack[fp + offset] = item;
 	}
+	// memmove on stack
+	inline	void	stack_memmove(utype dst, utype src, utype len) {
+		std::memmove(stack.data() + dst, stack.data() + src, len * sizeof(utype));	
+	}
+	// debug
 	void	stack_print() {
 		std::printf("[");
 		for (utype i = fp; i < sp; i++)
@@ -73,10 +83,30 @@ private:
 		std::printf("]\n");
 	}
 	// STACK CALLING FUNCTION
+	/*
+	Function calling procedure.
+	1.	push_fp
+		Advance stack 2 slots, set last frame pointer into second slot.
+		Set shv = 0
+
+	2. 	...
+		Push arguments (push increases shv by 1, pop decreases by 1)
+
+	3. 	call
+		Jump
+		Set current frame pointer to the first arguments (calculated base on shv)
+		Set return address into first slot
+	4. return
+		Take out return value
+		Store the old frame pointer
+		Store the return address to instruction pointer
+		de-advance stack
+		push return value
+	*/
 	inline	void	stack_push_fp() {
-		sp++;			// placeholder for return address
+		sp++;				// placeholder for return address
 		stack_push(fp);		// store frame pointer
-		shv = 0;		// set shv to zero to calculate hm arguments
+		shv = 0;			// set shv to zero to calculate hm arguments
 	}
 	inline	void	stack_call() {
 		fp = sp - shv;		// set frame pointer to the first argument
@@ -87,7 +117,7 @@ private:
 		fp = stack[sp + 1];	// restore frame pointer
 		return stack[sp];	// return address;
 	}
-public:
+public: // CLASS METHODS
 	thread(const i_code<opcode, utype>& c, i_data<utype>& d, utype stack_count = 1024):
 		i_thread<opcode, utype>(c, d),
 		ip(0),
@@ -99,10 +129,8 @@ public:
 	}
 	~thread() {}
 	bool iterate() {
-			//stack_print();
 		// FETCH
 		opcode op_name = c.fetch(ip);
-			//std::printf("ip: %u, opcode: 0x%x\n", ip, op_name);
 		// DECODE
 		auto op_func = this->ops[op_name];
 		if (op_func == &thread::halt)
@@ -111,8 +139,7 @@ public:
 		jump((this->*op_func)());
 		return true;
 	}
-public:
-	// INSTRUCTIONS
+public:// INSTRUCTIONS IMPLEMENTATION
 	// instruction return relative address to jump
 	stype halt() {
 		// halt should not be called!
