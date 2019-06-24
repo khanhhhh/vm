@@ -1,11 +1,11 @@
 #ifndef _DATA_HH_
 #define _DATA_HH_
 #include"i_data.hh"
-#include<vector>
+#include<cstring>
 template<class utype, utype count>
 class data: public i_data<utype> {
 public:
-	utype mem[count];
+	std::array<utype, count> mem;
 public:
 	data():
 		i_data<utype>()
@@ -20,10 +20,10 @@ public:
 	}
 
 	void	load_array(utype addr, utype len, utype *v) const {
-		std::memcpy(v, mem + addr, len *sizeof(utype));
+		std::memcpy(v, mem.data() + addr, len *sizeof(utype));
 	}
 	void	store_array(utype addr, utype len, utype *v) {
-		std::memcpy(mem+addr, v, len * sizeof(utype));
+		std::memcpy(mem.data() + addr, v, len * sizeof(utype));
 	}
 };
 #endif

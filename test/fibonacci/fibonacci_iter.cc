@@ -34,7 +34,7 @@ int main() {
 	};
 	int len = 43;
 	program<43> p;
-	std::memcpy(p.mem, source, len);
+	std::memcpy(p.mem.data(), source, len);
 
 	heap<1> h;
 	h.mem[0] = 28;

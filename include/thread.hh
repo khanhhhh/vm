@@ -28,6 +28,7 @@ private:
 	utype fp; // frame pointer: fucntion call convention 
 	utype shv; // stack height variation: used for function call
 	utype stack[count];
+private:
 	// JUMP
 inline	void	jump(stype offset) {
 		ip += offset;

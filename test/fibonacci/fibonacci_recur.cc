@@ -49,7 +49,7 @@ int main() {
 	};
 	int len = 79;
 	program<79> p;
-	std::memcpy(p.mem, source, len);
+	std::memcpy(p.mem.data(), source, len);
 
 	heap<1> h;
 	h.mem[0] = 28;
