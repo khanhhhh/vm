@@ -30,40 +30,40 @@ private:
 	std::array<utype, count> stack;
 private:
 	// JUMP
-inline	void	jump(stype offset) {
+	inline	void	jump(stype offset) {
 		ip += offset;
 	}
-inline	stype	ip_offset(utype dst) {
+	inline	stype	ip_offset(utype dst) {
 		return dst - ip;
 	}
 	// STACK MANIPULATION
-inline	utype*	stack_ptr() {
+	inline	utype*	stack_ptr() {
 		return &stack[sp];
 	}
-inline	utype	stack_peek() {
+	inline	utype	stack_peek() {
 		return stack[sp - 1];
 	}
-inline	utype	stack_pop() {
+	inline	utype	stack_pop() {
 		sp--;
 		shv--;
 		return stack[sp];
 	}
-inline	void	stack_push(utype item) {
+	inline	void	stack_push(utype item) {
 		stack[sp] = item;
 		sp++;
 		shv++;
 	}
-inline	void	stack_advance(stype len) {
+	inline	void	stack_advance(stype len) {
 		sp += len;
 		shv += len;
 	}
-inline	utype	stack_load(utype offset) {
+	inline	utype	stack_load(utype offset) {
 		return stack[fp + offset];
 	}
-inline	void	stack_memmove(utype dst, utype src, utype len) {
+	inline	void	stack_memmove(utype dst, utype src, utype len) {
 		std::memmove(stack.data() + dst, stack.data() + src, len * sizeof(utype));	
 	}
-inline	void	stack_store(utype offset, utype item) {
+	inline	void	stack_store(utype offset, utype item) {
 		stack[fp + offset] = item;
 	}
 	void	stack_print() {
@@ -72,17 +72,17 @@ inline	void	stack_store(utype offset, utype item) {
 			std::printf("%u, ", stack[i]);
 		std::printf("]\n");
 	}
-inline	// STACK CALLING FUNCTION
-	void	stack_push_fp() {
+	// STACK CALLING FUNCTION
+	inline	void	stack_push_fp() {
 		sp++;			// placeholder for return address
 		stack_push(fp);		// store frame pointer
 		shv = 0;		// set shv to zero to calculate hm arguments
 	}
-inline	void	stack_call() {
+	inline	void	stack_call() {
 		fp = sp - shv;		// set frame pointer to the first argument
 		stack[fp - 2] = ip;	// set return address to ip
 	}
-inline	utype	stack_return() {
+	inline	utype	stack_return() {
 		sp = fp - 2;		// restore stack pointer
 		fp = stack[sp + 1];	// restore frame pointer
 		return stack[sp];	// return address;
@@ -449,7 +449,10 @@ public:
 };
 constexpr const std::array<thread::instruction, 256> ops_init() {
 	std::array<thread::instruction, 256> ops = {nullptr};
-
+		// SET HALT
+		for (uint32_t i=0; i<ops.size(); i++) {
+			ops[i] = nullptr;
+		}
 		// 0x0.. : SPECIAL
 		ops[0x00] = &thread::halt;
 		ops[0x01] = &thread::nop;
