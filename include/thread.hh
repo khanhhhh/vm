@@ -9,14 +9,15 @@
 #include<array>
 
 // constants
-using opcode = uint8_t;
-using utype	= uint32_t;
-using stype	= int32_t;
-using ftype	= float;
-const int count	= 1024;
+using opcode		= uint8_t;
+using utype			= uint32_t;
+using stype			= int32_t;
+using ftype			= float;
+const utype count	= 1024;
 // class name
-template<uint32_t count> using program = code<opcode, utype, count>;
-template<uint32_t count> using heap = data<utype, count>;
+template<uint32_t count> using program	= code<opcode, utype, count>;
+template<uint32_t count> using heap		= data<utype, count>;
+
 
 class thread: public i_thread<opcode, utype> {
 public: //INSTRUCTIONS
