@@ -27,7 +27,7 @@ private:
 	utype sp; // stack pointer: stack[sp-1] is top of the stack
 	utype fp; // frame pointer: fucntion call convention 
 	utype shv; // stack height variation: used for function call
-	utype stack[count];
+	std::array<utype, count> stack;
 private:
 	// JUMP
 inline	void	jump(stype offset) {
@@ -61,7 +61,7 @@ inline	utype	stack_load(utype offset) {
 		return stack[fp + offset];
 	}
 inline	void	stack_memmove(utype dst, utype src, utype len) {
-		std::memmove(stack + dst, stack + src, len * sizeof(utype));	
+		std::memmove(stack.data() + dst, stack.data() + src, len * sizeof(utype));	
 	}
 inline	void	stack_store(utype offset, utype item) {
 		stack[fp + offset] = item;
