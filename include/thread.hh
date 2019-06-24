@@ -365,7 +365,7 @@ public:// INSTRUCTIONS IMPLEMENTATION
 		stack_push(_f2u(- a));
 		return 1;
 	}
-// TYPE CONVERSION
+	// TYPE CONVERSION
 	// I2F
 	stype i2f() {
 		stype a = _u2s(stack_pop());
@@ -378,13 +378,13 @@ public:// INSTRUCTIONS IMPLEMENTATION
 		stack_push(_s2u((stype)a));
 		return 1;
 	}
-// JUMP
+	// JUMP
 	// JUMP DST
 	stype jump() {
 		stype dst = _u2s(c.fetch_param(ip + 1));
 		return ip_offset(dst);
 	}
-// CONDITIONAL JUMP
+	// CONDITIONAL JUMP
 	// IFEQ_JUMP DST
 	stype ifeq_jump() {
 		stype cond = _u2s(stack_pop());
@@ -439,7 +439,7 @@ public:// INSTRUCTIONS IMPLEMENTATION
 		}
 		return 1 + 4;
 	}
-// FUNCTION CALL = PUSH_FP -> PREPARE STACK -> CALL_FP
+	// FUNCTION CALL = PUSH_FP -> PREPARE STACK -> CALL_FP
 	// PUSH_FP
 	stype push_fp() {
 		stack_push_fp();
