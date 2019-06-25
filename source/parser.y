@@ -5,8 +5,8 @@ Type = INT
     | TUPLE LBRACKET Tuple RBRACKET
 // tuple of var names and their types
 Tuple = EMPTY
-    | INDENTIFIER COLON Type
-    | Tuple SEPARATOR INDENTIFIER COLON Type
+    | IDENTIFIER COLON Type
+    | Tuple SEPARATOR IDENTIFIER COLON Type
 
 Operator = EQ | LT | GT | LE | GE | NE
         | ADD | SUB | MUL | DIV | REM
@@ -20,11 +20,11 @@ ExprtList = EMPTY
 // binary expression
 BinExpr = Expr Operator Expr
 // function call or array indexing
-Index = INDENTIFIER LPAREN ExprList RPAREN
+Index = IDENTIFIER LPAREN ExprList RPAREN
 // return statement
 Return = RETURN Expr SEPARATOR
 // var declaration
-VarDecl = VAR INDENTIFIER COLON Type EQ Expr
+VarDecl = VAR IDENTIFIER COLON Type EQ Expr
 // code block
 Block = LCURLY ExprList RCURLY
 // braching
@@ -37,7 +37,7 @@ While = WHILE LPAREN Expr RPAREN Expr
 Lambda = LPAREN Tuple RPAREN RASSIGN Type Expr
 
 Expr =
-    | INDENTIFIER
+    | IDENTIFIER
     | INTLITERAL
     | FLOATLITERAL
     | ADDRLITERAL
