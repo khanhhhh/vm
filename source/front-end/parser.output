@@ -1,0 +1,3909 @@
+Terminals unused in grammar
+
+   ADDR
+   TYPE
+   CAST
+   EOF
+
+
+State 0 conflicts: 2 shift/reduce
+State 1 conflicts: 2 shift/reduce
+State 9 conflicts: 2 shift/reduce
+State 10 conflicts: 2 shift/reduce
+State 11 conflicts: 2 shift/reduce, 2 reduce/reduce
+State 12 conflicts: 2 shift/reduce
+State 58 conflicts: 2 shift/reduce
+State 59 conflicts: 2 shift/reduce
+State 60 conflicts: 13 shift/reduce
+State 61 conflicts: 13 shift/reduce
+State 67 conflicts: 2 shift/reduce
+State 69 conflicts: 2 shift/reduce
+State 70 conflicts: 2 shift/reduce
+State 71 conflicts: 2 shift/reduce
+State 72 conflicts: 2 shift/reduce
+State 73 conflicts: 2 shift/reduce
+State 74 conflicts: 2 shift/reduce
+State 75 conflicts: 2 shift/reduce
+State 76 conflicts: 2 shift/reduce
+State 77 conflicts: 2 shift/reduce
+State 78 conflicts: 2 shift/reduce
+State 79 conflicts: 2 shift/reduce
+State 80 conflicts: 2 shift/reduce
+State 81 conflicts: 2 shift/reduce
+State 95 conflicts: 2 shift/reduce
+State 97 conflicts: 13 shift/reduce
+State 98 conflicts: 13 shift/reduce
+State 99 conflicts: 13 shift/reduce
+State 100 conflicts: 13 shift/reduce
+State 101 conflicts: 13 shift/reduce
+State 102 conflicts: 13 shift/reduce
+State 103 conflicts: 13 shift/reduce
+State 104 conflicts: 13 shift/reduce
+State 105 conflicts: 13 shift/reduce
+State 106 conflicts: 13 shift/reduce
+State 107 conflicts: 13 shift/reduce
+State 108 conflicts: 13 shift/reduce
+State 109 conflicts: 13 shift/reduce
+State 111 conflicts: 2 shift/reduce
+State 113 conflicts: 2 shift/reduce
+State 114 conflicts: 2 shift/reduce
+State 119 conflicts: 2 shift/reduce
+State 121 conflicts: 14 shift/reduce
+State 122 conflicts: 13 shift/reduce
+State 125 conflicts: 13 shift/reduce
+State 127 conflicts: 2 shift/reduce
+State 130 conflicts: 13 shift/reduce
+State 131 conflicts: 2 shift/reduce
+State 132 conflicts: 13 shift/reduce
+
+
+Grammar
+
+    0 $accept: ExprList $end
+
+    1 ExprList: Expr
+    2         | ExprList SEPARATOR Expr
+
+    3 Literal: Identifier
+    4        | IntLiteral
+    5        | FloatLiteral
+    6        | TupleValue
+
+    7 Identifier: IDENTIFIER
+
+    8 IntLiteral: INTLITERAL
+
+    9 FloatLiteral: FLOATLITERAL
+
+   10 TupleValue: LPAREN ExprList RPAREN
+
+   11 Type: IntType
+   12     | FloatType
+   13     | AddrType
+   14     | ArrayType
+   15     | TupleType
+
+   16 IntType: INT
+
+   17 FloatType: FLOAT
+
+   18 AddrType: ADDRLITERAL
+
+   19 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET
+
+   20 TupleType: TUPLE LBRACKET TupleList RBRACKET
+
+   21 TupleList: %empty
+   22          | Identifier COLON Type
+   23          | TupleList SEPARATOR IDENTIFIER COLON Type
+
+   24 UnaryExpr: DerefExpr
+   25          | NegExpr
+
+   26 DerefExpr: MUL Expr
+
+   27 NegExpr: SUB Expr
+
+   28 BinaryExpr: EQExpr
+   29           | LTExpr
+   30           | GTExpr
+   31           | LEExpr
+   32           | GEExpr
+   33           | NEExpr
+   34           | AddExpr
+   35           | SubExpr
+   36           | MulExpr
+   37           | DivExpr
+   38           | RemExpr
+   39           | AssignExpr
+   40           | LAssignExpr
+
+   41 EQExpr: Expr EQ Expr
+
+   42 LTExpr: Expr LT Expr
+
+   43 GTExpr: Expr GT Expr
+
+   44 LEExpr: Expr LE Expr
+
+   45 GEExpr: Expr GE Expr
+
+   46 NEExpr: Expr NE Expr
+
+   47 AddExpr: Expr ADD Expr
+
+   48 SubExpr: Expr SUB Expr
+
+   49 MulExpr: Expr MUL Expr
+
+   50 DivExpr: Expr DIV Expr
+
+   51 RemExpr: Expr REM Expr
+
+   52 AssignExpr: Expr ASSIGN Expr
+
+   53 LAssignExpr: Expr LASSIGN Expr
+
+   54 Index: Identifier LPAREN TupleValue RPAREN
+
+   55 Return: RETURN Expr SEPARATOR
+
+   56 VarDecl: VAR Identifier COLON Type EQ Expr
+
+   57 Block: LCURLY ExprList RCURLY
+
+   58 IfElse: IF LPAREN Expr RPAREN Expr ELSE Expr
+   59       | IF LPAREN Expr RPAREN Expr
+
+   60 While: WHILE LPAREN Expr RPAREN Expr
+
+   61 Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN TupleList RPAREN Expr
+
+   62 Expr: %empty
+   63     | Literal
+   64     | Type
+   65     | UnaryExpr
+   66     | BinaryExpr
+   67     | Index
+   68     | Return
+   69     | VarDecl
+   70     | Block
+   71     | IfElse
+   72     | While
+   73     | Lambda
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+RETURN (258) 55
+VAR (259) 56
+INT (260) 16
+FLOAT (261) 17
+ADDR (262)
+ARRAY (263) 19
+TUPLE (264) 20
+TYPE (265)
+CAST (266)
+IF (267) 58 59
+ELSE (268) 58
+WHILE (269) 60
+EQ (270) 41 56
+LT (271) 42
+GT (272) 43
+LE (273) 44
+GE (274) 45
+NE (275) 46
+ASSIGN (276) 52
+LASSIGN (277) 53
+RASSIGN (278) 61
+ADD (279) 47
+SUB (280) 27 48
+MUL (281) 26 49
+DIV (282) 50
+REM (283) 51
+LPAREN (284) 10 54 58 59 60 61
+RPAREN (285) 10 54 58 59 60 61
+LCURLY (286) 57
+RCURLY (287) 57
+LBRACKET (288) 19 20
+RBRACKET (289) 19 20
+COLON (290) 22 23 56
+SEPARATOR (291) 2 19 23 55
+INTLITERAL (292) 8
+FLOATLITERAL (293) 9
+ADDRLITERAL (294) 18
+IDENTIFIER (295) 7 23
+EOF (296)
+
+
+Nonterminals, with rules where they appear
+
+$accept (42)
+    on left: 0
+ExprList (43)
+    on left: 1 2, on right: 0 2 10 57
+Literal (44)
+    on left: 3 4 5 6, on right: 63
+Identifier (45)
+    on left: 7, on right: 3 22 54 56
+IntLiteral (46)
+    on left: 8, on right: 4
+FloatLiteral (47)
+    on left: 9, on right: 5
+TupleValue (48)
+    on left: 10, on right: 6 54
+Type (49)
+    on left: 11 12 13 14 15, on right: 19 22 23 56 64
+IntType (50)
+    on left: 16, on right: 11
+FloatType (51)
+    on left: 17, on right: 12
+AddrType (52)
+    on left: 18, on right: 13
+ArrayType (53)
+    on left: 19, on right: 14
+TupleType (54)
+    on left: 20, on right: 15
+TupleList (55)
+    on left: 21 22 23, on right: 20 23 61
+UnaryExpr (56)
+    on left: 24 25, on right: 65
+DerefExpr (57)
+    on left: 26, on right: 24
+NegExpr (58)
+    on left: 27, on right: 25
+BinaryExpr (59)
+    on left: 28 29 30 31 32 33 34 35 36 37 38 39 40, on right: 66
+EQExpr (60)
+    on left: 41, on right: 28
+LTExpr (61)
+    on left: 42, on right: 29
+GTExpr (62)
+    on left: 43, on right: 30
+LEExpr (63)
+    on left: 44, on right: 31
+GEExpr (64)
+    on left: 45, on right: 32
+NEExpr (65)
+    on left: 46, on right: 33
+AddExpr (66)
+    on left: 47, on right: 34
+SubExpr (67)
+    on left: 48, on right: 35
+MulExpr (68)
+    on left: 49, on right: 36
+DivExpr (69)
+    on left: 50, on right: 37
+RemExpr (70)
+    on left: 51, on right: 38
+AssignExpr (71)
+    on left: 52, on right: 39
+LAssignExpr (72)
+    on left: 53, on right: 40
+Index (73)
+    on left: 54, on right: 67
+Return (74)
+    on left: 55, on right: 68
+VarDecl (75)
+    on left: 56, on right: 69
+Block (76)
+    on left: 57, on right: 70
+IfElse (77)
+    on left: 58 59, on right: 71
+While (78)
+    on left: 60, on right: 72
+Lambda (79)
+    on left: 61, on right: 73
+Expr (80)
+    on left: 62 63 64 65 66 67 68 69 70 71 72 73, on right: 1 2 19
+    26 27 41 42 43 44 45 46 47 48 49 50 51 52 53 55 56 58 59 60 61
+
+
+State 0
+
+    0 $accept: . ExprList $end
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    ExprList      go to state 17
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 53
+
+
+State 1
+
+   55 Return: RETURN . Expr SEPARATOR
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 54
+
+
+State 2
+
+   56 VarDecl: VAR . Identifier COLON Type EQ Expr
+
+    IDENTIFIER  shift, and go to state 16
+
+    Identifier  go to state 55
+
+
+State 3
+
+   16 IntType: INT .
+
+    $default  reduce using rule 16 (IntType)
+
+
+State 4
+
+   17 FloatType: FLOAT .
+
+    $default  reduce using rule 17 (FloatType)
+
+
+State 5
+
+   19 ArrayType: ARRAY . LBRACKET Type SEPARATOR Expr RBRACKET
+
+    LBRACKET  shift, and go to state 56
+
+
+State 6
+
+   20 TupleType: TUPLE . LBRACKET TupleList RBRACKET
+
+    LBRACKET  shift, and go to state 57
+
+
+State 7
+
+   58 IfElse: IF . LPAREN Expr RPAREN Expr ELSE Expr
+   59       | IF . LPAREN Expr RPAREN Expr
+
+    LPAREN  shift, and go to state 58
+
+
+State 8
+
+   60 While: WHILE . LPAREN Expr RPAREN Expr
+
+    LPAREN  shift, and go to state 59
+
+
+State 9
+
+   27 NegExpr: SUB . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 60
+
+
+State 10
+
+   26 DerefExpr: MUL . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 61
+
+
+State 11
+
+   10 TupleValue: LPAREN . ExprList RPAREN
+   61 Lambda: LPAREN . TupleList RPAREN RASSIGN LPAREN TupleList RPAREN Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB        [reduce using rule 62 (Expr)]
+    MUL        [reduce using rule 62 (Expr)]
+    RPAREN     reduce using rule 21 (TupleList)
+    RPAREN     [reduce using rule 62 (Expr)]
+    SEPARATOR  reduce using rule 21 (TupleList)
+    SEPARATOR  [reduce using rule 62 (Expr)]
+    $default   reduce using rule 62 (Expr)
+
+    ExprList      go to state 62
+    Literal       go to state 18
+    Identifier    go to state 63
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    TupleList     go to state 64
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 53
+
+
+State 12
+
+   57 Block: LCURLY . ExprList RCURLY
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    ExprList      go to state 65
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 53
+
+
+State 13
+
+    8 IntLiteral: INTLITERAL .
+
+    $default  reduce using rule 8 (IntLiteral)
+
+
+State 14
+
+    9 FloatLiteral: FLOATLITERAL .
+
+    $default  reduce using rule 9 (FloatLiteral)
+
+
+State 15
+
+   18 AddrType: ADDRLITERAL .
+
+    $default  reduce using rule 18 (AddrType)
+
+
+State 16
+
+    7 Identifier: IDENTIFIER .
+
+    $default  reduce using rule 7 (Identifier)
+
+
+State 17
+
+    0 $accept: ExprList . $end
+    2 ExprList: ExprList . SEPARATOR Expr
+
+    $end       shift, and go to state 66
+    SEPARATOR  shift, and go to state 67
+
+
+State 18
+
+   63 Expr: Literal .
+
+    $default  reduce using rule 63 (Expr)
+
+
+State 19
+
+    3 Literal: Identifier .
+   54 Index: Identifier . LPAREN TupleValue RPAREN
+
+    LPAREN  shift, and go to state 68
+
+    $default  reduce using rule 3 (Literal)
+
+
+State 20
+
+    4 Literal: IntLiteral .
+
+    $default  reduce using rule 4 (Literal)
+
+
+State 21
+
+    5 Literal: FloatLiteral .
+
+    $default  reduce using rule 5 (Literal)
+
+
+State 22
+
+    6 Literal: TupleValue .
+
+    $default  reduce using rule 6 (Literal)
+
+
+State 23
+
+   64 Expr: Type .
+
+    $default  reduce using rule 64 (Expr)
+
+
+State 24
+
+   11 Type: IntType .
+
+    $default  reduce using rule 11 (Type)
+
+
+State 25
+
+   12 Type: FloatType .
+
+    $default  reduce using rule 12 (Type)
+
+
+State 26
+
+   13 Type: AddrType .
+
+    $default  reduce using rule 13 (Type)
+
+
+State 27
+
+   14 Type: ArrayType .
+
+    $default  reduce using rule 14 (Type)
+
+
+State 28
+
+   15 Type: TupleType .
+
+    $default  reduce using rule 15 (Type)
+
+
+State 29
+
+   65 Expr: UnaryExpr .
+
+    $default  reduce using rule 65 (Expr)
+
+
+State 30
+
+   24 UnaryExpr: DerefExpr .
+
+    $default  reduce using rule 24 (UnaryExpr)
+
+
+State 31
+
+   25 UnaryExpr: NegExpr .
+
+    $default  reduce using rule 25 (UnaryExpr)
+
+
+State 32
+
+   66 Expr: BinaryExpr .
+
+    $default  reduce using rule 66 (Expr)
+
+
+State 33
+
+   28 BinaryExpr: EQExpr .
+
+    $default  reduce using rule 28 (BinaryExpr)
+
+
+State 34
+
+   29 BinaryExpr: LTExpr .
+
+    $default  reduce using rule 29 (BinaryExpr)
+
+
+State 35
+
+   30 BinaryExpr: GTExpr .
+
+    $default  reduce using rule 30 (BinaryExpr)
+
+
+State 36
+
+   31 BinaryExpr: LEExpr .
+
+    $default  reduce using rule 31 (BinaryExpr)
+
+
+State 37
+
+   32 BinaryExpr: GEExpr .
+
+    $default  reduce using rule 32 (BinaryExpr)
+
+
+State 38
+
+   33 BinaryExpr: NEExpr .
+
+    $default  reduce using rule 33 (BinaryExpr)
+
+
+State 39
+
+   34 BinaryExpr: AddExpr .
+
+    $default  reduce using rule 34 (BinaryExpr)
+
+
+State 40
+
+   35 BinaryExpr: SubExpr .
+
+    $default  reduce using rule 35 (BinaryExpr)
+
+
+State 41
+
+   36 BinaryExpr: MulExpr .
+
+    $default  reduce using rule 36 (BinaryExpr)
+
+
+State 42
+
+   37 BinaryExpr: DivExpr .
+
+    $default  reduce using rule 37 (BinaryExpr)
+
+
+State 43
+
+   38 BinaryExpr: RemExpr .
+
+    $default  reduce using rule 38 (BinaryExpr)
+
+
+State 44
+
+   39 BinaryExpr: AssignExpr .
+
+    $default  reduce using rule 39 (BinaryExpr)
+
+
+State 45
+
+   40 BinaryExpr: LAssignExpr .
+
+    $default  reduce using rule 40 (BinaryExpr)
+
+
+State 46
+
+   67 Expr: Index .
+
+    $default  reduce using rule 67 (Expr)
+
+
+State 47
+
+   68 Expr: Return .
+
+    $default  reduce using rule 68 (Expr)
+
+
+State 48
+
+   69 Expr: VarDecl .
+
+    $default  reduce using rule 69 (Expr)
+
+
+State 49
+
+   70 Expr: Block .
+
+    $default  reduce using rule 70 (Expr)
+
+
+State 50
+
+   71 Expr: IfElse .
+
+    $default  reduce using rule 71 (Expr)
+
+
+State 51
+
+   72 Expr: While .
+
+    $default  reduce using rule 72 (Expr)
+
+
+State 52
+
+   73 Expr: Lambda .
+
+    $default  reduce using rule 73 (Expr)
+
+
+State 53
+
+    1 ExprList: Expr .
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    $default  reduce using rule 1 (ExprList)
+
+
+State 54
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   55 Return: RETURN Expr . SEPARATOR
+
+    EQ         shift, and go to state 69
+    LT         shift, and go to state 70
+    GT         shift, and go to state 71
+    LE         shift, and go to state 72
+    GE         shift, and go to state 73
+    NE         shift, and go to state 74
+    ASSIGN     shift, and go to state 75
+    LASSIGN    shift, and go to state 76
+    ADD        shift, and go to state 77
+    SUB        shift, and go to state 78
+    MUL        shift, and go to state 79
+    DIV        shift, and go to state 80
+    REM        shift, and go to state 81
+    SEPARATOR  shift, and go to state 82
+
+
+State 55
+
+   56 VarDecl: VAR Identifier . COLON Type EQ Expr
+
+    COLON  shift, and go to state 83
+
+
+State 56
+
+   19 ArrayType: ARRAY LBRACKET . Type SEPARATOR Expr RBRACKET
+
+    INT          shift, and go to state 3
+    FLOAT        shift, and go to state 4
+    ARRAY        shift, and go to state 5
+    TUPLE        shift, and go to state 6
+    ADDRLITERAL  shift, and go to state 15
+
+    Type       go to state 84
+    IntType    go to state 24
+    FloatType  go to state 25
+    AddrType   go to state 26
+    ArrayType  go to state 27
+    TupleType  go to state 28
+
+
+State 57
+
+   20 TupleType: TUPLE LBRACKET . TupleList RBRACKET
+
+    IDENTIFIER  shift, and go to state 16
+
+    $default  reduce using rule 21 (TupleList)
+
+    Identifier  go to state 85
+    TupleList   go to state 86
+
+
+State 58
+
+   58 IfElse: IF LPAREN . Expr RPAREN Expr ELSE Expr
+   59       | IF LPAREN . Expr RPAREN Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 87
+
+
+State 59
+
+   60 While: WHILE LPAREN . Expr RPAREN Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 88
+
+
+State 60
+
+   27 NegExpr: SUB Expr .
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 27 (NegExpr)]
+    LT        [reduce using rule 27 (NegExpr)]
+    GT        [reduce using rule 27 (NegExpr)]
+    LE        [reduce using rule 27 (NegExpr)]
+    GE        [reduce using rule 27 (NegExpr)]
+    NE        [reduce using rule 27 (NegExpr)]
+    ASSIGN    [reduce using rule 27 (NegExpr)]
+    LASSIGN   [reduce using rule 27 (NegExpr)]
+    ADD       [reduce using rule 27 (NegExpr)]
+    SUB       [reduce using rule 27 (NegExpr)]
+    MUL       [reduce using rule 27 (NegExpr)]
+    DIV       [reduce using rule 27 (NegExpr)]
+    REM       [reduce using rule 27 (NegExpr)]
+    $default  reduce using rule 27 (NegExpr)
+
+
+State 61
+
+   26 DerefExpr: MUL Expr .
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 26 (DerefExpr)]
+    LT        [reduce using rule 26 (DerefExpr)]
+    GT        [reduce using rule 26 (DerefExpr)]
+    LE        [reduce using rule 26 (DerefExpr)]
+    GE        [reduce using rule 26 (DerefExpr)]
+    NE        [reduce using rule 26 (DerefExpr)]
+    ASSIGN    [reduce using rule 26 (DerefExpr)]
+    LASSIGN   [reduce using rule 26 (DerefExpr)]
+    ADD       [reduce using rule 26 (DerefExpr)]
+    SUB       [reduce using rule 26 (DerefExpr)]
+    MUL       [reduce using rule 26 (DerefExpr)]
+    DIV       [reduce using rule 26 (DerefExpr)]
+    REM       [reduce using rule 26 (DerefExpr)]
+    $default  reduce using rule 26 (DerefExpr)
+
+
+State 62
+
+    2 ExprList: ExprList . SEPARATOR Expr
+   10 TupleValue: LPAREN ExprList . RPAREN
+
+    RPAREN     shift, and go to state 89
+    SEPARATOR  shift, and go to state 67
+
+
+State 63
+
+    3 Literal: Identifier .
+   22 TupleList: Identifier . COLON Type
+   54 Index: Identifier . LPAREN TupleValue RPAREN
+
+    LPAREN  shift, and go to state 68
+    COLON   shift, and go to state 90
+
+    $default  reduce using rule 3 (Literal)
+
+
+State 64
+
+   23 TupleList: TupleList . SEPARATOR IDENTIFIER COLON Type
+   61 Lambda: LPAREN TupleList . RPAREN RASSIGN LPAREN TupleList RPAREN Expr
+
+    RPAREN     shift, and go to state 91
+    SEPARATOR  shift, and go to state 92
+
+
+State 65
+
+    2 ExprList: ExprList . SEPARATOR Expr
+   57 Block: LCURLY ExprList . RCURLY
+
+    RCURLY     shift, and go to state 93
+    SEPARATOR  shift, and go to state 67
+
+
+State 66
+
+    0 $accept: ExprList $end .
+
+    $default  accept
+
+
+State 67
+
+    2 ExprList: ExprList SEPARATOR . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 94
+
+
+State 68
+
+   54 Index: Identifier LPAREN . TupleValue RPAREN
+
+    LPAREN  shift, and go to state 95
+
+    TupleValue  go to state 96
+
+
+State 69
+
+   41 EQExpr: Expr EQ . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 97
+
+
+State 70
+
+   42 LTExpr: Expr LT . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 98
+
+
+State 71
+
+   43 GTExpr: Expr GT . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 99
+
+
+State 72
+
+   44 LEExpr: Expr LE . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 100
+
+
+State 73
+
+   45 GEExpr: Expr GE . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 101
+
+
+State 74
+
+   46 NEExpr: Expr NE . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 102
+
+
+State 75
+
+   52 AssignExpr: Expr ASSIGN . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 103
+
+
+State 76
+
+   53 LAssignExpr: Expr LASSIGN . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 104
+
+
+State 77
+
+   47 AddExpr: Expr ADD . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 105
+
+
+State 78
+
+   48 SubExpr: Expr SUB . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 106
+
+
+State 79
+
+   49 MulExpr: Expr MUL . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 107
+
+
+State 80
+
+   50 DivExpr: Expr DIV . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 108
+
+
+State 81
+
+   51 RemExpr: Expr REM . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 109
+
+
+State 82
+
+   55 Return: RETURN Expr SEPARATOR .
+
+    $default  reduce using rule 55 (Return)
+
+
+State 83
+
+   56 VarDecl: VAR Identifier COLON . Type EQ Expr
+
+    INT          shift, and go to state 3
+    FLOAT        shift, and go to state 4
+    ARRAY        shift, and go to state 5
+    TUPLE        shift, and go to state 6
+    ADDRLITERAL  shift, and go to state 15
+
+    Type       go to state 110
+    IntType    go to state 24
+    FloatType  go to state 25
+    AddrType   go to state 26
+    ArrayType  go to state 27
+    TupleType  go to state 28
+
+
+State 84
+
+   19 ArrayType: ARRAY LBRACKET Type . SEPARATOR Expr RBRACKET
+
+    SEPARATOR  shift, and go to state 111
+
+
+State 85
+
+   22 TupleList: Identifier . COLON Type
+
+    COLON  shift, and go to state 90
+
+
+State 86
+
+   20 TupleType: TUPLE LBRACKET TupleList . RBRACKET
+   23 TupleList: TupleList . SEPARATOR IDENTIFIER COLON Type
+
+    RBRACKET   shift, and go to state 112
+    SEPARATOR  shift, and go to state 92
+
+
+State 87
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   58 IfElse: IF LPAREN Expr . RPAREN Expr ELSE Expr
+   59       | IF LPAREN Expr . RPAREN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+    RPAREN   shift, and go to state 113
+
+
+State 88
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   60 While: WHILE LPAREN Expr . RPAREN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+    RPAREN   shift, and go to state 114
+
+
+State 89
+
+   10 TupleValue: LPAREN ExprList RPAREN .
+
+    $default  reduce using rule 10 (TupleValue)
+
+
+State 90
+
+   22 TupleList: Identifier COLON . Type
+
+    INT          shift, and go to state 3
+    FLOAT        shift, and go to state 4
+    ARRAY        shift, and go to state 5
+    TUPLE        shift, and go to state 6
+    ADDRLITERAL  shift, and go to state 15
+
+    Type       go to state 115
+    IntType    go to state 24
+    FloatType  go to state 25
+    AddrType   go to state 26
+    ArrayType  go to state 27
+    TupleType  go to state 28
+
+
+State 91
+
+   61 Lambda: LPAREN TupleList RPAREN . RASSIGN LPAREN TupleList RPAREN Expr
+
+    RASSIGN  shift, and go to state 116
+
+
+State 92
+
+   23 TupleList: TupleList SEPARATOR . IDENTIFIER COLON Type
+
+    IDENTIFIER  shift, and go to state 117
+
+
+State 93
+
+   57 Block: LCURLY ExprList RCURLY .
+
+    $default  reduce using rule 57 (Block)
+
+
+State 94
+
+    2 ExprList: ExprList SEPARATOR Expr .
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    $default  reduce using rule 2 (ExprList)
+
+
+State 95
+
+   10 TupleValue: LPAREN . ExprList RPAREN
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    ExprList      go to state 62
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 53
+
+
+State 96
+
+   54 Index: Identifier LPAREN TupleValue . RPAREN
+
+    RPAREN  shift, and go to state 118
+
+
+State 97
+
+   41 EQExpr: Expr . EQ Expr
+   41       | Expr EQ Expr .
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 41 (EQExpr)]
+    LT        [reduce using rule 41 (EQExpr)]
+    GT        [reduce using rule 41 (EQExpr)]
+    LE        [reduce using rule 41 (EQExpr)]
+    GE        [reduce using rule 41 (EQExpr)]
+    NE        [reduce using rule 41 (EQExpr)]
+    ASSIGN    [reduce using rule 41 (EQExpr)]
+    LASSIGN   [reduce using rule 41 (EQExpr)]
+    ADD       [reduce using rule 41 (EQExpr)]
+    SUB       [reduce using rule 41 (EQExpr)]
+    MUL       [reduce using rule 41 (EQExpr)]
+    DIV       [reduce using rule 41 (EQExpr)]
+    REM       [reduce using rule 41 (EQExpr)]
+    $default  reduce using rule 41 (EQExpr)
+
+
+State 98
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   42       | Expr LT Expr .
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 42 (LTExpr)]
+    LT        [reduce using rule 42 (LTExpr)]
+    GT        [reduce using rule 42 (LTExpr)]
+    LE        [reduce using rule 42 (LTExpr)]
+    GE        [reduce using rule 42 (LTExpr)]
+    NE        [reduce using rule 42 (LTExpr)]
+    ASSIGN    [reduce using rule 42 (LTExpr)]
+    LASSIGN   [reduce using rule 42 (LTExpr)]
+    ADD       [reduce using rule 42 (LTExpr)]
+    SUB       [reduce using rule 42 (LTExpr)]
+    MUL       [reduce using rule 42 (LTExpr)]
+    DIV       [reduce using rule 42 (LTExpr)]
+    REM       [reduce using rule 42 (LTExpr)]
+    $default  reduce using rule 42 (LTExpr)
+
+
+State 99
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   43       | Expr GT Expr .
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 43 (GTExpr)]
+    LT        [reduce using rule 43 (GTExpr)]
+    GT        [reduce using rule 43 (GTExpr)]
+    LE        [reduce using rule 43 (GTExpr)]
+    GE        [reduce using rule 43 (GTExpr)]
+    NE        [reduce using rule 43 (GTExpr)]
+    ASSIGN    [reduce using rule 43 (GTExpr)]
+    LASSIGN   [reduce using rule 43 (GTExpr)]
+    ADD       [reduce using rule 43 (GTExpr)]
+    SUB       [reduce using rule 43 (GTExpr)]
+    MUL       [reduce using rule 43 (GTExpr)]
+    DIV       [reduce using rule 43 (GTExpr)]
+    REM       [reduce using rule 43 (GTExpr)]
+    $default  reduce using rule 43 (GTExpr)
+
+
+State 100
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   44       | Expr LE Expr .
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 44 (LEExpr)]
+    LT        [reduce using rule 44 (LEExpr)]
+    GT        [reduce using rule 44 (LEExpr)]
+    LE        [reduce using rule 44 (LEExpr)]
+    GE        [reduce using rule 44 (LEExpr)]
+    NE        [reduce using rule 44 (LEExpr)]
+    ASSIGN    [reduce using rule 44 (LEExpr)]
+    LASSIGN   [reduce using rule 44 (LEExpr)]
+    ADD       [reduce using rule 44 (LEExpr)]
+    SUB       [reduce using rule 44 (LEExpr)]
+    MUL       [reduce using rule 44 (LEExpr)]
+    DIV       [reduce using rule 44 (LEExpr)]
+    REM       [reduce using rule 44 (LEExpr)]
+    $default  reduce using rule 44 (LEExpr)
+
+
+State 101
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   45       | Expr GE Expr .
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 45 (GEExpr)]
+    LT        [reduce using rule 45 (GEExpr)]
+    GT        [reduce using rule 45 (GEExpr)]
+    LE        [reduce using rule 45 (GEExpr)]
+    GE        [reduce using rule 45 (GEExpr)]
+    NE        [reduce using rule 45 (GEExpr)]
+    ASSIGN    [reduce using rule 45 (GEExpr)]
+    LASSIGN   [reduce using rule 45 (GEExpr)]
+    ADD       [reduce using rule 45 (GEExpr)]
+    SUB       [reduce using rule 45 (GEExpr)]
+    MUL       [reduce using rule 45 (GEExpr)]
+    DIV       [reduce using rule 45 (GEExpr)]
+    REM       [reduce using rule 45 (GEExpr)]
+    $default  reduce using rule 45 (GEExpr)
+
+
+State 102
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   46       | Expr NE Expr .
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 46 (NEExpr)]
+    LT        [reduce using rule 46 (NEExpr)]
+    GT        [reduce using rule 46 (NEExpr)]
+    LE        [reduce using rule 46 (NEExpr)]
+    GE        [reduce using rule 46 (NEExpr)]
+    NE        [reduce using rule 46 (NEExpr)]
+    ASSIGN    [reduce using rule 46 (NEExpr)]
+    LASSIGN   [reduce using rule 46 (NEExpr)]
+    ADD       [reduce using rule 46 (NEExpr)]
+    SUB       [reduce using rule 46 (NEExpr)]
+    MUL       [reduce using rule 46 (NEExpr)]
+    DIV       [reduce using rule 46 (NEExpr)]
+    REM       [reduce using rule 46 (NEExpr)]
+    $default  reduce using rule 46 (NEExpr)
+
+
+State 103
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   52           | Expr ASSIGN Expr .
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 52 (AssignExpr)]
+    LT        [reduce using rule 52 (AssignExpr)]
+    GT        [reduce using rule 52 (AssignExpr)]
+    LE        [reduce using rule 52 (AssignExpr)]
+    GE        [reduce using rule 52 (AssignExpr)]
+    NE        [reduce using rule 52 (AssignExpr)]
+    ASSIGN    [reduce using rule 52 (AssignExpr)]
+    LASSIGN   [reduce using rule 52 (AssignExpr)]
+    ADD       [reduce using rule 52 (AssignExpr)]
+    SUB       [reduce using rule 52 (AssignExpr)]
+    MUL       [reduce using rule 52 (AssignExpr)]
+    DIV       [reduce using rule 52 (AssignExpr)]
+    REM       [reduce using rule 52 (AssignExpr)]
+    $default  reduce using rule 52 (AssignExpr)
+
+
+State 104
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   53            | Expr LASSIGN Expr .
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 53 (LAssignExpr)]
+    LT        [reduce using rule 53 (LAssignExpr)]
+    GT        [reduce using rule 53 (LAssignExpr)]
+    LE        [reduce using rule 53 (LAssignExpr)]
+    GE        [reduce using rule 53 (LAssignExpr)]
+    NE        [reduce using rule 53 (LAssignExpr)]
+    ASSIGN    [reduce using rule 53 (LAssignExpr)]
+    LASSIGN   [reduce using rule 53 (LAssignExpr)]
+    ADD       [reduce using rule 53 (LAssignExpr)]
+    SUB       [reduce using rule 53 (LAssignExpr)]
+    MUL       [reduce using rule 53 (LAssignExpr)]
+    DIV       [reduce using rule 53 (LAssignExpr)]
+    REM       [reduce using rule 53 (LAssignExpr)]
+    $default  reduce using rule 53 (LAssignExpr)
+
+
+State 105
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   47        | Expr ADD Expr .
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 47 (AddExpr)]
+    LT        [reduce using rule 47 (AddExpr)]
+    GT        [reduce using rule 47 (AddExpr)]
+    LE        [reduce using rule 47 (AddExpr)]
+    GE        [reduce using rule 47 (AddExpr)]
+    NE        [reduce using rule 47 (AddExpr)]
+    ASSIGN    [reduce using rule 47 (AddExpr)]
+    LASSIGN   [reduce using rule 47 (AddExpr)]
+    ADD       [reduce using rule 47 (AddExpr)]
+    SUB       [reduce using rule 47 (AddExpr)]
+    MUL       [reduce using rule 47 (AddExpr)]
+    DIV       [reduce using rule 47 (AddExpr)]
+    REM       [reduce using rule 47 (AddExpr)]
+    $default  reduce using rule 47 (AddExpr)
+
+
+State 106
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   48        | Expr SUB Expr .
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 48 (SubExpr)]
+    LT        [reduce using rule 48 (SubExpr)]
+    GT        [reduce using rule 48 (SubExpr)]
+    LE        [reduce using rule 48 (SubExpr)]
+    GE        [reduce using rule 48 (SubExpr)]
+    NE        [reduce using rule 48 (SubExpr)]
+    ASSIGN    [reduce using rule 48 (SubExpr)]
+    LASSIGN   [reduce using rule 48 (SubExpr)]
+    ADD       [reduce using rule 48 (SubExpr)]
+    SUB       [reduce using rule 48 (SubExpr)]
+    MUL       [reduce using rule 48 (SubExpr)]
+    DIV       [reduce using rule 48 (SubExpr)]
+    REM       [reduce using rule 48 (SubExpr)]
+    $default  reduce using rule 48 (SubExpr)
+
+
+State 107
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   49        | Expr MUL Expr .
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 49 (MulExpr)]
+    LT        [reduce using rule 49 (MulExpr)]
+    GT        [reduce using rule 49 (MulExpr)]
+    LE        [reduce using rule 49 (MulExpr)]
+    GE        [reduce using rule 49 (MulExpr)]
+    NE        [reduce using rule 49 (MulExpr)]
+    ASSIGN    [reduce using rule 49 (MulExpr)]
+    LASSIGN   [reduce using rule 49 (MulExpr)]
+    ADD       [reduce using rule 49 (MulExpr)]
+    SUB       [reduce using rule 49 (MulExpr)]
+    MUL       [reduce using rule 49 (MulExpr)]
+    DIV       [reduce using rule 49 (MulExpr)]
+    REM       [reduce using rule 49 (MulExpr)]
+    $default  reduce using rule 49 (MulExpr)
+
+
+State 108
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   50        | Expr DIV Expr .
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 50 (DivExpr)]
+    LT        [reduce using rule 50 (DivExpr)]
+    GT        [reduce using rule 50 (DivExpr)]
+    LE        [reduce using rule 50 (DivExpr)]
+    GE        [reduce using rule 50 (DivExpr)]
+    NE        [reduce using rule 50 (DivExpr)]
+    ASSIGN    [reduce using rule 50 (DivExpr)]
+    LASSIGN   [reduce using rule 50 (DivExpr)]
+    ADD       [reduce using rule 50 (DivExpr)]
+    SUB       [reduce using rule 50 (DivExpr)]
+    MUL       [reduce using rule 50 (DivExpr)]
+    DIV       [reduce using rule 50 (DivExpr)]
+    REM       [reduce using rule 50 (DivExpr)]
+    $default  reduce using rule 50 (DivExpr)
+
+
+State 109
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   51        | Expr REM Expr .
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 51 (RemExpr)]
+    LT        [reduce using rule 51 (RemExpr)]
+    GT        [reduce using rule 51 (RemExpr)]
+    LE        [reduce using rule 51 (RemExpr)]
+    GE        [reduce using rule 51 (RemExpr)]
+    NE        [reduce using rule 51 (RemExpr)]
+    ASSIGN    [reduce using rule 51 (RemExpr)]
+    LASSIGN   [reduce using rule 51 (RemExpr)]
+    ADD       [reduce using rule 51 (RemExpr)]
+    SUB       [reduce using rule 51 (RemExpr)]
+    MUL       [reduce using rule 51 (RemExpr)]
+    DIV       [reduce using rule 51 (RemExpr)]
+    REM       [reduce using rule 51 (RemExpr)]
+    $default  reduce using rule 51 (RemExpr)
+
+
+State 110
+
+   56 VarDecl: VAR Identifier COLON Type . EQ Expr
+
+    EQ  shift, and go to state 119
+
+
+State 111
+
+   19 ArrayType: ARRAY LBRACKET Type SEPARATOR . Expr RBRACKET
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 120
+
+
+State 112
+
+   20 TupleType: TUPLE LBRACKET TupleList RBRACKET .
+
+    $default  reduce using rule 20 (TupleType)
+
+
+State 113
+
+   58 IfElse: IF LPAREN Expr RPAREN . Expr ELSE Expr
+   59       | IF LPAREN Expr RPAREN . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 121
+
+
+State 114
+
+   60 While: WHILE LPAREN Expr RPAREN . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 122
+
+
+State 115
+
+   22 TupleList: Identifier COLON Type .
+
+    $default  reduce using rule 22 (TupleList)
+
+
+State 116
+
+   61 Lambda: LPAREN TupleList RPAREN RASSIGN . LPAREN TupleList RPAREN Expr
+
+    LPAREN  shift, and go to state 123
+
+
+State 117
+
+   23 TupleList: TupleList SEPARATOR IDENTIFIER . COLON Type
+
+    COLON  shift, and go to state 124
+
+
+State 118
+
+   54 Index: Identifier LPAREN TupleValue RPAREN .
+
+    $default  reduce using rule 54 (Index)
+
+
+State 119
+
+   56 VarDecl: VAR Identifier COLON Type EQ . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 125
+
+
+State 120
+
+   19 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr . RBRACKET
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+
+    EQ        shift, and go to state 69
+    LT        shift, and go to state 70
+    GT        shift, and go to state 71
+    LE        shift, and go to state 72
+    GE        shift, and go to state 73
+    NE        shift, and go to state 74
+    ASSIGN    shift, and go to state 75
+    LASSIGN   shift, and go to state 76
+    ADD       shift, and go to state 77
+    SUB       shift, and go to state 78
+    MUL       shift, and go to state 79
+    DIV       shift, and go to state 80
+    REM       shift, and go to state 81
+    RBRACKET  shift, and go to state 126
+
+
+State 121
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   58 IfElse: IF LPAREN Expr RPAREN Expr . ELSE Expr
+   59       | IF LPAREN Expr RPAREN Expr .
+
+    ELSE     shift, and go to state 127
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    ELSE      [reduce using rule 59 (IfElse)]
+    EQ        [reduce using rule 59 (IfElse)]
+    LT        [reduce using rule 59 (IfElse)]
+    GT        [reduce using rule 59 (IfElse)]
+    LE        [reduce using rule 59 (IfElse)]
+    GE        [reduce using rule 59 (IfElse)]
+    NE        [reduce using rule 59 (IfElse)]
+    ASSIGN    [reduce using rule 59 (IfElse)]
+    LASSIGN   [reduce using rule 59 (IfElse)]
+    ADD       [reduce using rule 59 (IfElse)]
+    SUB       [reduce using rule 59 (IfElse)]
+    MUL       [reduce using rule 59 (IfElse)]
+    DIV       [reduce using rule 59 (IfElse)]
+    REM       [reduce using rule 59 (IfElse)]
+    $default  reduce using rule 59 (IfElse)
+
+
+State 122
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   60 While: WHILE LPAREN Expr RPAREN Expr .
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 60 (While)]
+    LT        [reduce using rule 60 (While)]
+    GT        [reduce using rule 60 (While)]
+    LE        [reduce using rule 60 (While)]
+    GE        [reduce using rule 60 (While)]
+    NE        [reduce using rule 60 (While)]
+    ASSIGN    [reduce using rule 60 (While)]
+    LASSIGN   [reduce using rule 60 (While)]
+    ADD       [reduce using rule 60 (While)]
+    SUB       [reduce using rule 60 (While)]
+    MUL       [reduce using rule 60 (While)]
+    DIV       [reduce using rule 60 (While)]
+    REM       [reduce using rule 60 (While)]
+    $default  reduce using rule 60 (While)
+
+
+State 123
+
+   61 Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN . TupleList RPAREN Expr
+
+    IDENTIFIER  shift, and go to state 16
+
+    $default  reduce using rule 21 (TupleList)
+
+    Identifier  go to state 85
+    TupleList   go to state 128
+
+
+State 124
+
+   23 TupleList: TupleList SEPARATOR IDENTIFIER COLON . Type
+
+    INT          shift, and go to state 3
+    FLOAT        shift, and go to state 4
+    ARRAY        shift, and go to state 5
+    TUPLE        shift, and go to state 6
+    ADDRLITERAL  shift, and go to state 15
+
+    Type       go to state 129
+    IntType    go to state 24
+    FloatType  go to state 25
+    AddrType   go to state 26
+    ArrayType  go to state 27
+    TupleType  go to state 28
+
+
+State 125
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   56 VarDecl: VAR Identifier COLON Type EQ Expr .
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 56 (VarDecl)]
+    LT        [reduce using rule 56 (VarDecl)]
+    GT        [reduce using rule 56 (VarDecl)]
+    LE        [reduce using rule 56 (VarDecl)]
+    GE        [reduce using rule 56 (VarDecl)]
+    NE        [reduce using rule 56 (VarDecl)]
+    ASSIGN    [reduce using rule 56 (VarDecl)]
+    LASSIGN   [reduce using rule 56 (VarDecl)]
+    ADD       [reduce using rule 56 (VarDecl)]
+    SUB       [reduce using rule 56 (VarDecl)]
+    MUL       [reduce using rule 56 (VarDecl)]
+    DIV       [reduce using rule 56 (VarDecl)]
+    REM       [reduce using rule 56 (VarDecl)]
+    $default  reduce using rule 56 (VarDecl)
+
+
+State 126
+
+   19 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET .
+
+    $default  reduce using rule 19 (ArrayType)
+
+
+State 127
+
+   58 IfElse: IF LPAREN Expr RPAREN Expr ELSE . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 130
+
+
+State 128
+
+   23 TupleList: TupleList . SEPARATOR IDENTIFIER COLON Type
+   61 Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN TupleList . RPAREN Expr
+
+    RPAREN     shift, and go to state 131
+    SEPARATOR  shift, and go to state 92
+
+
+State 129
+
+   23 TupleList: TupleList SEPARATOR IDENTIFIER COLON Type .
+
+    $default  reduce using rule 23 (TupleList)
+
+
+State 130
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   58 IfElse: IF LPAREN Expr RPAREN Expr ELSE Expr .
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 58 (IfElse)]
+    LT        [reduce using rule 58 (IfElse)]
+    GT        [reduce using rule 58 (IfElse)]
+    LE        [reduce using rule 58 (IfElse)]
+    GE        [reduce using rule 58 (IfElse)]
+    NE        [reduce using rule 58 (IfElse)]
+    ASSIGN    [reduce using rule 58 (IfElse)]
+    LASSIGN   [reduce using rule 58 (IfElse)]
+    ADD       [reduce using rule 58 (IfElse)]
+    SUB       [reduce using rule 58 (IfElse)]
+    MUL       [reduce using rule 58 (IfElse)]
+    DIV       [reduce using rule 58 (IfElse)]
+    REM       [reduce using rule 58 (IfElse)]
+    $default  reduce using rule 58 (IfElse)
+
+
+State 131
+
+   61 Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN TupleList RPAREN . Expr
+
+    RETURN        shift, and go to state 1
+    VAR           shift, and go to state 2
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    ARRAY         shift, and go to state 5
+    TUPLE         shift, and go to state 6
+    IF            shift, and go to state 7
+    WHILE         shift, and go to state 8
+    SUB           shift, and go to state 9
+    MUL           shift, and go to state 10
+    LPAREN        shift, and go to state 11
+    LCURLY        shift, and go to state 12
+    INTLITERAL    shift, and go to state 13
+    FLOATLITERAL  shift, and go to state 14
+    ADDRLITERAL   shift, and go to state 15
+    IDENTIFIER    shift, and go to state 16
+
+    SUB       [reduce using rule 62 (Expr)]
+    MUL       [reduce using rule 62 (Expr)]
+    $default  reduce using rule 62 (Expr)
+
+    Literal       go to state 18
+    Identifier    go to state 19
+    IntLiteral    go to state 20
+    FloatLiteral  go to state 21
+    TupleValue    go to state 22
+    Type          go to state 23
+    IntType       go to state 24
+    FloatType     go to state 25
+    AddrType      go to state 26
+    ArrayType     go to state 27
+    TupleType     go to state 28
+    UnaryExpr     go to state 29
+    DerefExpr     go to state 30
+    NegExpr       go to state 31
+    BinaryExpr    go to state 32
+    EQExpr        go to state 33
+    LTExpr        go to state 34
+    GTExpr        go to state 35
+    LEExpr        go to state 36
+    GEExpr        go to state 37
+    NEExpr        go to state 38
+    AddExpr       go to state 39
+    SubExpr       go to state 40
+    MulExpr       go to state 41
+    DivExpr       go to state 42
+    RemExpr       go to state 43
+    AssignExpr    go to state 44
+    LAssignExpr   go to state 45
+    Index         go to state 46
+    Return        go to state 47
+    VarDecl       go to state 48
+    Block         go to state 49
+    IfElse        go to state 50
+    While         go to state 51
+    Lambda        go to state 52
+    Expr          go to state 132
+
+
+State 132
+
+   41 EQExpr: Expr . EQ Expr
+   42 LTExpr: Expr . LT Expr
+   43 GTExpr: Expr . GT Expr
+   44 LEExpr: Expr . LE Expr
+   45 GEExpr: Expr . GE Expr
+   46 NEExpr: Expr . NE Expr
+   47 AddExpr: Expr . ADD Expr
+   48 SubExpr: Expr . SUB Expr
+   49 MulExpr: Expr . MUL Expr
+   50 DivExpr: Expr . DIV Expr
+   51 RemExpr: Expr . REM Expr
+   52 AssignExpr: Expr . ASSIGN Expr
+   53 LAssignExpr: Expr . LASSIGN Expr
+   61 Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN TupleList RPAREN Expr .
+
+    EQ       shift, and go to state 69
+    LT       shift, and go to state 70
+    GT       shift, and go to state 71
+    LE       shift, and go to state 72
+    GE       shift, and go to state 73
+    NE       shift, and go to state 74
+    ASSIGN   shift, and go to state 75
+    LASSIGN  shift, and go to state 76
+    ADD      shift, and go to state 77
+    SUB      shift, and go to state 78
+    MUL      shift, and go to state 79
+    DIV      shift, and go to state 80
+    REM      shift, and go to state 81
+
+    EQ        [reduce using rule 61 (Lambda)]
+    LT        [reduce using rule 61 (Lambda)]
+    GT        [reduce using rule 61 (Lambda)]
+    LE        [reduce using rule 61 (Lambda)]
+    GE        [reduce using rule 61 (Lambda)]
+    NE        [reduce using rule 61 (Lambda)]
+    ASSIGN    [reduce using rule 61 (Lambda)]
+    LASSIGN   [reduce using rule 61 (Lambda)]
+    ADD       [reduce using rule 61 (Lambda)]
+    SUB       [reduce using rule 61 (Lambda)]
+    MUL       [reduce using rule 61 (Lambda)]
+    DIV       [reduce using rule 61 (Lambda)]
+    REM       [reduce using rule 61 (Lambda)]
+    $default  reduce using rule 61 (Lambda)

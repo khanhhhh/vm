@@ -1,7 +1,11 @@
 %{
 #include"AST.h"
 #include<cstdio>
+#include<string>
 %}
+%union {
+    std::string lexeme;
+}
 
 %token RETURN
 %token VAR
@@ -43,6 +47,9 @@
 %token IDENTIFIER
 %token EOF
 %%
+ExprList:
+      Expr
+    | ExprList SEPARATOR Expr;
 // tuple of values
 // abstract Literal
 Literal:
@@ -134,7 +141,4 @@ Expr:
     | IfElse
     | While
     | Lambda;
-ExprList:
-      Expr
-    | ExprList SEPARATOR Expr;
 %%
