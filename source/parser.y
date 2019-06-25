@@ -1,12 +1,12 @@
 Type = INT
     | FLOAT
     | ADDR
-    | ARRAY LBRACKET Type COMMA Expr RBRACKET
+    | ARRAY LBRACKET Type SEPARATOR Expr RBRACKET
     | TUPLE LBRACKET Tuple RBRACKET
 // tuple of var names and their types
 Tuple = EMPTY
     | INDENTIFIER COLON Type
-    | Tuple COMMA INDENTIFIER COLON Type
+    | Tuple SEPARATOR INDENTIFIER COLON Type
 
 Operator = EQ | LT | GT | LE | GE | NE
         | ADD | SUB | MUL | DIV | REM
@@ -16,13 +16,13 @@ Operator = EQ | LT | GT | LE | GE | NE
 TupleValue = LPAREN ExprList RPAREN
 ExprtList = EMPTY
     | Expr
-    | ExprList SEMICOLON Expr
+    | ExprList SEPARATOR Expr
 // binary expression
 BinExpr = Expr Operator Expr
 // function call or array indexing
 Index = INDENTIFIER LPAREN ExprList RPAREN
 // return statement
-Return = RETURN Expr SEMICOLON
+Return = RETURN Expr SEPARATOR
 // var declaration
 VarDecl = VAR INDENTIFIER COLON Type EQ Expr
 // code block

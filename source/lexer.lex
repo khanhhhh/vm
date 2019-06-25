@@ -36,8 +36,7 @@
         LBRACKET,
         RBRACKET,
         COLON,
-        SEMICOLON,
-        COMMA,
+        SEPARATOR
         INTLITERAL,
         FLOATLITERAL,
         ADDRLITERAL,
@@ -94,8 +93,8 @@ std::vector<token> tokens;
 "["         {tokens.emplace_back(LBRACKET);}
 "]"         {tokens.emplace_back(RBRACKET);}
 ":"         {tokens.emplace_back(COLON);}
-";"         {tokens.emplace_back(SEMICOLON);}
-","         {tokens.emplace_back(COMMA);}
+";"         {tokens.emplace_back(SEPARATOR);}
+","         {tokens.emplace_back(SEPARATOR);}
 
 -?[1-9][0-9]+                               {tokens.emplace_back(INTLITERAL, yytext);}
 -?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {tokens.emplace_back(FLOATLITERAL, yytext);}
