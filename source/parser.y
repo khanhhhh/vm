@@ -1,17 +1,5 @@
 %{
-#include<vector>
-class ast {
-public:
-    ast() {}
-    virtual ~ast() {}
-};
-class ast_int: public ast {
-public:
-    ast_int(int value)
-};
-
-
-
+#include"AST.h"
 %}
 
 %token RETURN
@@ -52,55 +40,86 @@ public:
 %token FLOATLITERAL
 %token ADDRLITERAL
 %token IDENTIFIER
+%token EOF
 %%
-
-Type: INT
-    | FLOAT
-    | ADDR
-    | ARRAY LBRACKET Type SEPARATOR Expr RBRACKET
-    | TUPLE LBRACKET Tuple RBRACKET;
-// tuple of var names and their types
-Tuple: /*EMPTY*/
-    | IDENTIFIER COLON Type
-    | Tuple SEPARATOR IDENTIFIER COLON Type;
-
-Operator: EQ | LT | GT | LE | GE | NE
-        | ADD | SUB | MUL | DIV | REM
-        | ASSIGN | LASSIGN;
-
 // tuple of values
+// abstract Literal
+Literal: Identifier
+    | IntLiteral
+    | FloatLiteral
+    | TupleValue;
+Identifier: IDENTIFIER;
+IntLiteral: INTLITERAL;
+FloatLiteral: FLOATLITERAL;
 TupleValue: LPAREN ExprList RPAREN;
-ExprList: /*EMPTY*/
-    | Expr
-    | ExprList SEPARATOR Expr;
+// abstract Type
+Type: IntType
+    | FloatType
+    | AddrType
+    | ArrayType
+    | TupleType;
+IntType: INT;
+FloatType: FLOAT;
+AddrType: ADDRLITERAL;
+ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
+TupleType: TUPLE LBRACKET TupleList RBRACKET;
+// Tuple list is used both in declaration and Lambda Expr
+TupleList: /*EMPTY*/
+    | Identifier COLON Type
+    | TupleList SEPARATOR IDENTIFIER COLON Type;
+// unary expression
+UnaryExpr: DerefExpr
+    | NegExpr;
+DerefExpr: MUL Expr;
+NegExpr: SUB Expr;
 // binary expression
-BinExpr: Expr Operator Expr;
+BinaryExpr: EQExpr
+    | LTExpr
+    | GTExpr
+    | LEExpr
+    | GEExpr
+    | NEExpr
+    | AddExpr
+    | SubExpr
+    | MulExpr
+    | DivExpr
+    | RemExpr
+    | AssignExpr
+    | LAssignExpr;
+EQExpr: Expr EQ Expr;
+LTExpr: Expr LT Expr;
+GTExpr: Expr GT Expr;
+LEExpr: Expr LE Expr;
+GEExpr: Expr GE Expr;
+NEExpr: Expr NE Expr;
+AddExpr: Expr ADD Expr;
+SubExpr: Expr SUB Expr;
+MulExpr: Expr MUL Expr;
+DivExpr: Expr DIV Expr;
+RemExpr: Expr REM Expr;
+AssignExpr: Expr ASSIGN Expr;
+LAssignExpr: Expr LASSIGN Expr; 
 // function call or array indexing
-Index: IDENTIFIER LPAREN ExprList RPAREN;
+Index: Identifier LPAREN TupleValue RPAREN;
 // return statement
 Return: RETURN Expr SEPARATOR;
 // var declaration
-VarDecl: VAR IDENTIFIER COLON Type EQ Expr;
+VarDecl: VAR Identifier COLON Type EQ Expr;
 // code block
 Block: LCURLY ExprList RCURLY;
 // braching
-IfElse: IF LPAREN Expr RPAREN Expr Else;
-Else: /*EMPTY*/
-    | ELSE Expr;
+IfElse: IF LPAREN Expr RPAREN Expr ELSE Expr
+    | IF LPAREN Expr RPAREN Expr;
 // looping
 While: WHILE LPAREN Expr RPAREN Expr;
 // lambda expression
-Lambda: LPAREN Tuple RPAREN RASSIGN Type Expr;
+Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN TupleList RPAREN Expr;
 
-Expr:
-    | IDENTIFIER
-    | INTLITERAL
-    | FLOATLITERAL
-    | ADDRLITERAL
-    | TupleValue
-    | SUB Expr
-    | MUL Expr
-    | BinExpr
+Expr: /*EMPTY*/
+    | Literal
+    | Type
+    | UnaryExpr
+    | BinaryExpr
     | Index
     | Return
     | VarDecl
@@ -108,4 +127,6 @@ Expr:
     | IfElse
     | While
     | Lambda;
+ExprList: Expr
+    | ExprList SEPARATOR Expr;
 %%
