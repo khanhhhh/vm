@@ -9,6 +9,8 @@
         FLOAT,
         ADDR,
         ARRAY,
+        TUPLE,
+        TYPE,
         CAST,
         IF,
         ELSE,
@@ -60,8 +62,10 @@ std::vector<token> tokens;
 "var"       {tokens.emplace_back(VAR);}
 "int"       {tokens.emplace_back(INT);}
 "float"     {tokens.emplace_back(FLOAT);}
-"array"     {tokens.emplace_back(ARRAY);}
 "addr"      {tokens.emplace_back(ADDR);}
+"array"     {tokens.emplace_back(ARRAY);}
+"tuple"     {tokens.emplace_back(TUPLE);}
+"type"      {tokens.emplace_back(TYPE);}
 "cast"      {tokens.emplace_back(CAST);}
 "if"        {tokens.emplace_back(IF);}
 "else"      {tokens.emplace_back(ELSE);}
