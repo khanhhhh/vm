@@ -1,6 +1,57 @@
 %{
+#include<vector>
+class ast {
+public:
+    ast() {}
+    virtual ~ast() {}
+};
+class ast_int: public ast {
+public:
+    ast_int(int value)
+};
+
+
 
 %}
+
+%token RETURN
+%token VAR
+%token INT
+%token FLOAT
+%token ADDR
+%token ARRAY
+%token TUPLE
+%token TYPE
+%token CAST
+%token IF
+%token ELSE
+%token WHILE
+%token EQ
+%token LT
+%token GT
+%token LE
+%token GE
+%token NE
+%token ASSIGN
+%token LASSIGN
+%token RASSIGN
+%token ADD
+%token SUB
+%token MUL
+%token DIV
+%token REM
+%token LPAREN
+%token RPAREN
+%token LCURLY
+%token RCURLY
+%token LBRACKET
+%token RBRACKET
+%token COLON
+%token SEPARATOR
+%token INTLITERAL
+%token FLOATLITERAL
+%token ADDRLITERAL
+%token IDENTIFIER
 %%
 
 Type: INT
@@ -19,7 +70,7 @@ Operator: EQ | LT | GT | LE | GE | NE
 
 // tuple of values
 TupleValue: LPAREN ExprList RPAREN;
-ExprtList: /*EMPTY*/
+ExprList: /*EMPTY*/
     | Expr
     | ExprList SEPARATOR Expr;
 // binary expression
@@ -46,7 +97,7 @@ Expr:
     | INTLITERAL
     | FLOATLITERAL
     | ADDRLITERAL
-    | ArrayLiteral
+    | TupleValue
     | SUB Expr
     | MUL Expr
     | BinExpr
