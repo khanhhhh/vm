@@ -48,6 +48,8 @@
 -?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval.lexeme = yytext; return(FLOATLITERAL, yytext);}
 0[xX][0-9]+                                 {yylval.lexeme = yytext; return(ADDRLITERAL, yytext);}
 [a-zA-Z_][0-9a-zA-Z_]+                      {yylval.lexeme = yytext; return(IDENTIFIER, yytext);}
+<<EOF>>                                     {yylval.lexeme = yytext; return(EOF, yytext);}
+
 
 %%
 int yywrap(){return 1;}

@@ -48,7 +48,7 @@ struct EQExpr: public BinaryExpr {};
 struct LTExpr: public BinaryExpr {};
 struct GTExpr: public BinaryExpr {};
 struct LEExpr: public BinaryExpr {};
-struct GTExpr: public BinaryExpr {};
+struct GEExpr: public BinaryExpr {};
 struct NEExpr: public BinaryExpr {};
 struct AddExpr: public BinaryExpr {};
 struct SubExpr: public BinaryExpr {};

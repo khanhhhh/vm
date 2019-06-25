@@ -1,5 +1,5 @@
 %{
-#include"AST.h"
+#include"AST.hh"
 %}
 %union {
     std::string lexeme;
