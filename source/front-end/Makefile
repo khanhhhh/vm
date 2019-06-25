@@ -1,4 +1,8 @@
+all: parser lexer
+
 parser:
 	bison -d -v parser.y
+lexer:
+	flex lexer.l
 clean:
-	rm -f lex.yy.c parser.output parser.tab.*
+	rm -f *.yy.c *.output *.tab.*
