@@ -1,5 +1,6 @@
 %{
 #include"AST.hh"
+#include<string>
 %}
 %union {
     std::string lexeme;
@@ -43,7 +44,7 @@
 %token FLOATLITERAL
 %token ADDRLITERAL
 %token IDENTIFIER
-%token EOF
+//%token EOF
 %%
 ExprList[obj]:
     /*EMPTY*/ {
