@@ -4,7 +4,7 @@
 #include<cstdint>
 #include<string>
 struct Expr {};
-struct ExprList {
+struct ExprList: public Expr {
     std::vector<Expr*> elements;
 };
 struct Identifier:  public Expr {

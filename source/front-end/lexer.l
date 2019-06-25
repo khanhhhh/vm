@@ -1,54 +1,55 @@
 %{
 #include"parser.tab.h"
+#include"AST.hh"
 %}
 
 
 
 %%
-"return"                                    {yylval.lexeme = yytext; return(RETURN);}
-"var"                                       {yylval.lexeme = yytext; return(VAR);}
-"int"                                       {yylval.lexeme = yytext; return(INT);}
-"float"                                     {yylval.lexeme = yytext; return(FLOAT);}
-"addr"                                      {yylval.lexeme = yytext; return(ADDR);}
-"array"                                     {yylval.lexeme = yytext; return(ARRAY);}
-"tuple"                                     {yylval.lexeme = yytext; return(TUPLE);}
-"type"                                      {yylval.lexeme = yytext; return(TYPE);}
-"cast"                                      {yylval.lexeme = yytext; return(CAST);}
-"if"                                        {yylval.lexeme = yytext; return(IF);}
-"else"                                      {yylval.lexeme = yytext; return(ELSE);}
-"while"                                     {yylval.lexeme = yytext; return(WHILE);}
+"return"                                    {yylval.string = yytext; return(RETURN);}
+"var"                                       {yylval.string = yytext; return(VAR);}
+"int"                                       {yylval.string = yytext; return(INT);}
+"float"                                     {yylval.string = yytext; return(FLOAT);}
+"addr"                                      {yylval.string = yytext; return(ADDR);}
+"array"                                     {yylval.string = yytext; return(ARRAY);}
+"tuple"                                     {yylval.string = yytext; return(TUPLE);}
+"type"                                      {yylval.string = yytext; return(TYPE);}
+"cast"                                      {yylval.string = yytext; return(CAST);}
+"if"                                        {yylval.string = yytext; return(IF);}
+"else"                                      {yylval.string = yytext; return(ELSE);}
+"while"                                     {yylval.string = yytext; return(WHILE);}
                                          
-"=="                                        {yylval.lexeme = yytext; return(EQ);}
-"<"                                         {yylval.lexeme = yytext; return(LT);}
-">"                                         {yylval.lexeme = yytext; return(GT);}
-"<="                                        {yylval.lexeme = yytext; return(LE);}
-">="                                        {yylval.lexeme = yytext; return(GE);}
-"!="                                        {yylval.lexeme = yytext; return(NE);}
+"=="                                        {yylval.string = yytext; return(EQ);}
+"<"                                         {yylval.string = yytext; return(LT);}
+">"                                         {yylval.string = yytext; return(GT);}
+"<="                                        {yylval.string = yytext; return(LE);}
+">="                                        {yylval.string = yytext; return(GE);}
+"!="                                        {yylval.string = yytext; return(NE);}
                                          
-"="                                         {yylval.lexeme = yytext; return(ASSIGN);}
-"<-"                                        {yylval.lexeme = yytext; return(LASSIGN);}
-"->"                                        {yylval.lexeme = yytext; return(RASSIGN);}
-"+"                                         {yylval.lexeme = yytext; return(ADD);}
-"-"                                         {yylval.lexeme = yytext; return(SUB);}
-"*"                                         {yylval.lexeme = yytext; return(MUL);}
-"/"                                         {yylval.lexeme = yytext; return(DIV);}
-"%"                                         {yylval.lexeme = yytext; return(REM);}
+"="                                         {yylval.string = yytext; return(ASSIGN);}
+"<-"                                        {yylval.string = yytext; return(LASSIGN);}
+"->"                                        {yylval.string = yytext; return(RASSIGN);}
+"+"                                         {yylval.string = yytext; return(ADD);}
+"-"                                         {yylval.string = yytext; return(SUB);}
+"*"                                         {yylval.string = yytext; return(MUL);}
+"/"                                         {yylval.string = yytext; return(DIV);}
+"%"                                         {yylval.string = yytext; return(REM);}
                                          
-"("                                         {yylval.lexeme = yytext; return(LPAREN);}
-")"                                         {yylval.lexeme = yytext; return(RPAREN);}
-"{"                                         {yylval.lexeme = yytext; return(LCURLY);}
-"}"                                         {yylval.lexeme = yytext; return(LCURLY);}
-"["                                         {yylval.lexeme = yytext; return(LBRACKET);}
-"]"                                         {yylval.lexeme = yytext; return(RBRACKET);}
-":"                                         {yylval.lexeme = yytext; return(COLON);}
-";"                                         {yylval.lexeme = yytext; return(SEPARATOR);}
-","                                         {yylval.lexeme = yytext; return(SEPARATOR);}
+"("                                         {yylval.string = yytext; return(LPAREN);}
+")"                                         {yylval.string = yytext; return(RPAREN);}
+"{"                                         {yylval.string = yytext; return(LCURLY);}
+"}"                                         {yylval.string = yytext; return(LCURLY);}
+"["                                         {yylval.string = yytext; return(LBRACKET);}
+"]"                                         {yylval.string = yytext; return(RBRACKET);}
+":"                                         {yylval.string = yytext; return(COLON);}
+";"                                         {yylval.string = yytext; return(SEPARATOR);}
+","                                         {yylval.string = yytext; return(SEPARATOR);}
 
--?[1-9][0-9]+                               {yylval.lexeme = yytext; return(INTLITERAL, yytext);}
--?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval.lexeme = yytext; return(FLOATLITERAL, yytext);}
-0[xX][0-9]+                                 {yylval.lexeme = yytext; return(ADDRLITERAL, yytext);}
-[a-zA-Z_][0-9a-zA-Z_]+                      {yylval.lexeme = yytext; return(IDENTIFIER, yytext);}
-<<EOF>>                                     {yylval.lexeme = yytext; return(EOF, yytext);}
+-?[1-9][0-9]+                               {yylval.string = yytext; return(INTLITERAL, yytext);}
+-?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval.string = yytext; return(FLOATLITERAL, yytext);}
+0[xX][0-9]+                                 {yylval.string = yytext; return(ADDRLITERAL, yytext);}
+[a-zA-Z_][0-9a-zA-Z_]+                      {yylval.string = yytext; return(IDENTIFIER, yytext);}
+<<EOF>>                                     {yylval.string = yytext; return(EOF, yytext);}
 
 
 %%
