@@ -1,5 +1,6 @@
 %{
 #include"AST.h"
+#include<cstdio>
 %}
 
 %token RETURN
@@ -44,7 +45,8 @@
 %%
 // tuple of values
 // abstract Literal
-Literal: Identifier
+Literal:
+      Identifier
     | IntLiteral
     | FloatLiteral
     | TupleValue;
@@ -53,7 +55,8 @@ IntLiteral: INTLITERAL;
 FloatLiteral: FLOATLITERAL;
 TupleValue: LPAREN ExprList RPAREN;
 // abstract Type
-Type: IntType
+Type:
+      IntType
     | FloatType
     | AddrType
     | ArrayType
@@ -64,16 +67,19 @@ AddrType: ADDRLITERAL;
 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
 TupleType: TUPLE LBRACKET TupleList RBRACKET;
 // Tuple list is used both in declaration and Lambda Expr
-TupleList: /*EMPTY*/
+TupleList:
+      /*EMPTY*/
     | Identifier COLON Type
     | TupleList SEPARATOR IDENTIFIER COLON Type;
 // unary expression
-UnaryExpr: DerefExpr
+UnaryExpr:
+      DerefExpr
     | NegExpr;
 DerefExpr: MUL Expr;
 NegExpr: SUB Expr;
 // binary expression
-BinaryExpr: EQExpr
+BinaryExpr:
+      EQExpr
     | LTExpr
     | GTExpr
     | LEExpr
@@ -115,7 +121,8 @@ While: WHILE LPAREN Expr RPAREN Expr;
 // lambda expression
 Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN TupleList RPAREN Expr;
 
-Expr: /*EMPTY*/
+Expr:
+      /*EMPTY*/
     | Literal
     | Type
     | UnaryExpr
@@ -127,6 +134,7 @@ Expr: /*EMPTY*/
     | IfElse
     | While
     | Lambda;
-ExprList: Expr
+ExprList:
+      Expr
     | ExprList SEPARATOR Expr;
 %%
