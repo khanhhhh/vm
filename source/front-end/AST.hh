@@ -4,6 +4,9 @@
 #include<cstdint>
 #include<string>
 struct Expr {};
+struct ExprList {
+    std::vector<Expr*> elements;
+};
 struct Identifier:  public Expr {
     std::string name;
 };
@@ -15,7 +18,7 @@ struct FloatLiteral: public Literal {
     float value;
 };
 struct TupleValue:  public Expr {
-    std::vector<Literal*> elements;
+    ExprList *list;
 };
 struct Type:        public Expr {};
 struct IntType:     public Type {};
@@ -25,9 +28,12 @@ struct ArrayType:   public Type {
     Type *type;
     uint32_t count;
 };
-struct TuplePair {Type *type; std::string name;};
-struct TupleType:   public Type {
+struct TuplePair {Identifier name; Type *type;};
+struct TupleList {
     std::vector<TuplePair> elements;
+};
+struct TupleType:   public Type {
+    TupleList *list;
 };
 struct UnaryExpr:   public Expr {
     Expr *expr;
@@ -65,7 +71,7 @@ struct ValDecl: public Expr {
     Expr *value;
 };
 struct Block: public Expr {
-    std::vector<Expr*> elements;
+    ExprList *list;
 };
 struct IfElse: public Expr {
     Expr *condition;
