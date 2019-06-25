@@ -1,3 +1,5 @@
+#ifndef _AST_HH_
+#define _AST_HH_
 #include<vector>
 #include<cstdint>
 #include<string>
@@ -79,3 +81,4 @@ struct Lambda: public Expr {
     TupleType *output;
     Expr *body;
 };
+#endif
