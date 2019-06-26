@@ -7,7 +7,7 @@ var foo: type = tuple[x: typex, y: typey];
 //trait
 var footrait: trait[foo] = {
     // first function must be destructor
-    // object has it own life time, destructor is called when object is destroy
+    // object has it own life time, destructor is called when object is destroyed
     var destructor: function = (self: foo) {
         delete...
     },
