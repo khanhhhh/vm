@@ -28,4 +28,10 @@ var func2: function = (function f1, type t1, int value) -> (int) {
 //main function
 var main: function =  (param main) -> (param main) {
     // implementation
+    var a = array[int, 3] = (1, 2, 3);
+    //fucntion call
+    func1(param1);
+    //array indexing
+    a(1);
+    return 0;
 }
