@@ -26,7 +26,7 @@ var func1: function = (param1) -> (return1) {
     // implementation
 };
 //generics
-var func2: function = (function f1, type t1, int value) -> (int) {
+var func2: function = (f1: function f1, t1: type, value: int) -> (int) {
     //implemtnation
 }
 //main function
