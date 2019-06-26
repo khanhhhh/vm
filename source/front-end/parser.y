@@ -1,341 +1,157 @@
+/*
+Some notes about AST.
+0. There are about 300 shift/reduce, reduce/reduce conficts in this grammar. Be careful =))
+1. Every element in this language is a expression.
+2. Program is a Expression List
+3. Expression List is a list of expresions, separated by SEPARATOR (either semicolon or comma)
+4. TupleValue is (1, 2, 3, 4). List of expressions enclosed by parentheses
+5. TupleList is "x: typex, y: typey, ..., z: typez"
+6. TupleType = TUPLE [TupleList]
+7. Array = ARRAY[TYPE, SIZE]
+8.  RETURN VALUE SEMICOLON has meaning of an expression (with semicolon).
+    RETURN VALUE without SEMICOLON is a syntax error
+9. 
+
+
+*/
+
+
+
 %{
     #include"AST.hh"
-    #include<string>
-    struct Node {
-        Expr *expr;
-        std::string string;
-    };
-    #define YYSTYPE Node
-    int yylex(void);
 %}
-%token<string> RETURN
-%token<string> VAR
-%token<string> INT
-%token<string> FLOAT
-%token<string> ADDR
-%token<string> ARRAY
-%token<string> TUPLE
-%token<string> TYPE
-%token<string> CAST
-%token<string> IF
-%token<string> ELSE
-%token<string> WHILE
-%token<string> EQ
-%token<string> LT
-%token<string> GT
-%token<string> LE
-%token<string> GE
-%token<string> NE
-%token<string> ASSIGN
-%token<string> LASSIGN
-%token<string> RASSIGN
-%token<string> ADD
-%token<string> SUB
-%token<string> MUL
-%token<string> DIV
-%token<string> REM
-%token<string> LPAREN
-%token<string> RPAREN
-%token<string> LCURLY
-%token<string> RCURLY
-%token<string> LBRACKET
-%token<string> RBRACKET
-%token<string> COLON
-%token<string> SEPARATOR
-%token<string> INTLITERAL
-%token<string> FLOATLITERAL
-%token<string> ADDRLITERAL
-%token<string> IDENTIFIER
 
-%type<expr> ExprList
-%type<expr> Literal
-%type<expr> Identifier
-%type<expr> IntLiteral
-%type<expr> FloatLiteral
-%type<expr> TupleValue
-%type<expr> Type
-%type<expr> IntType
-%type<expr> FloatType
-%type<expr> AddrType
-%type<expr> ArrayType
-%type<expr> TupleType
-%type<expr> TupleList
-%type<expr> UnaryExpr
-%type<expr> DerefExpr
-%type<expr> NegExpr
-%type<expr> BinaryExpr
-%type<expr> EQExpr
-%type<expr> LTExpr
-%type<expr> GTExpr
-%type<expr> LEExpr
-%type<expr> GEExpr
-%type<expr> NEExpr
-%type<expr> AddExpr
-%type<expr> SubExpr
-%type<expr> MulExpr
-%type<expr> DivExpr
-%type<expr> RemExpr
-%type<expr> AssignExpr
-%type<expr> LAssignExpr
-%type<expr> Index
-%type<expr> Return
-%type<expr> VarDecl
-%type<expr> Block
-%type<expr> IfElse
-%type<expr> While
-%type<expr> Lambda
-%type<expr> Expr
-
-
-//%token<string> EOF
+%token RETURN
+%token VAR
+%token INT
+%token FLOAT
+%token ADDR
+%token ARRAY
+%token TUPLE
+%token TYPE
+%token CAST
+%token IF
+%token ELSE
+%token WHILE
+%token EQ
+%token LT
+%token GT
+%token LE
+%token GE
+%token NE
+%token ASSIGN
+%token LASSIGN
+%token RASSIGN
+%token ADD
+%token SUB
+%token MUL
+%token DIV
+%token REM
+%token LPAREN
+%token RPAREN
+%token LCURLY
+%token RCURLY
+%token LBRACKET
+%token RBRACKET
+%token COLON
+%token SEPARATOR
+%token INTLITERAL
+%token FLOATLITERAL
+%token ADDRLITERAL
+%token IDENTIFIER
 %%
-ExprList[obj]:
-    /*EMPTY*/ {
-        $obj = new ExprList;
-    }
-|   Expr[expr] {
-        $obj = new ExprList;
-        $obj->elements.push_back(expr);
-    }
-|   ExprList[left] SEPARATOR Expr[expr] {
-        $obj = new ExprList;
-        $obj->elements = std::move(left.elements);
-        $obj->elements.push_back(expr);
-        delete left;
-    };
+ExprList:
+    /*EMPTY*/
+|   Expr
+|   ExprList SEPARATOR Expr;
 // tuple of values
 // abstract Literal
-Literal[obj]:
-    Identifier[child] {
-        $obj = child;
-    }
-|   IntLiteral[child] {
-        $obj = child;
-    }
-|   FloatLiteral[child] {
-        $obj = child;
-    }
-|   TupleValue[child] {
-        $obj = child;
-    };
-Identifier[obj]: IDENTIFIER[name] {
-    $obj = new Identifier({name});
-};
-IntLiteral[obj]: INTLITERAL[name] {
-    $obj = new IntLiteral({std::stoi(name)});
-};
-FloatLiteral[obj]: FLOATLITERAL[name] {
-    $obj = new FloatLiteral({std::stof(name)});
-};
-TupleValue[obj]: LPAREN ExprList[child] RPAREN {
-    $obj = new TupleValue({child});
-};
+Literal:
+    Identifier
+|   IntLiteral
+|   FloatLiteral
+|   TupleValue
+Identifier: IDENTIFIER;
+IntLiteral: INTLITERAL;
+FloatLiteral: FLOATLITERAL;
+TupleValue: LPAREN ExprList RPAREN;
 // abstract Type
-Type[obj]:
-    IntType[child] {
-        $obj = child;
-    }
-|   FloatType[child] {
-        $obj = child;
-    }
-|   AddrType[child] {
-        $obj = child;
-    }
-|   ArrayType[child] {
-        $obj = child;
-    }
-|   TupleType[child] {
-        $obj = child;
-    };
-IntType[obj]: INT[name] {
-    $obj = new IntType;
-};
-FloatType[obj]: FLOAT[name] {
-    $obj = new FloatType;
-};
-AddrType[obj]: ADDRLITERAL[name] {
-    $obj = new AddrType;
-};
-ArrayType[obj]: ARRAY LBRACKET Type[type] SEPARATOR Expr[count] RBRACKET {
-    $obj = new ArrayType({type, count});
-};
-TupleType[obj]: TUPLE LBRACKET TupleList[child] RBRACKET {
-    $obj = new TupleList({child});
-};
+Type:
+|   FloatType
+|   AddrType
+|   ArrayType
+|   TupleType;
+IntType: INT;
+FloatType: FLOAT;
+AddrType: ADDRLITERAL;
+ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
+TupleType: TUPLE LBRACKET TupleList RBRACKET;
 // Tuple list is used both in declaration and Lambda Expr
-TupleList[obj]:
-    /*EMPTY*/ {
-        $obj = new TupleList;
-    }
-|   Identifier[name] COLON Type[type] {
-        $obj = new TupleList;
-        $obj->elements.push_back({name, type});
-    }
-|   TupleList[left] SEPARATOR Identifier[name] COLON Type[type] {
-        $obj = new TupleList;
-        $obj->elements = std::move(left.elements);
-        $obj->elements.push_back({name, type});
-        delete left;
-    };
+TupleList:
+    /*EMPTY*/
+|   Identifier COLON Type
+|   TupleList SEPARATOR Identifier COLON Type;
 // unary expression
-UnaryExpr[obj]:
-    DerefExpr[child] {
-        $obj = child;
-    }
-|    NegExpr[child] {
-        $obj = child;
-    };
-DerefExpr[obj]: MUL Expr[child] {
-    $obj = new UnaryExpr({child});
-};
-NegExpr[obj]: SUB Expr[child] {
-    $obj = new UnaryExpr({child});
-};
+UnaryExpr:
+    DerefExpr
+|   NegExpr;
+DerefExpr: MUL Expr;
+NegExpr: SUB Expr;
 // binary expression
-BinaryExpr[obj]:
-    EQExpr[child] {
-        $obj = child;
-    }
-|   LTExpr[child] {
-        $obj = child;
-    }
-|   GTExpr[child] {
-        $obj = child;
-    }
-|   LEExpr[child] {
-        $obj = child;
-    }
-|   GEExpr[child] {
-        $obj = child;
-    }
-|   NEExpr[child] {
-        $obj = child;
-    }
-|   AddExpr[child] {
-        $obj = child;
-    }
-|   SubExpr[child] {
-        $obj = child;
-    }
-|   MulExpr[child] {
-        $obj = child;
-    }
-|   DivExpr[child] {
-        $obj = child;
-    }
-|   RemExpr[child] {
-        $obj = child;
-    }
-|   AssignExpr[child] {
-        $obj = child;
-    }
-|   LAssignExpr[child] {
-        $obj = child;
-    };
-EQExpr[obj]: Expr[left] EQ Expr[right] {
-    $obj = new EQExpr({left, right});
-};
-LTExpr[obj]: Expr[left] LT Expr[right] {
-    $obj = new LTExpr({left, right});
-};
-GTExpr[obj]: Expr[left] GT Expr[right] {
-    $obj = new GTExpr({left, right});
-};
-LEExpr[obj]: Expr[left] LE Expr[right] {
-    $obj = new LEExpr({left, right});
-};
-GEExpr[obj]: Expr[left] GE Expr[right] {
-    $obj = new GEExpr({left, right});
-};
-NEExpr[obj]: Expr[left] NE Expr[right] {
-    $obj = new NEExpr({left, right});
-};
-AddExpr[obj]: Expr[left] ADD Expr[right] {
-    $obj = new AddExpr({left, right});
-};
-SubExpr[obj]: Expr[left] SUB Expr[right] {
-    $obj = new SubExpr({left, right});
-};
-MulExpr[obj]: Expr[left] MUL Expr[right] {
-    $obj = new MulExpr({left, right});
-};
-DivExpr[obj]: Expr[left] DIV Expr[right] {
-    $obj = new DivExpr({left, right});
-};
-RemExpr[obj]: Expr[left] REM Expr[right] {
-    $obj = new RemExpr({left, right});
-};
-AssignExpr[obj]: Expr[left] ASSIGN Expr[right] {
-    $obj = new AssignExpr({left, right});
-};
-LAssignExpr[obj]: Expr[left] LASSIGN Expr[right] {
-    $obj = new LAssignExpr({left, right});
-};
+BinaryExpr:
+    EQExpr
+|   LTExpr
+|   GTExpr
+|   LEExpr
+|   GEExpr
+|   NEExpr
+|   AddExpr
+|   SubExpr
+|   MulExpr
+|   DivExpr
+|   RemExpr
+|   AssignExpr
+|   LAssignExpr;
+EQExpr: Expr EQ Expr;
+LTExpr: Expr LT Expr;
+GTExpr: Expr GT Expr;
+LEExpr: Expr LE Expr;
+GEExpr: Expr GE Expr;
+NEExpr: Expr NE Expr;
+AddExpr: Expr ADD Expr;
+SubExpr: Expr SUB Expr;
+MulExpr: Expr MUL Expr;
+DivExpr: Expr DIV Expr;
+RemExpr: Expr REM Expr;
+AssignExpr: Expr ASSIGN Expr;
+LAssignExpr: Expr LASSIGN Expr;
 // function call or array indexing
-Index[obj]: Identifier[name] LPAREN TupleValue[arguments] RPAREN {
-    $obj = new Index({name, arguments});
-};
+Index: Identifier LPAREN TupleValue RPAREN;
 // return statement
-Return[obj]: RETURN Expr[expr] SEPARATOR {
-    $obj = new Return({expr});
-};
+Return: RETURN Expr SEPARATOR;
 // var declaration
-VarDecl[obj]: VAR Identifier[var] COLON Type[type] EQ Expr[value] {
-    $obj = new VarDecl({var, type, value});
-};
+VarDecl: VAR Identifier COLON Type EQ Expr;
 // code block
-Block[obj]: LCURLY ExprList[list] RCURLY {
-    $obj = new Block({list});
-};
+Block: LCURLY ExprList RCURLY;
 // braching
-IfElse[obj]:
-    IF LPAREN Expr[condition] RPAREN Expr[thenExpr] ELSE Expr[elseExpr] {
-        $obj = new IfElse({condition, thenExpr, elseExpr});
-    }
-|   IF LPAREN Expr[condition] RPAREN Expr[thenExpr] {
-        $obj = new IfElse({condition, thenExpr, nullptr});
-    };
+IfElse:
+    IF LPAREN Expr RPAREN Expr ELSE Expr
+|   IF LPAREN Expr RPAREN Expr;
 // looping
-While[obj]: WHILE LPAREN Expr[condition] RPAREN Expr[task] {
-        $obj = new While({condition, task});
-    };
+While: WHILE LPAREN Expr RPAREN Expr;
 // lambda expression
-Lambda[obj]: LPAREN TupleList[parameters] RPAREN RASSIGN LPAREN TupleList[output] RPAREN Expr[body] {
-    $obj = new Lambda({parameters, output, body});
-};
+Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN TupleList RPAREN Expr;
 
-Expr[obj]:
-    Literal[child] {
-        $obj = child;
-    }
-|   Type[child] {
-        $obj = child;
-    }
-|   UnaryExpr[child] {
-        $obj = child;
-    }
-|   BinaryExpr[child] {
-        $obj = child;
-    }
-|   Index[child] {
-        $obj = child;
-    }
-|   Return[child] {
-        $obj = child;
-    }
-|   VarDecl[child] {
-        $obj = child;
-    }
-|   Block[child] {
-        $obj = child;
-    }
-|   IfElse[child] {
-        $obj = child;
-    }
-|   While[child] {
-        $obj = child;
-    }
-|   Lambda[child] {
-        $obj = child;
-    };
+Expr:
+    Literal
+|   Type
+|   UnaryExpr
+|   BinaryExpr
+|   Index
+|   Return
+|   VarDecl
+|   Block
+|   IfElse
+|   While
+|   Lambda;
 %%

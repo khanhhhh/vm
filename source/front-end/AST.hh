@@ -9,16 +9,20 @@ struct ExprList: public Expr {
 };
 struct Identifier:  public Expr {
     std::string name;
+    Identifier(const std::string& name): name(name) {}
 };
 struct Literal:     public Expr {};
 struct IntLiteral:  public Literal {
     int32_t value;
+    IntLiteral(int32_t value): value(value) {}
 };
 struct FloatLiteral: public Literal {
     float value;
+    FloatLiteral(float value): value(value) {}
 };
 struct TupleValue:  public Expr {
     ExprList *list;
+    TupleValue(ExprList *list): list(list) {}
 };
 struct Type:        public Expr {};
 struct IntType:     public Type {};
@@ -26,14 +30,19 @@ struct FloatType:   public Type {};
 struct AddrType:    public Type {};
 struct ArrayType:   public Type {
     Type *type;
-    uint32_t count;
+    Expr *count;
+    ArrayType(Type *type, Expr *count): type(type), count(count) {}
 };
-struct TuplePair {Identifier name; Type *type;};
-struct TupleList {
+struct TuplePair {
+    Identifier *name; Type *type;
+    TuplePair(Identifier *name, Type *type): name(name), type(type) {}
+    };
+struct TupleList: public Expr {
     std::vector<TuplePair> elements;
 };
 struct TupleType:   public Type {
     TupleList *list;
+    TupleType(TupleList *list): list(list) {}
 };
 struct UnaryExpr:   public Expr {
     Expr *expr;
