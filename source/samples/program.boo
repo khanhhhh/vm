@@ -6,16 +6,20 @@ var foo: type = tuple[x: typex, y: typey];
 
 //trait
 var footrait: trait[foo] = {
-    fooconstructor,
+    // first function must be destructor
+    // object has it own life time, destructor is called when object is destroy
     var destructor: function = (self: foo) {
         delete...
-    }
+    },
+    fooconstructor
 }
-var fooconstructor: function = (self: foo, value1: typex, value2: typey) {
+var fooconstructor: function = (value1: typex, value2: typey) -> foo {
+    var self: foo = 0;
     self.x = typex;
     self.y = typey;
+    return self;
 }
-
+var fooinstance: foo = footrait.fooconstructor(1, 2);
 
 //function
 var func1: function = (param1) -> (return1) {
