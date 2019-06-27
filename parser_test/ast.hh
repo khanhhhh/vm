@@ -26,18 +26,18 @@ struct Number: public Node {
         value(value)
     {}
 };
-typedef union somename{
+union YYSTYPE {
     Node *node;
     int integer;
     std::string string;
-    somename() {}
-    somename(const somename& obj) {
-        std::memcpy(this, &obj, sizeof(somename));
+    YYSTYPE() {}
+    YYSTYPE(const YYSTYPE& obj) {
+        std::memcpy(this, &obj, sizeof(YYSTYPE));
     }
-    somename& operator=(const somename& obj) {
-        std::memcpy(this, &obj, sizeof(somename));
+    YYSTYPE& operator=(const YYSTYPE& obj) {
+        std::memcpy(this, &obj, sizeof(YYSTYPE));
         return *this;
     }
-    ~somename() {};
-} YYSTYPE;
+    ~YYSTYPE() {};
+};
 #endif

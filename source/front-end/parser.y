@@ -41,21 +41,29 @@
 %token ADDRLITERAL
 %token IDENTIFIER
 %%
+Program:
+    ExprList;
+// tuple of values
+// abstract Literal
+TupleList:
+    /*EMPTY*/
+|   Identifier COLON Type
+|   TupleList SEPARATOR Identifier COLON Type;
 ExprList:
     /*EMPTY*/
 |   Expr
 |   ExprList SEPARATOR Expr;
-// tuple of values
-// abstract Literal
 Literal:
     Identifier
 |   IntLiteral
 |   FloatLiteral
-|   TupleValue;
+|   AddrLiteral
+|   TupleLiteral;
 Identifier: IDENTIFIER;
 IntLiteral: INTLITERAL;
 FloatLiteral: FLOATLITERAL;
-TupleValue: LPAREN ExprList RPAREN;
+AddrLiteral: ADDRLITERAL;
+TupleLiteral: LPAREN ExprList RPAREN;
 // abstract Type
 Type:
 |   FloatType
@@ -68,10 +76,6 @@ AddrType: ADDRLITERAL;
 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
 TupleType: TUPLE LBRACKET TupleList RBRACKET;
 // Tuple list is used both in declaration and Lambda Expr
-TupleList:
-    /*EMPTY*/
-|   Identifier COLON Type
-|   TupleList SEPARATOR Identifier COLON Type;
 // unary expression
 UnaryExpr:
     DerefExpr
@@ -107,7 +111,7 @@ RemExpr: Expr REM Expr;
 AssignExpr: Expr ASSIGN Expr;
 LAssignExpr: Expr LASSIGN Expr;
 // function call or array indexing
-Index: Identifier TupleValue;
+Index: Identifier TupleLiteral;
 // return statement
 Return: RETURN Expr SEPARATOR;
 // var declaration
