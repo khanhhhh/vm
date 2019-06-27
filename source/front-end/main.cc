@@ -1,5 +1,5 @@
 #include<parser.tab.h>
-Expr* Expr::program;
+Program* Program::program;
 int main() {
 	FILE *f = fopen("code.boo", "r");
 	yyin = f;
