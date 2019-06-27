@@ -1,22 +1,3 @@
-/*
-Some notes about AST.
-0. There are about 300 shift/reduce, reduce/reduce conficts in this grammar. Be careful =))
-1. Every element in this language is a expression.
-2. Program is a Expression List
-3. Expression List is a list of expresions, separated by SEPARATOR (either semicolon or comma)
-4. TupleValue is (1, 2, 3, 4). List of expressions enclosed by parentheses
-5. TupleList is "x: typex, y: typey, ..., z: typez"
-6. TupleType = TUPLE [TupleList]
-7. Array = ARRAY[TYPE, SIZE]
-8.  RETURN VALUE SEMICOLON has meaning of an expression (with semicolon).
-    RETURN VALUE without SEMICOLON is a syntax error
-9. 
-
-
-*/
-
-
-
 %{
     #include"AST.hh"
 %}
@@ -70,7 +51,7 @@ Literal:
     Identifier
 |   IntLiteral
 |   FloatLiteral
-|   TupleValue
+|   TupleValue;
 Identifier: IDENTIFIER;
 IntLiteral: INTLITERAL;
 FloatLiteral: FLOATLITERAL;
@@ -126,7 +107,7 @@ RemExpr: Expr REM Expr;
 AssignExpr: Expr ASSIGN Expr;
 LAssignExpr: Expr LASSIGN Expr;
 // function call or array indexing
-Index: Identifier LPAREN TupleValue RPAREN;
+Index: Identifier TupleValue;
 // return statement
 Return: RETURN Expr SEPARATOR;
 // var declaration
@@ -140,7 +121,7 @@ IfElse:
 // looping
 While: WHILE LPAREN Expr RPAREN Expr;
 // lambda expression
-Lambda: LPAREN TupleList RPAREN RASSIGN LPAREN TupleList RPAREN Expr;
+Lambda: Type RASSIGN Type Expr;
 
 Expr:
     Literal
