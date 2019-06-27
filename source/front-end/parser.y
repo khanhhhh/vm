@@ -1,15 +1,22 @@
+%code requires {
+#include<AST.hh>
+extern int yylex();
+extern int yyparse();
+extern FILE* yyin;
+void yyerror(const char* s);
+}
 %{
-    #include"AST.hh"
+
 %}
 
 %token RETURN
 %token VAR
-%token INT
-%token FLOAT
-%token ADDR
+%token IntType
+%token FloatType
+%token AddrType
 %token ARRAY
 %token TUPLE
-%token TYPE
+%token TypeType
 %token CAST
 %token IF
 %token ELSE
@@ -36,10 +43,10 @@
 %token RBRACKET
 %token COLON
 %token SEPARATOR
-%token INTLITERAL
-%token FLOATLITERAL
-%token ADDRLITERAL
-%token IDENTIFIER
+%token IntLiteral
+%token FloatLiteral
+%token AddrLiteral
+%token Identifier
 %%
 Program:
     ExprList;
@@ -59,10 +66,6 @@ Literal:
 |   FloatLiteral
 |   AddrLiteral
 |   TupleLiteral;
-Identifier: IDENTIFIER;
-IntLiteral: INTLITERAL;
-FloatLiteral: FLOATLITERAL;
-AddrLiteral: ADDRLITERAL;
 TupleLiteral: LPAREN ExprList RPAREN;
 // abstract Type
 Type:
@@ -70,9 +73,6 @@ Type:
 |   AddrType
 |   ArrayType
 |   TupleType;
-IntType: INT;
-FloatType: FLOAT;
-AddrType: ADDRLITERAL;
 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
 TupleType: TUPLE LBRACKET TupleList RBRACKET;
 // Tuple list is used both in declaration and Lambda Expr

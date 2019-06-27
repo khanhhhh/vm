@@ -3,10 +3,18 @@
 #include<cstdint>
 #include<string>
 #include<vector>
+
+
+#define YYSTYPE_IS_DECLARED
+struct Expr;
+typedef Expr* YYSTYPE;
+
+
 struct Expr {
     Expr() {}
     ~Expr() {}
 };
+struct Type;
 struct TuplePair {
     std::string name;
     Type *type;
@@ -95,6 +103,12 @@ struct Type: Expr {
         Expr()
     {}
     ~Type() {}
+};
+struct TypeType: Type {
+    TypeType():
+        Type()
+    {}
+    ~TypeType() {}
 };
 struct IntType: Type {
     IntType():
@@ -332,5 +346,4 @@ struct Lambda: Expr {
         delete body;
     }
 };
-using YYSTYPE = Expr*;
 #endif
