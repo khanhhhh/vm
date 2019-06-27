@@ -2,6 +2,8 @@
 
 %code requires {
 #include<ast.hh>
+#include<cstring>
+#include<cstdio>
 extern int yylex();
 extern int yyparse();
 extern FILE* yyin;

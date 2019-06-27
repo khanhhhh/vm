@@ -3,7 +3,6 @@
 #include<vector>
 #include<string>
 #include<cstring>
-#include<cstdio>
 struct Node {
     static std::vector<Node*> all_nodes;
     Node *left;
