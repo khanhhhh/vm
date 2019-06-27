@@ -9,10 +9,23 @@
 struct Expr;
 typedef Expr* YYSTYPE;
 
-
 struct Expr {
     Expr() {}
     ~Expr() {}
+};
+struct ExprList;
+struct Program: Expr {
+    static Program* program;
+    ExprList *list;
+    Program(ExprList* list):
+        Expr(),
+        list(list)
+    {
+        program = this;
+    }
+    ~Program() {
+        delete list;
+    }
 };
 struct Type;
 struct TuplePair {
