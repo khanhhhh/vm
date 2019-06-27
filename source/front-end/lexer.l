@@ -1,55 +1,56 @@
+%option noyywrap
 %{
 #include"parser.tab.h"
-#include"AST.hh"
+#define YY_DECL int yylex()
 %}
 
 
 
 %%
-"return"                                    {yylval.string = yytext; return(RETURN);}
-"var"                                       {yylval.string = yytext; return(VAR);}
-"int"                                       {yylval.string = yytext; return(INT);}
-"float"                                     {yylval.string = yytext; return(FLOAT);}
-"addr"                                      {yylval.string = yytext; return(ADDR);}
-"array"                                     {yylval.string = yytext; return(ARRAY);}
-"tuple"                                     {yylval.string = yytext; return(TUPLE);}
-"type"                                      {yylval.string = yytext; return(TYPE);}
-"cast"                                      {yylval.string = yytext; return(CAST);}
-"if"                                        {yylval.string = yytext; return(IF);}
-"else"                                      {yylval.string = yytext; return(ELSE);}
-"while"                                     {yylval.string = yytext; return(WHILE);}
+"return"                                    {return RETURN;};
+"var"                                       {return VAR;};
+"int"                                       {yylval = new IntType(); return IntType;};
+"float"                                     {yylval = new FloatType(); return FloatType;};
+"addr"                                      {yylval = new AddrType(); return AddrType;};
+"array"                                     {return ARRAY;};
+"tuple"                                     {return TUPLE;};
+"type"                                      {yylval = TypeType(); return TypeType;};
+"cast"                                      {return CAST;};
+"if"                                        {return IF;};
+"else"                                      {return ELSE;};
+"while"                                     {return WHILE;};
                                          
-"=="                                        {yylval.string = yytext; return(EQ);}
-"<"                                         {yylval.string = yytext; return(LT);}
-">"                                         {yylval.string = yytext; return(GT);}
-"<="                                        {yylval.string = yytext; return(LE);}
-">="                                        {yylval.string = yytext; return(GE);}
-"!="                                        {yylval.string = yytext; return(NE);}
+"=="                                        {return EQ;};
+"<"                                         {return LT;};
+">"                                         {return GT;};
+"<="                                        {return LE;};
+">="                                        {return GE;};
+"!="                                        {return NE;};
                                          
-"="                                         {yylval.string = yytext; return(ASSIGN);}
-"<-"                                        {yylval.string = yytext; return(LASSIGN);}
-"->"                                        {yylval.string = yytext; return(RASSIGN);}
-"+"                                         {yylval.string = yytext; return(ADD);}
-"-"                                         {yylval.string = yytext; return(SUB);}
-"*"                                         {yylval.string = yytext; return(MUL);}
-"/"                                         {yylval.string = yytext; return(DIV);}
-"%"                                         {yylval.string = yytext; return(REM);}
+"="                                         {return ASSIGN;};
+"<-"                                        {return LASSIGN;};
+"->"                                        {return RASSIGN};
+"+"                                         {return ADD;};
+"-"                                         {return SUB;};
+"*"                                         {return MUL;};
+"/"                                         {return DIV;};
+"%"                                         {return REM;};
                                          
-"("                                         {yylval.string = yytext; return(LPAREN);}
-")"                                         {yylval.string = yytext; return(RPAREN);}
-"{"                                         {yylval.string = yytext; return(LCURLY);}
-"}"                                         {yylval.string = yytext; return(LCURLY);}
-"["                                         {yylval.string = yytext; return(LBRACKET);}
-"]"                                         {yylval.string = yytext; return(RBRACKET);}
-":"                                         {yylval.string = yytext; return(COLON);}
-";"                                         {yylval.string = yytext; return(SEPARATOR);}
-","                                         {yylval.string = yytext; return(SEPARATOR);}
+"("                                         {return LPAREN;};
+")"                                         {return RPAREN;};
+"{"                                         {return LCURLY;};
+"}"                                         {return RCURLY;};
+"["                                         {return LBRACKET;};
+"]"                                         {return RBRACKET;};
+":"                                         {return COLON;};
+";"                                         {return SEPARATOR;};
+","                                         {return SEPARATOR;};
 
--?[1-9][0-9]+                               {yylval.string = yytext; return(INTLITERAL, yytext);}
--?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval.string = yytext; return(FLOATLITERAL, yytext);}
-0[xX][0-9]+                                 {yylval.string = yytext; return(ADDRLITERAL, yytext);}
-[a-zA-Z_][0-9a-zA-Z_]+                      {yylval.string = yytext; return(IDENTIFIER, yytext);}
-<<EOF>>                                     {yylval.string = yytext; return(EOF, yytext);}
+-?[1-9][0-9]+                               {yylval = new IntLiteral(std::stoi(yytext)); return IntLiteral;};
+-?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval = new FloatLiteral(std::stof(yytext)); return FloatLiteral;};
+0[xX][0-9]+                                 {yylval = new AddrLiteral(std::stoul(yytext)); return AddrLiteral;};
+[a-zA-Z_][0-9a-zA-Z_]+                      {yylval = yytext; return Identifier;};
+<<EOF>>                                     {yylval = EoF;};
 
 
 %%

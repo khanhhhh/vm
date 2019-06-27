@@ -9,6 +9,7 @@ void yyerror(const char* s);
 
 %}
 
+%token EoF
 %token RETURN
 %token VAR
 %token IntType
@@ -49,7 +50,7 @@ void yyerror(const char* s);
 %token Identifier
 %%
 Program:
-    ExprList;
+    ExprList EoF;
 // tuple of values
 // abstract Literal
 TupleList:
