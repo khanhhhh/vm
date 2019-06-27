@@ -45,6 +45,7 @@ extern int yydebug;
 #include<ast.hh>
 #include<string>
 #include<cstring>
+#include<cstdio>
 typedef union somename{
     Node *node;
     int integer;
@@ -59,8 +60,12 @@ typedef union somename{
     }
     ~somename() {};
 } YYSTYPE;
+extern int yylex();
+extern int yyparse();
+extern FILE* yyin;
+void yyerror(const char* s);
 
-#line 64 "parser.tab.h" /* yacc.c:1910  */
+#line 69 "parser.tab.h" /* yacc.c:1910  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE

@@ -4,6 +4,7 @@
 #include<ast.hh>
 #include<string>
 #include<cstring>
+#include<cstdio>
 typedef union somename{
     Node *node;
     int integer;
@@ -18,12 +19,12 @@ typedef union somename{
     }
     ~somename() {};
 } YYSTYPE;
-}
-%{
 extern int yylex();
 extern int yyparse();
 extern FILE* yyin;
 void yyerror(const char* s);
+}
+%{
 %}
 
 
