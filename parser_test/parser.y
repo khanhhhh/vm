@@ -2,23 +2,6 @@
 
 %code requires {
 #include<ast.hh>
-#include<string>
-#include<cstring>
-#include<cstdio>
-typedef union somename{
-    Node *node;
-    int integer;
-    std::string string;
-    somename() {}
-    somename(const somename& obj) {
-        std::memcpy(this, &obj, sizeof(somename));
-    }
-    somename& operator=(const somename& obj) {
-        std::memcpy(this, &obj, sizeof(somename));
-        return *this;
-    }
-    ~somename() {};
-} YYSTYPE;
 extern int yylex();
 extern int yyparse();
 extern FILE* yyin;
