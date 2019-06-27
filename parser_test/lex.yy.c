@@ -322,6 +322,9 @@ void yyfree ( void *  );
 #define YY_AT_BOL() (YY_CURRENT_BUFFER_LVALUE->yy_at_bol)
 
 /* Begin user sect3 */
+
+#define yywrap() (/*CONSTCOND*/1)
+#define YY_SKIP_YYWRAP
 typedef flex_uint8_t YY_CHAR;
 
 FILE *yyin = NULL, *yyout = NULL;
@@ -439,11 +442,12 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "lexer.l"
-#line 2 "lexer.l"
+#line 3 "lexer.l"
 #include<parser.tab.h>
 #include<stdio.h>
-#line 445 "lex.yy.c"
-#line 446 "lex.yy.c"
+#define YY_DECL int yylex()
+#line 449 "lex.yy.c"
+#line 450 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -660,9 +664,9 @@ YY_DECL
 		}
 
 	{
-#line 5 "lexer.l"
+#line 7 "lexer.l"
 
-#line 665 "lex.yy.c"
+#line 669 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -721,20 +725,20 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 6 "lexer.l"
+#line 8 "lexer.l"
 {yylval.string = std::string(yytext); return ADD;};
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 7 "lexer.l"
+#line 9 "lexer.l"
 {yylval.integer = std::stoi(yytext); return NUMBER;};
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 8 "lexer.l"
+#line 10 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 737 "lex.yy.c"
+#line 741 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1739,5 +1743,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 8 "lexer.l"
+#line 10 "lexer.l"
 
