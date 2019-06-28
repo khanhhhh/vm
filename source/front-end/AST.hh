@@ -4,7 +4,6 @@
 #include<string>
 #include<vector>
 
-
 #define YYSTYPE_IS_DECLARED
 struct Expr;
 typedef Expr* YYSTYPE;

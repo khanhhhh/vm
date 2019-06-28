@@ -18,7 +18,6 @@ endif
 
 test: clean all
 	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run main.cc ./libparser.so
-	$(GDB) ./run
 all: parser lexer
 	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -c -o parser.tab.o parser.tab.c
 	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -c -o lex.yy.o lex.yy.c
