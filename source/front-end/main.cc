@@ -6,6 +6,7 @@ int main() {
 	yyin = f;
 	do {
 		yyparse();
+		std::printf("parsing...\n");
 	} while(!feof(yyin));
 	fclose(f);
 	return 0;

@@ -7,6 +7,7 @@
 
 
 %%
+[ \t]	; // ignore all whitespace
 "return"                                    {return RETURN;};
 "var"                                       {return VAR;};
 "int"                                       {yylval = new IntType(); return INTTYPE;};

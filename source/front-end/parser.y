@@ -53,8 +53,18 @@ void yyerror(const char* s);
 %%
 Program:
     ExprList;
-// tuple of values
-// abstract Literal
+Expr:
+    Literal
+|   Type
+|   UnaryExpr
+|   BinaryExpr
+|   Index
+|   Return
+|   VarDecl
+|   Block
+|   IfElse
+|   While
+|   Lambda;
 TupleList:
     /*EMPTY*/
 |   IDENTIFIER COLON Type
@@ -133,18 +143,6 @@ While: WHILE LPAREN Expr RPAREN Expr;
 // lambda expression
 Lambda: Type RASSIGN Type Expr;
 
-Expr:
-    Literal
-|   Type
-|   UnaryExpr
-|   BinaryExpr
-|   Index
-|   Return
-|   VarDecl
-|   Block
-|   IfElse
-|   While
-|   Lambda;
 %%
 void yyerror(const char* s) {
 	throw std::runtime_error(std::string("ParseError: ") + s);
