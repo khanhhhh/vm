@@ -177,12 +177,12 @@
 };
 0[xX][0-9]+ {
     std::printf(yytext);
-    yylval = new AddrLiteral(std::stoul(yytext));
+    //yylval = new AddrLiteral(std::stoul(yytext));
     return ADDRLITERAL;
 };
 [a-zA-Z_][0-9a-zA-Z_]+ {
     std::printf(yytext);
-    yylval = new Identifier(yytext);
+    //yylval = new Identifier(yytext);
     return IDENTIFIER;
 };
 
