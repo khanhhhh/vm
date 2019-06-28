@@ -11,7 +11,7 @@ typedef Expr* YYSTYPE;
 
 struct Expr {
     Expr() {}
-    ~Expr() {}
+    virtual ~Expr() {}
 };
 struct ExprList;
 struct Program: Expr {
@@ -23,7 +23,7 @@ struct Program: Expr {
     {
         program = this;
     }
-    ~Program() {
+    virtual ~Program() {
         delete list;
     }
 };
@@ -35,7 +35,7 @@ struct TuplePair {
         name(name),
         type(type)
     {}
-    ~TuplePair() {
+    virtual ~TuplePair() {
         delete type;
     }
 };
@@ -44,20 +44,20 @@ struct TupleList: Expr {
     TupleList():
         Expr()
     {}
-    void push_element(const std::string& name, Type *type) {
+    virtual void push_element(const std::string& name, Type *type) {
         elements.emplace_back(name, type);
     }
-    ~TupleList() {}
+    virtual ~TupleList() {}
 };
 struct ExprList: Expr {
     std::vector<Expr*> elements;
     ExprList():
         Expr()
     {}
-    void push_element(Expr* expr) {
+    virtual void push_element(Expr* expr) {
         elements.push_back(expr);
     }
-    ~ExprList() {
+    virtual ~ExprList() {
         for (size_t i=0; i<elements.size(); i++) {
             delete elements[i];
         }
@@ -67,7 +67,7 @@ struct Literal: Expr {
     Literal():
         Expr()
     {}
-    ~Literal() {}
+    virtual ~Literal() {}
 };
 struct Identifier: Literal {
     std::string value;
@@ -75,7 +75,7 @@ struct Identifier: Literal {
         Literal(),
         value(value)
     {}
-    ~Identifier() {}
+    virtual ~Identifier() {}
 };
 struct IntLiteral: Literal {
     int32_t value;
@@ -83,7 +83,7 @@ struct IntLiteral: Literal {
         Literal(),
         value(value)
     {}
-    ~IntLiteral() {}
+    virtual ~IntLiteral() {}
 };
 struct FloatLiteral: Literal {
     float value;
@@ -91,7 +91,7 @@ struct FloatLiteral: Literal {
         Literal(),
         value(value)
     {}
-    ~FloatLiteral() {}
+    virtual ~FloatLiteral() {}
 };
 struct AddrLiteral: Literal {
     uint32_t value;
@@ -99,7 +99,7 @@ struct AddrLiteral: Literal {
         Literal(),
         value(value)
     {}
-    ~AddrLiteral() {}
+    virtual ~AddrLiteral() {}
 };
 struct TupleLiteral: Literal {
     ExprList* list;
@@ -107,7 +107,7 @@ struct TupleLiteral: Literal {
         Literal(),
         list(list)
     {}
-    ~TupleLiteral() {
+    virtual ~TupleLiteral() {
         delete list;
     }
 };
@@ -115,31 +115,31 @@ struct Type: Expr {
     Type():
         Expr()
     {}
-    ~Type() {}
+    virtual ~Type() {}
 };
 struct TypeType: Type {
     TypeType():
         Type()
     {}
-    ~TypeType() {}
+    virtual ~TypeType() {}
 };
 struct IntType: Type {
     IntType():
         Type()
     {}
-    ~IntType() {}
+    virtual ~IntType() {}
 };
 struct FloatType: Type {
     FloatType():
         Type()
     {}
-    ~FloatType() {}
+    virtual ~FloatType() {}
 };
 struct AddrType: Type {
     AddrType():
         Type()
     {}
-    ~AddrType() {}
+    virtual ~AddrType() {}
 };
 struct TupleType: Type {
     TupleList *list;
@@ -147,7 +147,7 @@ struct TupleType: Type {
         Type(),
         list(list)
     {}
-    ~TupleType() {
+    virtual ~TupleType() {
         delete list;
     }
 };
@@ -158,7 +158,7 @@ struct UnaryExpr: Expr {
         Expr(),
         element(element)
     {}
-    ~UnaryExpr() {
+    virtual ~UnaryExpr() {
         delete element;
     }
 };
@@ -166,13 +166,13 @@ struct DerefExpr: UnaryExpr {
     DerefExpr(Expr *element):
         UnaryExpr(element)
     {}
-    ~DerefExpr() {}
+    virtual ~DerefExpr() {}
 };
 struct NegExpr: UnaryExpr {
     NegExpr(Expr *element):
         UnaryExpr(element)
     {}
-    ~NegExpr() {}
+    virtual ~NegExpr() {}
 };
 struct BinaryExpr: Expr {
     Expr *left;
@@ -182,7 +182,7 @@ struct BinaryExpr: Expr {
         left(left),
         right(right)
     {}
-    ~BinaryExpr() {
+    virtual ~BinaryExpr() {
         delete left;
         delete right;
     }
@@ -191,79 +191,79 @@ struct EQExpr: BinaryExpr {
     EQExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~EQExpr() {}
+    virtual ~EQExpr() {}
 };
 struct LTExpr: BinaryExpr {
     LTExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~LTExpr() {}
+    virtual ~LTExpr() {}
 };
 struct GTExpr: BinaryExpr {
     GTExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~GTExpr() {}
+    virtual ~GTExpr() {}
 };
 struct LEExpr: BinaryExpr {
     LEExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~LEExpr() {}
+    virtual ~LEExpr() {}
 };
 struct GEExpr: BinaryExpr {
     GEExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~GEExpr() {}
+    virtual ~GEExpr() {}
 };
 struct NEExpr: BinaryExpr {
     NEExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~NEExpr() {}
+    virtual ~NEExpr() {}
 };
 struct AddExpr: BinaryExpr {
     AddExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~AddExpr() {}
+    virtual ~AddExpr() {}
 };
 struct SubExpr: BinaryExpr {
     SubExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~SubExpr() {}
+    virtual ~SubExpr() {}
 };
 struct MulExpr: BinaryExpr {
     MulExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~MulExpr() {}
+    virtual ~MulExpr() {}
 };
 struct DivExpr: BinaryExpr {
     DivExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~DivExpr() {}
+    virtual ~DivExpr() {}
 };
 struct RemExpr: BinaryExpr {
     RemExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~RemExpr() {}
+    virtual ~RemExpr() {}
 };
 struct AssignExpr: BinaryExpr {
     AssignExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~AssignExpr() {}
+    virtual ~AssignExpr() {}
 };
 struct LAssignExpr: BinaryExpr {
     LAssignExpr(Expr *left, Expr *right):
         BinaryExpr(left, right)
     {}
-    ~LAssignExpr() {}
+    virtual ~LAssignExpr() {}
 };
 struct Index: Expr {
     Identifier *identifier;
@@ -273,7 +273,7 @@ struct Index: Expr {
         identifier(identifier),
         arguments(arguments)
     {}
-    ~Index() {
+    virtual ~Index() {
         delete identifier;
         delete arguments;
     }
@@ -284,7 +284,7 @@ struct Return: Expr {
         Expr(),
         expr(expr)
     {}
-    ~Return() {
+    virtual ~Return() {
         delete expr;
     }
 };
@@ -298,7 +298,7 @@ struct VarDecl: Expr {
         type(type),
         expr(expr)
     {}
-    ~VarDecl() {
+    virtual ~VarDecl() {
         delete identifier;
         delete type;
         delete expr;
@@ -310,7 +310,7 @@ struct Block: Expr {
         Expr(),
         list(list)
     {}
-    ~Block() {
+    virtual ~Block() {
         delete list;
     }
 };
@@ -324,7 +324,7 @@ struct IfElse: Expr {
         then_expr(then_expr),
         else_expr(else_expr)
     {}
-    ~IfElse() {
+    virtual ~IfElse() {
         delete condition;
         delete then_expr;
         delete else_expr;
@@ -338,7 +338,7 @@ struct While: Expr {
         condition(condition),
         task(task)
     {}
-    ~While() {
+    virtual ~While() {
         delete condition;
         delete task;
     }
@@ -353,7 +353,7 @@ struct Lambda: Expr {
         type_out(type_out),
         body(body)
     {}
-    ~Lambda() {
+    virtual ~Lambda() {
         delete type_in;
         delete type_out;
         delete body;
