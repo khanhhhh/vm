@@ -22,7 +22,7 @@ test: clean all
 all: parser lexer
 	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -c -o parser.tab.o parser.tab.c
 	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -c -o lex.yy.o lex.yy.c
-	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -shared libparser.so *.o
+	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -shared -o libparser.so *.o
 parser:
 	bison -d -v parser.y
 lexer:
