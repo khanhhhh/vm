@@ -7,9 +7,11 @@
 #define YYSTYPE_IS_DECLARED
 struct Expr;
 typedef Expr* YYSTYPE;
-
 struct Expr {
-    Expr() {}
+    static std::vector<Expr*> all_expr;
+    Expr() {
+        all_expr.push_back(this);
+    }
     virtual ~Expr() {}
 };
 struct ExprList;

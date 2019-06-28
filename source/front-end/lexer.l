@@ -7,52 +7,184 @@
 
 
 %%
-[ \t]	; // ignore all whitespace
-"return"                                    {return RETURN;};
-"var"                                       {return VAR;};
-"int"                                       {yylval = new IntType(); return INTTYPE;};
-"float"                                     {yylval = new FloatType(); return FLOATTYPE;};
-"addr"                                      {yylval = new AddrType(); return ADDRTYPE;};
-"func"                                      {yylval = new FuncType(); return FUNCTYPE;}
-"type"                                      {yylval = new TypeType(); return TYPETYPE;};
-"trait"                                     {return TRAIT;}
-"array"                                     {return ARRAY;};
-"tuple"                                     {return TUPLE;};
-"cast"                                      {return CAST;};
-"if"                                        {return IF;};
-"else"                                      {return ELSE;};
-"while"                                     {return WHILE;};
-                                         
-"=="                                        {return EQ;};
-"<"                                         {return LT;};
-">"                                         {return GT;};
-"<="                                        {return LE;};
-">="                                        {return GE;};
-"!="                                        {return NE;};
-                                         
-"="                                         {return ASSIGN;};
-"<-"                                        {return LASSIGN;};
-"->"                                        {return RASSIGN;};
-"+"                                         {return ADD;};
-"-"                                         {return SUB;};
-"*"                                         {return MUL;};
-"/"                                         {return DIV;};
-"%"                                         {return REM;};
-                                         
-"("                                         {return LPAREN;};
-")"                                         {return RPAREN;};
-"{"                                         {return LCURLY;};
-"}"                                         {return RCURLY;};
-"["                                         {return LBRACKET;};
-"]"                                         {return RBRACKET;};
-":"                                         {return COLON;};
-";"                                         {return SEPARATOR;};
-","                                         {return SEPARATOR;};
+[ \t]; // ignore all whitespace
+"return" {
+    std::printf(yytext);
+    return RETURN;
+};
+"var" {
+    std::printf(yytext);
+    return VAR;
+};
+"int" {
+    std::printf(yytext);
+    //yylval = new IntType();
+    return INTTYPE;
+};
+"float" {
+    std::printf(yytext);
+    //yylval = new FloatType();
+    return FLOATTYPE;
+};
+"addr" {
+    std::printf(yytext);
+    //yylval = new AddrType();
+    return ADDRTYPE;
+};
+"func" {
+    std::printf(yytext);
+    //yylval = new FuncType();
+    return FUNCTYPE;
+};
+"type" {
+    std::printf(yytext);
+    //yylval = new TypeType();
+    return TYPETYPE;
+};
+"trait" {
+    std::printf(yytext);
+    return TRAIT;
+};
+"array" {
+    std::printf(yytext);
+    return ARRAY;
+};
+"tuple" {
+    std::printf(yytext);
+    return TUPLE;
+};
+"cast" {
+    std::printf(yytext);
+    return CAST;
+};
+"if" {
+    std::printf(yytext);
+    return IF;
+};
+"else" {
+    std::printf(yytext);
+    return ELSE;
+};
+"while" {
+    std::printf(yytext);
+    return WHILE;
+};
+        
+"==" {
+    std::printf(yytext);
+    return EQ;
+};
+"<" {
+    std::printf(yytext);
+    return LT;
+};
+">" {
+    std::printf(yytext);
+    return GT;
+};
+"<=" {
+    std::printf(yytext);
+    return LE;
+};
+">=" {
+    std::printf(yytext);
+    return GE;
+};
+"!=" {
+    std::printf(yytext);
+    return NE;
+};
+        
+"=" {
+    std::printf(yytext);
+    return ASSIGN;
+};
+"<-" {
+    std::printf(yytext);
+    return LASSIGN;
+};
+"->" {
+    std::printf(yytext);
+    return RASSIGN;
+};
+"+" {
+    std::printf(yytext);
+    return ADD;
+};
+"-" {
+    std::printf(yytext);
+    return SUB;
+};
+"*" {
+    std::printf(yytext);
+    return MUL;
+};
+"/" {
+    std::printf(yytext);
+    return DIV;
+};
+"%" {
+    std::printf(yytext);
+    return REM;
+};
+        
+"(" {
+    std::printf(yytext);
+    return LPAREN;
+};
+")" {
+    std::printf(yytext);
+    return RPAREN;
+};
+"{" {
+    std::printf(yytext);
+    return LCURLY;
+};
+"}" {
+    std::printf(yytext);
+    return RCURLY;
+};
+"[" {
+    std::printf(yytext);
+    return LBRACKET;
+};
+"]" {
+    std::printf(yytext);
+    return RBRACKET;
+};
+":" {
+    std::printf(yytext);
+    return COLON;
+};
+";" {
+    std::printf(yytext);
+    return SEPARATOR;
+};
+"," {
+    std::printf(yytext);
+    return SEPARATOR;
+};
 
--?[1-9][0-9]+                               {yylval = new IntLiteral(std::stoi(yytext)); return INTLITERAL;};
--?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval = new FloatLiteral(std::stof(yytext)); return FLOATLITERAL;};
-0[xX][0-9]+                                 {yylval = new AddrLiteral(std::stoul(yytext)); return ADDRLITERAL;};
-[a-zA-Z_][0-9a-zA-Z_]+                      {yylval = new Identifier(yytext); return IDENTIFIER;};
+-?[1-9][0-9]+ {
+    std::printf(yytext);
+    //yylval = new IntLiteral(std::stoi(yytext));
+    return INTLITERAL;
+};
+-?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)? {
+    std::printf(yytext);
+    //yylval = new FloatLiteral(std::stof(yytext));
+    return FLOATLITERAL;
+};
+0[xX][0-9]+ {
+    std::printf(yytext);
+    yylval = new AddrLiteral(std::stoul(yytext));
+    return ADDRLITERAL;
+};
+[a-zA-Z_][0-9a-zA-Z_]+ {
+    std::printf(yytext);
+    yylval = new Identifier(yytext);
+    return IDENTIFIER;
+};
 
 
 
