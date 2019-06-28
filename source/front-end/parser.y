@@ -1,5 +1,6 @@
 %code requires {
 #include<AST.hh>
+#include<cstdio>
 extern int yylex();
 extern int yyparse();
 extern FILE* yyin;
@@ -144,3 +145,6 @@ Expr:
 |   While
 |   Lambda;
 %%
+void yyerror(const char* s) {
+	std::fprintf(stderr, "Parse error: %s\n", s);
+}

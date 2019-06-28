@@ -1,4 +1,4 @@
-DEBUG = 0
+DEBUG = 1
 
 CC = g++
 CCFLAGS = -fPIC -Wall -Wfatal-errors
@@ -17,7 +17,7 @@ endif
 .PHONY: clean test parser lexer 
 
 test: clean all
-	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run main.cc
+	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run main.cc ./libparser.so
 	$(GDB) ./run
 all: parser lexer
 	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -c -o parser.tab.o parser.tab.c
