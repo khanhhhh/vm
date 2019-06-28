@@ -12,6 +12,7 @@
 "int"                                       {yylval = new IntType(); return IntType;};
 "float"                                     {yylval = new FloatType(); return FloatType;};
 "addr"                                      {yylval = new AddrType(); return AddrType;};
+"func"                                      {yylval = new FuncType(); return FuncType;}
 "array"                                     {return ARRAY;};
 "tuple"                                     {return TUPLE;};
 "type"                                      {yylval = TypeType(); return TypeType;};

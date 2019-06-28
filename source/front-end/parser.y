@@ -15,6 +15,7 @@ void yyerror(const char* s);
 %token IntType
 %token FloatType
 %token AddrType
+%token FuncType
 %token ARRAY
 %token TUPLE
 %token TypeType
@@ -70,8 +71,10 @@ Literal:
 TupleLiteral: LPAREN ExprList RPAREN;
 // abstract Type
 Type:
+    IntType
 |   FloatType
 |   AddrType
+|   FuncType
 |   ArrayType
 |   TupleType;
 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
