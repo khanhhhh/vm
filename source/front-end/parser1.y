@@ -17,9 +17,9 @@ void yyerror(const char* s);
 %token ADDRTYPE
 %token FUNCTYPE
 %token TYPETYPE
-%token ARRAYTYPE
-%token TUPLETYPE
-%token TRAITTYPE
+%token ARRAY
+%token TUPLE
+%token TRAIT
 %token CAST
 %token IF
 %token ELSE
@@ -53,46 +53,46 @@ void yyerror(const char* s);
 %%
 Program:
     ExprList;
-ExprList:
-    /*empty*/
-|   Expr
-|   ExprList SEPARATOR Expr;
-
 Expr:
     Literal
-|   Type;
-
-Literal:
-    INTLITERAL
-|   FLOATLITERAL
-|   ADDRLITERAL
-|   TupleLiteral
-|   FuncLiteral
-|   FuncCall
+|   Type
+|   UnaryExpr
+|   BinaryExpr
+|   Index
 |   Return
 |   VarDecl
 |   Block
 |   IfElse
 |   While
-|   UnaryExpr
-|   BinaryExpr;
-TupleLiteral:
-    LPAREN ExprList RPAREN;
-FuncLiteral:
-    Type RASSIGN Type Expr;
-FuncCall:
-    IDENTIFIER TupleLiteral;
-Return:
-    RETURN Expr SEPARATOR;
-VarDecl:
-    VAR IDENTIFIER COLON Type EQ Expr;
-Block:
-    LCURLY ExprList RCURLY;
-IfElse:
-    IF Expr Expr ELSE Expr
-|   IF Expr Expr;
-While:
-    WHILE Expr Expr;
+|   Lambda;
+TupleList:
+    /*EMPTY*/
+|   IDENTIFIER COLON Type
+|   TupleList SEPARATOR IDENTIFIER COLON Type;
+ExprList:
+    /*EMPTY*/
+|   Expr
+|   ExprList SEPARATOR Expr;
+Literal:
+    IDENTIFIER
+|   INTLITERAL
+|   FLOATLITERAL
+|   ADDRLITERAL
+|   TupleLiteral;
+TupleLiteral: LPAREN ExprList RPAREN;
+// abstract Type
+Type:
+    INTTYPE
+|   FLOATTYPE
+|   ADDRTYPE
+|   FUNCTYPE
+|   ArrayType
+|   TupleType
+|   TraitType;
+ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
+TupleType: TUPLE LBRACKET TupleList RBRACKET;
+TraitType: TRAIT LBRACKET IDENTIFIER RBRACKET;
+// unary expression
 UnaryExpr:
     DerefExpr
 |   NegExpr;
@@ -125,29 +125,23 @@ MulExpr: Expr MUL Expr;
 DivExpr: Expr DIV Expr;
 RemExpr: Expr REM Expr;
 AssignExpr: Expr ASSIGN Expr;
-LAssignExpr: Expr LASSIGN Expr
-
-Type:
-    INTTYPE
-|   FLOATTYPE
-|   ADDRTYPE
-|   FUNCTYPE
-|   TYPETYPE
-|   ArrayType
-|   TupleType
-|   TraitType;
-
-ArrayType:
-    ARRAYTYPE LBRACKET Type SEPARATOR Expr RBRACKET;
-TupleType:
-    TUPLETYPE LBRACKET TupleList RBRACKET;
-TupleList:
-    /*empty*/
-|   IDENTIFIER COLON Type
-|   TupleList SEPARATOR IDENTIFIER COLON Type;
-TraitType:
-    TRAITTYPE LBRACKET IDENTIFIER RBRACKET;
-
+LAssignExpr: Expr LASSIGN Expr;
+// function call or array indexing
+Index: IDENTIFIER TupleLiteral;
+// return statement
+Return: RETURN Expr SEPARATOR;
+// var declaration
+VarDecl: VAR IDENTIFIER COLON Type EQ Expr;
+// code block
+Block: LCURLY ExprList RCURLY;
+// braching
+IfElse:
+    IF LPAREN Expr RPAREN Expr ELSE Expr
+|   IF LPAREN Expr RPAREN Expr;
+// looping
+While: WHILE LPAREN Expr RPAREN Expr;
+// lambda expression
+Lambda: Type RASSIGN Type Expr;
 
 %%
 void yyerror(const char* s) {
