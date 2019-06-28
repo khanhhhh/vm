@@ -43,15 +43,15 @@
 };
 "trait" {
     std::printf(yytext);
-    return TRAITTYPE;
+    return TRAIT;
 };
 "array" {
     std::printf(yytext);
-    return ARRAYTYPE;
+    return ARRAY;
 };
 "tuple" {
     std::printf(yytext);
-    return TUPLETYPE;
+    return TUPLE;
 };
 "cast" {
     std::printf(yytext);
@@ -167,22 +167,22 @@
 
 -?[1-9][0-9]+ {
     std::printf(yytext);
-    yylval = new IntLiteral(std::stoi(yytext));
+    //yylval = new IntLiteral(std::stoi(yytext));
     return INTLITERAL;
 };
 -?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)? {
     std::printf(yytext);
-    yylval = new FloatLiteral(std::stof(yytext));
+    //yylval = new FloatLiteral(std::stof(yytext));
     return FLOATLITERAL;
 };
 0[xX][0-9]+ {
     std::printf(yytext);
-    yylval = new AddrLiteral(std::stoul(yytext));
+    //yylval = new AddrLiteral(std::stoul(yytext));
     return ADDRLITERAL;
 };
 [a-zA-Z_][0-9a-zA-Z_]+ {
     std::printf(yytext);
-    yylval = new Identifier(yytext);
+    //yylval = new Identifier(yytext);
     return IDENTIFIER;
 };
 

@@ -63,7 +63,8 @@ Expr:
 |   Type;
 
 Literal:
-    INTLITERAL
+    IDENTIFIER
+|   INTLITERAL
 |   FLOATLITERAL
 |   ADDRLITERAL
 |   TupleLiteral
