@@ -117,18 +117,6 @@ struct Type: Expr {
     {}
     virtual ~Type() {}
 };
-struct TypeType: Type {
-    TypeType():
-        Type()
-    {}
-    virtual ~TypeType() {}
-};
-struct FuncType: Type {
-    FuncType():
-        Type()
-    {}
-    virtual ~FuncType() {}
-};
 struct IntType: Type {
     IntType():
         Type()
@@ -147,6 +135,18 @@ struct AddrType: Type {
     {}
     virtual ~AddrType() {}
 };
+struct FuncType: Type {
+    FuncType():
+        Type()
+    {}
+    virtual ~FuncType() {}
+};
+struct TypeType: Type {
+    TypeType():
+        Type()
+    {}
+    virtual ~TypeType() {}
+};
 struct TupleType: Type {
     TupleList *list;
     TupleType(TupleList* list):
@@ -156,6 +156,12 @@ struct TupleType: Type {
     virtual ~TupleType() {
         delete list;
     }
+};
+struct TraitType: Type {
+    TraitType():
+        Type()
+    {}
+    virtual ~TraitType() {}
 };
 
 struct UnaryExpr: Expr {

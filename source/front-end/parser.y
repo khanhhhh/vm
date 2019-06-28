@@ -20,6 +20,7 @@ void yyerror(const char* s);
 %token TYPETYPE
 %token ARRAY
 %token TUPLE
+%token TRAIT
 %token CAST
 %token IF
 %token ELSE
@@ -77,10 +78,11 @@ Type:
 |   ADDRTYPE
 |   FUNCTYPE
 |   ArrayType
-|   TupleType;
+|   TupleType
+|   TraitType;
 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
 TupleType: TUPLE LBRACKET TupleList RBRACKET;
-// Tuple list is used both in declaration and Lambda Expr
+TraitType: TRAIT LBRACKET IDENTIFIER RBRACKET;
 // unary expression
 UnaryExpr:
     DerefExpr

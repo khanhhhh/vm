@@ -13,9 +13,10 @@
 "float"                                     {yylval = new FloatType(); return FLOATTYPE;};
 "addr"                                      {yylval = new AddrType(); return ADDRTYPE;};
 "func"                                      {yylval = new FuncType(); return FUNCTYPE;}
+"type"                                      {yylval = new TypeType(); return TYPETYPE;};
+"trait"                                     {return TRAIT;}
 "array"                                     {return ARRAY;};
 "tuple"                                     {return TUPLE;};
-"type"                                      {yylval = new TypeType(); return TYPETYPE;};
 "cast"                                      {return CAST;};
 "if"                                        {return IF;};
 "else"                                      {return ELSE;};
