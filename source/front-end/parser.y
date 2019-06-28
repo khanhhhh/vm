@@ -1,6 +1,6 @@
 %code requires {
 #include<AST.hh>
-#include<cstdio>
+#include<stdexcept>
 extern int yylex();
 extern int yyparse();
 extern FILE* yyin;
@@ -10,7 +10,6 @@ void yyerror(const char* s);
 
 %}
 
-%token EoF
 %token RETURN
 %token VAR
 %token INTTYPE
@@ -53,7 +52,7 @@ void yyerror(const char* s);
 %token IDENTIFIER
 %%
 Program:
-    ExprList EoF;
+    ExprList;
 // tuple of values
 // abstract Literal
 TupleList:
@@ -148,5 +147,5 @@ Expr:
 |   Lambda;
 %%
 void yyerror(const char* s) {
-	std::fprintf(stderr, "Parse error: %s\n", s);
+	throw std::runtime_error(std::string("ParseError: ") + s);
 }

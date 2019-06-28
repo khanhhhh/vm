@@ -52,7 +52,6 @@
 -?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval = new FloatLiteral(std::stof(yytext)); return FLOATLITERAL;};
 0[xX][0-9]+                                 {yylval = new AddrLiteral(std::stoul(yytext)); return ADDRLITERAL;};
 [a-zA-Z_][0-9a-zA-Z_]+                      {yylval = new Identifier(yytext); return IDENTIFIER;};
-<<EOF>>                                     {return EoF;};
 
 
 
