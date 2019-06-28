@@ -9,13 +9,13 @@
 %%
 "return"                                    {return RETURN;};
 "var"                                       {return VAR;};
-"int"                                       {yylval = new IntType(); return IntType;};
-"float"                                     {yylval = new FloatType(); return FloatType;};
-"addr"                                      {yylval = new AddrType(); return AddrType;};
-"func"                                      {yylval = new FuncType(); return FuncType;}
+"int"                                       {yylval = new IntType(); return INTTYPE;};
+"float"                                     {yylval = new FloatType(); return FLOATTYPE;};
+"addr"                                      {yylval = new AddrType(); return ADDRTYPE;};
+"func"                                      {yylval = new FuncType(); return FUNCTYPE;}
 "array"                                     {return ARRAY;};
 "tuple"                                     {return TUPLE;};
-"type"                                      {yylval = TypeType(); return TypeType;};
+"type"                                      {yylval = new TypeType(); return TYPETYPE;};
 "cast"                                      {return CAST;};
 "if"                                        {return IF;};
 "else"                                      {return ELSE;};
@@ -30,7 +30,7 @@
                                          
 "="                                         {return ASSIGN;};
 "<-"                                        {return LASSIGN;};
-"->"                                        {return RASSIGN};
+"->"                                        {return RASSIGN;};
 "+"                                         {return ADD;};
 "-"                                         {return SUB;};
 "*"                                         {return MUL;};
@@ -47,11 +47,12 @@
 ";"                                         {return SEPARATOR;};
 ","                                         {return SEPARATOR;};
 
--?[1-9][0-9]+                               {yylval = new IntLiteral(std::stoi(yytext)); return IntLiteral;};
--?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval = new FloatLiteral(std::stof(yytext)); return FloatLiteral;};
-0[xX][0-9]+                                 {yylval = new AddrLiteral(std::stoul(yytext)); return AddrLiteral;};
-[a-zA-Z_][0-9a-zA-Z_]+                      {yylval = yytext; return Identifier;};
-<<EOF>>                                     {yylval = EoF;};
+-?[1-9][0-9]+                               {yylval = new IntLiteral(std::stoi(yytext)); return INTLITERAL;};
+-?[1-9][0-9]+.[0-9]+(e-?[1-9][0-9]+)?       {yylval = new FloatLiteral(std::stof(yytext)); return FLOATLITERAL;};
+0[xX][0-9]+                                 {yylval = new AddrLiteral(std::stoul(yytext)); return ADDRLITERAL;};
+[a-zA-Z_][0-9a-zA-Z_]+                      {yylval = new Identifier(yytext); return IDENTIFIER;};
+<<EOF>>                                     {return EoF;};
+
 
 
 %%

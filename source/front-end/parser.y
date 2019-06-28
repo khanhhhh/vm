@@ -12,13 +12,13 @@ void yyerror(const char* s);
 %token EoF
 %token RETURN
 %token VAR
-%token IntType
-%token FloatType
-%token AddrType
-%token FuncType
+%token INTTYPE
+%token FLOATTYPE
+%token ADDRTYPE
+%token FUNCTYPE
+%token TYPETYPE
 %token ARRAY
 %token TUPLE
-%token TypeType
 %token CAST
 %token IF
 %token ELSE
@@ -45,10 +45,10 @@ void yyerror(const char* s);
 %token RBRACKET
 %token COLON
 %token SEPARATOR
-%token IntLiteral
-%token FloatLiteral
-%token AddrLiteral
-%token Identifier
+%token INTLITERAL
+%token FLOATLITERAL
+%token ADDRLITERAL
+%token IDENTIFIER
 %%
 Program:
     ExprList EoF;
@@ -56,25 +56,25 @@ Program:
 // abstract Literal
 TupleList:
     /*EMPTY*/
-|   Identifier COLON Type
-|   TupleList SEPARATOR Identifier COLON Type;
+|   IDENTIFIER COLON Type
+|   TupleList SEPARATOR IDENTIFIER COLON Type;
 ExprList:
     /*EMPTY*/
 |   Expr
 |   ExprList SEPARATOR Expr;
 Literal:
-    Identifier
-|   IntLiteral
-|   FloatLiteral
-|   AddrLiteral
+    IDENTIFIER
+|   INTLITERAL
+|   FLOATLITERAL
+|   ADDRLITERAL
 |   TupleLiteral;
 TupleLiteral: LPAREN ExprList RPAREN;
 // abstract Type
 Type:
-    IntType
-|   FloatType
-|   AddrType
-|   FuncType
+    INTTYPE
+|   FLOATTYPE
+|   ADDRTYPE
+|   FUNCTYPE
 |   ArrayType
 |   TupleType;
 ArrayType: ARRAY LBRACKET Type SEPARATOR Expr RBRACKET;
@@ -115,11 +115,11 @@ RemExpr: Expr REM Expr;
 AssignExpr: Expr ASSIGN Expr;
 LAssignExpr: Expr LASSIGN Expr;
 // function call or array indexing
-Index: Identifier TupleLiteral;
+Index: IDENTIFIER TupleLiteral;
 // return statement
 Return: RETURN Expr SEPARATOR;
 // var declaration
-VarDecl: VAR Identifier COLON Type EQ Expr;
+VarDecl: VAR IDENTIFIER COLON Type EQ Expr;
 // code block
 Block: LCURLY ExprList RCURLY;
 // braching

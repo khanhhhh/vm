@@ -123,6 +123,12 @@ struct TypeType: Type {
     {}
     virtual ~TypeType() {}
 };
+struct FuncType: Type {
+    FuncType():
+        Type()
+    {}
+    virtual ~FuncType() {}
+};
 struct IntType: Type {
     IntType():
         Type()

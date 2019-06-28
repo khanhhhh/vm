@@ -1,2 +1,0 @@
-1. rename Literal (IntLiteral, FloatLiteral, ...) to LITERAL.
-	maybe, token type must be distinct with class type
