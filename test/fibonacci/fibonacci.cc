@@ -52,7 +52,7 @@ int main() {
 	std::memcpy(p.mem.data(), source, len);
 
 	heap<1> h;
-	h.mem[0] = 30;
+	h.mem[0] = 35;
 	thread t(p, h);
     long t1 = std::clock();
     long count = 0;

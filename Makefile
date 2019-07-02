@@ -9,14 +9,14 @@ ifeq (1, $(DEBUG))
 CCFLAGS += -g -O0
 GDB = gdb
 else
-CCFLAGS += -DNDEBUG -O3
+CCFLAGS += -DNDEBUG -Ofast
 GDB = 
 endif
 
 .PHONY: clean fibonacci_recur
 
-fibonacci_recur:
-	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run test/fibonacci/fibonacci_recur.cc
+fibonacci:
+	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) -o run test/fibonacci/fibonacci.cc
 	$(GDB) ./run
 clean:
 	rm -f run

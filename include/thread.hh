@@ -11,13 +11,13 @@
 
 // constants
 using opcode		= uint8_t;
-using utype			= uint32_t;
-using stype			= int32_t;
-using ftype			= float;
+using utype		= uint32_t;
+using stype		= int32_t;
+using ftype		= float;
 const utype count	= 1024;
 // class name
 template<uint32_t count> using program	= code<opcode, utype, count>;
-template<uint32_t count> using heap		= data<utype, count>;
+template<uint32_t count> using heap	= data<utype, count>;
 
 
 class thread: public i_thread<opcode, utype> {
@@ -88,7 +88,7 @@ private: //PRIVATE METHODS
 	/*
 	Function calling procedure.
 	1.	push_fp
-		Advance stack 2 slots, set last frame pointer into second slot.
+		Advance stack 2 slots, set last frame-pointer into second slot.
 		Set shv = 0
 
 	2. 	...
