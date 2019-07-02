@@ -7,7 +7,6 @@
 #include<cstdlib>
 #include<cstdio>
 #include<array>
-#include<thread>
 
 
 // constants
@@ -130,22 +129,6 @@ public: // CLASS METHODS
 		stack()
        	{}
 	~thread() {}
-	std::thread *t = nullptr;
-	void loop_start() {
-		if (t == nullptr)
-			t = new std::thread(&thread::loop, this);
-	}
-	void loop_join() {
-		t->join();
-		delete t;
-	}
-	void loop_detach() {
-		t->detach();
-		delete t;
-	}
-	void loop() {
-		while (iterate());
-	}
 	bool iterate() {
 		// FETCH
 		opcode op_name = c.fetch(ip);
