@@ -137,7 +137,9 @@ public: // CLASS METHODS
 		if (op_func == &thread::halt)
 			return false;
 		// EXECUTE
-		jump((this->*op_func)());
+		stype steps = (this->*op_func)();
+		// JUMP TO NEXT INSTRUCTION
+		jump(steps);
 		return true;
 	}
 public:// INSTRUCTIONS IMPLEMENTATION
