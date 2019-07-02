@@ -47,8 +47,8 @@ int main() {
 		0x17, 0x00, 0x00, 0x00, 0x00,			// #74 store_data 0
 		0x00						// #78 halt
 	};
-	int len = 79;
-	program<79> p;
+	const int len = 79;
+	program<len> p;
 	std::memcpy(p.mem.data(), source, len);
 
 	heap<1> h;
@@ -61,7 +61,6 @@ int main() {
     long t2 = std::clock();
 	std::printf("ops: %ld, ticks: %ld\n", count, t2-t1);
 	std::printf("MIPS: %f\n", 1e-6 * (double)count * CLOCKS_PER_SEC / (t2-t1));
-
 
 	std::cout<<h.mem[0]<<std::endl;
 	return 0;
