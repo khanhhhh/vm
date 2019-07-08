@@ -1,7 +1,7 @@
 DEBUG = 0
 
 CC = g++
-CCFLAGS = -std=c++17 -fPIC -Wall -Wfatal-errors -march=native 
+CCFLAGS = -std=c++17 -fPIC -Wall -Wfatal-errors -march=native -Wl,-O1
 INFLAGS = -I./include
 LDFLAGS = 
 
