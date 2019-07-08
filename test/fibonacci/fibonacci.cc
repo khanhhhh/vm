@@ -47,7 +47,7 @@ int main() {
 		0x17, 0x00, 0x00, 0x00, 0x00,			// #75 store_data 0
 		0x00						// #80 halt
 	};
-	const int len = 81;
+	constexpr int len = 81;
 	program<len> p;
 	std::memcpy(p.mem.data(), source, len);
 

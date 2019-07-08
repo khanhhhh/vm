@@ -27,6 +27,5 @@ b1:	push_fp
 main:	push_fp
 	load_data	0
 	call_fp 	fib
-	print_int
 	store_data 	0
 	halt
