@@ -284,13 +284,23 @@ public:// INSTRUCTIONS IMPLEMENTATION
 		static inline utype _s2u(stype in) {
 			return (utype)in;
 		}
+		union _type {
+			utype _u;
+			ftype _f;
+		};
 		static inline ftype _u2f(utype in) {
-			ftype *out = (ftype*)&in;
-			return *out;
+			//ftype *out = (ftype*)&in;
+			//return *out;
+			_type out;
+			out._u = in;
+			return out._f;
 		}
 		static inline utype _f2u(ftype in) {
-			utype *out = (utype*)&in;
-			return *out;
+			//utype *out = (utype*)&in;
+			//return *out;
+			_type out;
+			out._f = in;
+			return out._u;
 		}
 	// IADD
 	stype iadd() {
