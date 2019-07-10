@@ -5,7 +5,6 @@
 #include"data.hh"
 #include<cstdint>
 #include<cstdlib>
-#include<cstdio>
 #include<array>
 
 
