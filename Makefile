@@ -19,4 +19,4 @@ fibonacci:
 	$(CC) $(CCFLAGS) $(INFLAGS) $(LDFLAGS) test/fibonacci/fibonacci.cc
 	$(GDB) ./a.out
 clean:
-	rm -f a.out
+	rm -f *.out *.s *.ll
