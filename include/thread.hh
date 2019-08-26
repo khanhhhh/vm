@@ -21,7 +21,7 @@ template<uint32_t count> using heap	= data<utype, count>;
 
 class thread: public i_thread<opcode, utype> {
 public: //INSTRUCTIONS
-	typedef stype (thread::* instruction)();
+	using instruction = stype (thread::*)();
 	static std::array<instruction, 256> ops;
 private: // MEMBERS
 	utype ip; // instruction pointer: current instruction index

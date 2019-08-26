@@ -1,7 +1,7 @@
 DEBUG = 0
 
 CC = g++
-CCFLAGS = -std=c++17 -fPIC -Wall -Wfatal-errors -march=native -Wl,-O1
+CCFLAGS = -std=c++17 -fPIC -Wall -Wfatal-errors -march=native
 INFLAGS = -I./include
 LDFLAGS = 
 
@@ -9,7 +9,7 @@ ifeq (1, $(DEBUG))
 CCFLAGS += -g -O0
 GDB = gdb
 else
-CCFLAGS += -DNDEBUG -Ofast
+CCFLAGS += -DNDEBUG -O3
 GDB = 
 endif
 
